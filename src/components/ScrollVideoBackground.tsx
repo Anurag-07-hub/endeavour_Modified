@@ -9,7 +9,7 @@ export function ScrollVideoBackground() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const frameCount = 210;
+    const frameCount = 176;
     // Helper to get frame path: /frames/ezgif-frame-001.png
     const currentFrame = (index: number) => {
       const paddedIndex = index.toString().padStart(3, '0');
