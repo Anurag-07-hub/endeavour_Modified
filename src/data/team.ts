@@ -1,6 +1,6 @@
 export const teamMembers = [
   {
-    "name": "Prof. Surita Maini",
+    "name": "Amrik Sir",
     "position": "Faculty Advisor",
     "image": "https://www.endeavoursliet.in/images/main%20mam%20image.jpeg", 
     "linkedin": ""
