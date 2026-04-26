@@ -120,7 +120,7 @@ export function GalleryPage() {
       {/* Header Section */}
       <div className="max-w-[1024px] mx-auto px-5 md:px-[60px] text-center mb-4 md:mb-6 relative z-30">
         <FadeIn delay={0.2} direction="up">
-          <h1 className="text-[32px] sm:text-[40px] md:text-[56px] lg:text-[64px] font-sans font-black tracking-[-2px] pb-2 leading-[1.1]">
+          <h1 className="text-[20px] sm:text-[26px] md:text-[36px] lg:text-[44px] font-sans font-black tracking-[-1px] pb-2 leading-[1.1]">
             <span className="text-black" style={{ color: 'black' }}>WELCOME </span>
             <span className="text-white relative inline-block px-4 bg-black rounded-lg transform -skew-x-12 mx-2">
               <span className="inline-block transform skew-x-12">TO OUR</span>
