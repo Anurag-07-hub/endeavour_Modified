@@ -5,6 +5,10 @@ import { Linkedin, Mail } from 'lucide-react';
 
 function TeamMemberCard({ member, delay }: { member: any; delay: number; key?: string | number }) {
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isActive, setIsActive] = useState(false);
+
+  const activate = () => setIsActive(true);
+  const deactivate = () => setIsActive(false);
 
   return (
     <motion.div
@@ -12,7 +16,15 @@ function TeamMemberCard({ member, delay }: { member: any; delay: number; key?: s
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ delay, type: "spring", stiffness: 50 }}
-      className="bg-black/30 border border-white/10 group overflow-hidden flex flex-col items-center hover:border-brand-accent transition-all duration-500 backdrop-blur-sm shadow-lg hover:shadow-[0_0_25px_rgba(164,5,5,0.4)] relative hover:-translate-y-2 rounded-2xl"
+      onMouseEnter={activate}
+      onMouseLeave={deactivate}
+      onTouchStart={activate}
+      onTouchEnd={deactivate}
+      className={`bg-black/30 border overflow-hidden flex flex-col items-center transition-all duration-500 backdrop-blur-sm shadow-lg relative rounded-2xl cursor-pointer select-none
+        ${isActive
+          ? 'border-brand-accent shadow-[0_0_25px_rgba(164,5,5,0.4)] -translate-y-2'
+          : 'border-white/10'
+        }`}
     >
       <div className="w-full relative pt-[100%] overflow-hidden bg-white/5">
         {/* Skeleton Loader */}
@@ -20,13 +32,13 @@ function TeamMemberCard({ member, delay }: { member: any; delay: number; key?: s
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full animate-[shimmer_1.5s_infinite] z-0" />
         )}
 
-        <div className="absolute inset-0 bg-gradient-to-br from-brand-accent/0 to-brand-accent/10 group-hover:opacity-100 opacity-0 transition-opacity duration-500 z-10" />
+        <div className={`absolute inset-0 bg-gradient-to-br from-brand-accent/0 to-brand-accent/10 transition-opacity duration-500 z-10 ${isActive ? 'opacity-100' : 'opacity-0'}`} />
 
         <img
           src={member.image}
           alt={member.name}
           onLoad={() => setIsLoaded(true)}
-          className={`absolute inset-0 w-full h-full object-cover object-top transition-all duration-700 ease-out group-hover:scale-105 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+          className={`absolute inset-0 w-full h-full object-cover object-top transition-all duration-700 ease-out ${isActive ? 'scale-105' : 'scale-100'} ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
           referrerPolicy="no-referrer"
           onError={(e) => {
             (e.target as HTMLImageElement).src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(member.name) + '&background=a40505&color=fff&size=512';
@@ -34,8 +46,8 @@ function TeamMemberCard({ member, delay }: { member: any; delay: number; key?: s
           }}
         />
       </div>
-      <div className="p-6 w-full text-center relative z-20 bg-gradient-to-t from-brand-bg to-brand-bg/80 border-t border-white/5 group-hover:border-brand-accent/50 transition-colors duration-500">
-        <h3 className="text-white font-sans font-bold text-lg mb-1 tracking-wider uppercase group-hover:text-brand-accent transition-colors">{member.name}</h3>
+      <div className={`p-6 w-full text-center relative z-20 bg-gradient-to-t from-brand-bg to-brand-bg/80 border-t transition-colors duration-500 ${isActive ? 'border-brand-accent/50' : 'border-white/5'}`}>
+        <h3 className={`font-sans font-bold text-lg mb-1 tracking-wider uppercase transition-colors ${isActive ? 'text-brand-accent' : 'text-white'}`}>{member.name}</h3>
         <p className="text-brand-muted font-sans text-xs uppercase tracking-[2px]">{member.position}</p>
 
         <div className="flex items-center justify-center gap-4 mt-5 relative z-30">
@@ -81,29 +93,27 @@ export function TeamPage() {
       <div className="max-w-[1280px] mx-auto px-[30px] md:px-[60px]">
         <div className="mb-20 text-center flex flex-col items-center">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ type: 'spring', damping: 20, stiffness: 50 }}
             className="mb-6"
           >
-            <h2 className="font-sans text-[40px] md:text-[60px] font-black uppercase tracking-[-2px] text-white leading-[1]">
+            <h2 className="font-sans text-[28px] min-[390px]:text-[34px] md:text-[60px] font-black uppercase tracking-[-2px] text-white leading-[1]">
               OUR STRONGEST <span className="text-brand-accent">PILLARS</span>
             </h2>
           </motion.div>
-          <div className="h-[2px] w-[60px] bg-brand-accent mb-12"></div>
 
-          {/* Tabs */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="flex flex-wrap justify-center gap-4 mb-16"
+            className="flex flex-wrap gap-3 justify-center"
           >
-            {['Faculty Advisor', 'Executives', 'Core Committee', 'Alumni'].map((tab) => (
+            {['Executives', 'Technical', 'Non-Technical', 'Faculty Advisor'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`px-8 py-3 font-sans text-sm tracking-[2px] uppercase font-bold transition-all duration-300 border ${activeTab === tab
+                className={`px-4 min-[390px]:px-6 md:px-8 py-2.5 md:py-3 font-sans text-[11px] min-[390px]:text-[12px] md:text-sm tracking-[2px] uppercase font-bold transition-all duration-300 border ${activeTab === tab
                     ? 'bg-brand-accent border-brand-accent text-white shadow-[0_0_15px_rgba(164,5,5,0.4)]'
                     : 'bg-transparent border-white/20 text-brand-muted hover:border-brand-accent hover:text-white'
                   }`}
@@ -114,19 +124,17 @@ export function TeamPage() {
           </motion.div>
         </div>
 
-        {/* Grid */}
         <motion.div
           key={activeTab}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8"
         >
           {visibleMembers.map((member: any, i: number) => (
-            member && <TeamMemberCard key={member.name} member={member} delay={i * 0.1} />
+            <TeamMemberCard key={member?.name ?? i} member={member} delay={i * 0.05} />
           ))}
         </motion.div>
-
       </div>
     </div>
   );
