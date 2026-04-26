@@ -107,7 +107,7 @@ export function Navbar() {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            className="fixed inset-0 z-40 md:hidden flex flex-col bg-brand-bg overflow-hidden"
+            className="fixed inset-0 z-[60] md:hidden flex flex-col bg-brand-bg overflow-hidden"
             initial={{ clipPath: 'inset(0 0 100% 0)' }}
             animate={{ clipPath: 'inset(0 0 0% 0)' }}
             exit={{ clipPath: 'inset(0 0 100% 0)' }}
