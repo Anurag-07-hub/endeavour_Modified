@@ -9,6 +9,8 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
 
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'instant' });
+
   useEffect(() => {
     return scrollY.on('change', (latest) => {
       setIsScrolled(latest > 50);
@@ -63,6 +65,7 @@ export function Navbar() {
                 <Link
                   key={link.name}
                   to={link.href}
+                  onClick={scrollToTop}
                   className={`text-[11px] lg:text-[13px] uppercase tracking-[1px] lg:tracking-[1.5px] font-bold transition-colors relative ${
                     location.pathname === link.href ? 'text-brand-accent' : 'text-brand-muted hover:text-white'
                   }`}
@@ -73,6 +76,7 @@ export function Navbar() {
                 <a
                   key={link.name}
                   href={link.href}
+                  onClick={scrollToTop}
                   className="text-[11px] lg:text-[13px] uppercase tracking-[1px] lg:tracking-[1.5px] font-bold text-brand-muted hover:text-white transition-colors relative"
                 >
                   {link.name}
@@ -81,6 +85,7 @@ export function Navbar() {
             )}
             <a
               href="#contact"
+              onClick={scrollToTop}
               className="hidden lg:inline-block px-[20px] py-[9px] border border-brand-accent text-brand-accent text-[11px] uppercase tracking-[2px] hover:bg-brand-accent hover:text-brand-bg transition-colors duration-300 font-sans font-black whitespace-nowrap"
             >
               Join Us
@@ -145,6 +150,7 @@ export function Navbar() {
                     >
                       <Link
                         to={link.href}
+                        onClick={() => { scrollToTop(); setMobileOpen(false); }}
                         className={`block py-4 text-[15px] uppercase tracking-[2px] font-bold border-b border-white/5 transition-colors ${
                           location.pathname === link.href ? 'text-brand-accent' : 'text-brand-muted hover:text-white'
                         }`}
@@ -161,7 +167,7 @@ export function Navbar() {
                     >
                       <a
                         href={link.href}
-                        onClick={() => setMobileOpen(false)}
+                        onClick={() => { scrollToTop(); setMobileOpen(false); }}
                         className="block py-4 text-[15px] uppercase tracking-[2px] font-bold border-b border-white/5 text-brand-muted hover:text-white transition-colors"
                       >
                         {link.name}
