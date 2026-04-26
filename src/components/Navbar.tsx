@@ -103,86 +103,103 @@ export function Navbar() {
         </div>
       </motion.header>
 
-      {/* Mobile Drawer */}
+      {/* Full-screen Mobile Menu Overlay */}
       <AnimatePresence>
         {mobileOpen && (
-          <>
-            {/* Backdrop */}
-            <motion.div
-              className="fixed inset-0 bg-black/60 z-40 md:hidden"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setMobileOpen(false)}
-            />
-
-            {/* Slide-in panel */}
-            <motion.div
-              className="fixed top-0 right-0 bottom-0 w-[75vw] max-w-[320px] bg-brand-bg border-l border-white/10 z-50 flex flex-col md:hidden"
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 28, stiffness: 200 }}
-            >
-              {/* Drawer header */}
-              <div className="flex items-center justify-between px-6 py-5 border-b border-white/10">
-                <span className="font-sans font-black text-[14px] uppercase tracking-[3px] text-brand-accent">
-                  MENU
+          <motion.div
+            className="fixed inset-0 z-40 md:hidden flex flex-col bg-brand-bg overflow-hidden"
+            initial={{ clipPath: 'inset(0 0 100% 0)' }}
+            animate={{ clipPath: 'inset(0 0 0% 0)' }}
+            exit={{ clipPath: 'inset(0 0 100% 0)' }}
+            transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
+          >
+            {/* Top bar inside overlay */}
+            <div className="flex items-center justify-between px-5 py-4 border-b border-white/10 shrink-0">
+              <Link
+                to="/"
+                onClick={() => { scrollToTop(); setMobileOpen(false); }}
+                className="flex items-center gap-2"
+              >
+                <img
+                  src="https://www.endeavoursliet.in/images/mainlogo.png"
+                  alt="Endeavour Logo"
+                  className="w-[36px] h-auto object-contain"
+                  referrerPolicy="no-referrer"
+                />
+                <span className="font-sans font-black text-[13px] uppercase tracking-[3px] text-brand-accent">
+                  ENDEAVOUR
                 </span>
-                <button
-                  onClick={() => setMobileOpen(false)}
-                  className="w-9 h-9 flex items-center justify-center text-brand-muted hover:text-brand-accent transition-colors"
-                  aria-label="Close menu"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
+              </Link>
+              <button
+                onClick={() => setMobileOpen(false)}
+                className="w-10 h-10 flex items-center justify-center text-brand-muted hover:text-white transition-colors"
+                aria-label="Close menu"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
 
-              {/* Links */}
-              <nav className="flex flex-col px-6 py-8 gap-1 flex-1">
-                {navLinks.map((link, i) =>
-                  link.isRouterLink ? (
-                    <motion.div
-                      key={link.name}
-                      initial={{ opacity: 0, x: 30 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.05 * i }}
-                    >
+            {/* Nav links — staggered reveal */}
+            <nav className="flex flex-col flex-1 justify-center px-8 gap-0">
+              {navLinks.map((link, i) => (
+                <motion.div
+                  key={link.name}
+                  className="overflow-hidden border-b border-white/5"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.1 + i * 0.07 }}
+                >
+                  <motion.div
+                    initial={{ y: '100%' }}
+                    animate={{ y: 0 }}
+                    exit={{ y: '100%' }}
+                    transition={{ duration: 0.4, delay: 0.1 + i * 0.07, ease: [0.76, 0, 0.24, 1] }}
+                  >
+                    {link.isRouterLink ? (
                       <Link
                         to={link.href}
                         onClick={() => { scrollToTop(); setMobileOpen(false); }}
-                        className={`block py-4 text-[15px] uppercase tracking-[2px] font-bold border-b border-white/5 transition-colors ${
-                          location.pathname === link.href ? 'text-brand-accent' : 'text-brand-muted hover:text-white'
+                        className={`block py-5 text-[28px] font-black uppercase tracking-[-0.5px] transition-colors leading-none ${
+                          location.pathname === link.href ? 'text-brand-accent' : 'text-white'
                         }`}
                       >
                         {link.name}
                       </Link>
-                    </motion.div>
-                  ) : (
-                    <motion.div
-                      key={link.name}
-                      initial={{ opacity: 0, x: 30 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.05 * i }}
-                    >
+                    ) : (
                       <a
                         href={link.href}
                         onClick={() => { scrollToTop(); setMobileOpen(false); }}
-                        className="block py-4 text-[15px] uppercase tracking-[2px] font-bold border-b border-white/5 text-brand-muted hover:text-white transition-colors"
+                        className="block py-5 text-[28px] font-black uppercase tracking-[-0.5px] text-white transition-colors leading-none"
                       >
                         {link.name}
                       </a>
-                    </motion.div>
-                  )
-                )}
-              </nav>
+                    )}
+                  </motion.div>
+                </motion.div>
+              ))}
 
-              {/* Footer of drawer */}
-              <div className="px-6 py-6 border-t border-white/10">
-                <p className="text-[11px] text-brand-muted uppercase tracking-[1px]">EST. 2009 — SLIET LONGOWAL</p>
-              </div>
-            </motion.div>
-          </>
+              {/* Join Us CTA */}
+              <motion.div
+                className="mt-8"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+              >
+                <a
+                  href="#contact"
+                  onClick={() => { scrollToTop(); setMobileOpen(false); }}
+                  className="inline-block px-8 py-4 border-2 border-brand-accent text-brand-accent text-[13px] uppercase tracking-[3px] font-black hover:bg-brand-accent hover:text-white transition-colors duration-300"
+                >
+                  Join Us
+                </a>
+              </motion.div>
+            </nav>
+
+            {/* Bottom bar */}
+            <div className="px-8 py-6 border-t border-white/10 shrink-0">
+              <p className="text-[11px] text-brand-muted uppercase tracking-[2px]">EST. 2009 — SLIET LONGOWAL</p>
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </>
