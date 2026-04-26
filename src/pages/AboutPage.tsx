@@ -8,8 +8,8 @@ export function AboutPage() {
   }, []);
 
   return (
-    <div className="pt-[150px] pb-[100px] bg-black/30 min-h-screen">
-      <div className="max-w-[1024px] mx-auto px-[60px]">
+    <div className="pt-[90px] md:pt-[150px] pb-[60px] md:pb-[100px] bg-black/30 min-h-screen">
+      <div className="max-w-[1024px] mx-auto px-5 md:px-[60px]">
         <div className="mb-20">
           <motion.div
             initial={{ opacity: 0, x: -100 }}

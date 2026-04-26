@@ -60,8 +60,8 @@ export function DocumentationPage() {
   const mid = Math.ceil(titleWords.length / 2);
 
   return (
-    <div className="min-h-screen pt-[140px] pb-[50px]">
-      <div className="max-w-[1024px] mx-auto px-[40px]">
+    <div className="min-h-screen pt-[90px] md:pt-[140px] pb-[50px]">
+      <div className="max-w-[1024px] mx-auto px-5 md:px-[40px]">
 
         {/* Hero */}
         <FadeIn direction="up" delay={0.1}>

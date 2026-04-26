@@ -44,8 +44,8 @@ export function Gallery() {
   const totalImages = [...images, ...images, ...images, ...images];
 
   return (
-    <section id="gallery" className="py-[120px] bg-black/30 relative border-t border-white/10 overflow-hidden">
-      <div className="max-w-[1024px] mx-auto px-[60px] mb-[60px] text-center relative z-10">
+    <section id="gallery" className="py-[60px] md:py-[120px] bg-black/30 relative border-t border-white/10 overflow-hidden">
+      <div className="max-w-[1024px] mx-auto px-5 md:px-[60px] mb-10 md:mb-[60px] text-center relative z-10">
         <FadeIn delay={0.1} direction="up">
           <p className="text-brand-muted text-sm font-bold tracking-widest uppercase mb-4">Today's Pick</p>
         </FadeIn>
@@ -65,7 +65,7 @@ export function Gallery() {
       <div
         ref={containerRef}
         // Increase container height to allow for scaled up outer elements
-        className="w-full relative h-[650px] flex items-center overflow-hidden"
+        className="w-full relative h-[280px] sm:h-[420px] md:h-[500px] lg:h-[650px] flex items-center overflow-hidden"
         style={{ perspective: '1200px' }}
       >
         <motion.div

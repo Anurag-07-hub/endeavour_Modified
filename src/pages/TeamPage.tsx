@@ -77,7 +77,7 @@ export function TeamPage() {
     : teamMembers.find(t => t.category === activeTab)?.members || [];
 
   return (
-    <div className="pt-[150px] pb-[100px] bg-brand-bg min-h-screen">
+    <div className="pt-[90px] md:pt-[150px] pb-[60px] md:pb-[100px] bg-brand-bg min-h-screen">
       <div className="max-w-[1280px] mx-auto px-[30px] md:px-[60px]">
         <div className="mb-20 text-center flex flex-col items-center">
           <motion.div

@@ -26,6 +26,11 @@
 /* Smooth scrolling behavior for html */
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;
 }
 
 @keyframes shimmer {

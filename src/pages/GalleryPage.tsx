@@ -116,11 +116,11 @@ export function GalleryPage() {
   const totalImages = [...images, ...images, ...images, ...images];
 
   return (
-    <div className="pt-[150px] pb-0 bg-[#F9F9F9] h-screen flex flex-col items-center justify-center overflow-hidden">
+    <div className="pt-[70px] md:pt-[80px] pb-0 bg-[#F9F9F9] h-screen flex flex-col items-center justify-center overflow-hidden">
       {/* Header Section */}
-      <div className="max-w-[1024px] mx-auto px-[30px] md:px-[60px] text-center mb-6 relative z-30">
+      <div className="max-w-[1024px] mx-auto px-5 md:px-[60px] text-center mb-4 md:mb-6 relative z-30">
         <FadeIn delay={0.2} direction="up">
-          <h1 className="text-[40px] md:text-[56px] lg:text-[64px] font-sans font-black tracking-[-2px] pb-2 leading-[1.1]">
+          <h1 className="text-[32px] sm:text-[40px] md:text-[56px] lg:text-[64px] font-sans font-black tracking-[-2px] pb-2 leading-[1.1]">
             <span className="text-black" style={{ color: 'black' }}>WELCOME </span>
             <span className="text-white relative inline-block px-4 bg-black rounded-lg transform -skew-x-12 mx-2">
               <span className="inline-block transform skew-x-12">TO OUR</span>
@@ -132,7 +132,7 @@ export function GalleryPage() {
 
       {/* 3D Continuous Gallery Section */}
       <div
-        className="w-full relative h-[400px] md:h-[500px]"
+        className="w-full relative h-[280px] sm:h-[360px] md:h-[400px] lg:h-[500px]"
         style={{ perspective: "1500px" }}
       >
         <motion.div
