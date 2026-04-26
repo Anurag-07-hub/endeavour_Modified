@@ -85,7 +85,7 @@ export function TeamPage() {
   const [activeTab, setActiveTab] = useState('Executives');
 
   const visibleMembers = activeTab === 'Faculty Advisor'
-    ? [teamMembers.find(t => t.name === 'Prof. Surita Maini')]
+    ? [teamMembers.find(t => !t.category)]
     : teamMembers.find(t => t.category === activeTab)?.members || [];
 
   return (
@@ -109,7 +109,7 @@ export function TeamPage() {
             transition={{ delay: 0.2 }}
             className="flex flex-wrap gap-3 justify-center"
           >
-            {['Executives', 'Technical', 'Non-Technical', 'Faculty Advisor'].map((tab) => (
+            {['Executives', 'Core Committee', 'Alumni', 'Faculty Advisor'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
