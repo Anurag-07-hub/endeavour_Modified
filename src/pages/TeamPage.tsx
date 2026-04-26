@@ -129,7 +129,7 @@ export function TeamPage() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 md:gap-8"
+          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8"
         >
           {visibleMembers.map((member: any, i: number) => (
             <TeamMemberCard key={member?.name ?? i} member={member} delay={i * 0.05} />
