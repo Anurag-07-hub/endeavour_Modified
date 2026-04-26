@@ -26,6 +26,7 @@ export function Navbar() {
     { name: 'Team', href: '/team', isRouterLink: true },
     { name: 'Events', href: '/#events', isRouterLink: false },
     { name: 'Gallery', href: '/gallery', isRouterLink: true },
+    { name: 'Contact', href: '#contact', isRouterLink: false },
     { name: 'Documentation', href: '/documentation', isRouterLink: true },
   ];
 
@@ -56,13 +57,13 @@ export function Navbar() {
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-[32px] lg:gap-[40px]">
+          <nav className="hidden md:flex items-center gap-[24px] lg:gap-[32px]">
             {navLinks.map((link) =>
               link.isRouterLink ? (
                 <Link
                   key={link.name}
                   to={link.href}
-                  className={`text-[13px] lg:text-[15px] uppercase tracking-[1.5px] font-bold transition-colors relative ${
+                  className={`text-[13px] uppercase tracking-[1.5px] font-bold transition-colors relative ${
                     location.pathname === link.href ? 'text-brand-accent' : 'text-brand-muted hover:text-white'
                   }`}
                 >
@@ -72,12 +73,18 @@ export function Navbar() {
                 <a
                   key={link.name}
                   href={link.href}
-                  className="text-[13px] lg:text-[15px] uppercase tracking-[1.5px] font-bold text-brand-muted hover:text-white transition-colors relative"
+                  className="text-[13px] uppercase tracking-[1.5px] font-bold text-brand-muted hover:text-white transition-colors relative"
                 >
                   {link.name}
                 </a>
               )
             )}
+            <a
+              href="#contact"
+              className="hidden lg:inline-block px-[24px] py-[10px] border border-brand-accent text-brand-accent text-[12px] uppercase tracking-[2px] hover:bg-brand-accent hover:text-brand-bg transition-colors duration-300 font-sans font-black whitespace-nowrap"
+            >
+              Join Us
+            </a>
           </nav>
 
           {/* Mobile Hamburger */}
