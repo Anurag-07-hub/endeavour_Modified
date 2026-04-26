@@ -42,28 +42,28 @@ export function Navbar() {
       >
         <div className="max-w-[1024px] mx-auto px-5 md:px-6 py-4 md:py-6 flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 group">
+          <Link to="/" className="flex items-center gap-2 lg:gap-3 group shrink-0">
             <motion.img
               src="https://www.endeavoursliet.in/images/mainlogo.png"
               alt="Endeavour Logo"
-              className="w-[56px] md:w-[72px] h-auto object-contain drop-shadow-[0_0_5px_rgba(164,5,5,0.5)]"
+              className="w-[48px] md:w-[52px] lg:w-[68px] h-auto object-contain drop-shadow-[0_0_5px_rgba(164,5,5,0.5)]"
               animate={{ y: [-3, 3, -3], rotate: [-2, 2, -2], scale: [1, 1.05, 1] }}
               transition={{ repeat: Infinity, duration: 5, ease: 'easeInOut' }}
               referrerPolicy="no-referrer"
             />
-            <span className="font-sans font-black text-[16px] md:text-[20px] uppercase tracking-[3px] md:tracking-[4px] text-brand-accent">
+            <span className="hidden lg:inline font-sans font-black text-[18px] uppercase tracking-[4px] text-brand-accent">
               ENDEAVOUR
             </span>
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-[24px] lg:gap-[32px]">
+          <nav className="hidden md:flex items-center gap-[16px] lg:gap-[28px]">
             {navLinks.map((link) =>
               link.isRouterLink ? (
                 <Link
                   key={link.name}
                   to={link.href}
-                  className={`text-[13px] uppercase tracking-[1.5px] font-bold transition-colors relative ${
+                  className={`text-[11px] lg:text-[13px] uppercase tracking-[1px] lg:tracking-[1.5px] font-bold transition-colors relative ${
                     location.pathname === link.href ? 'text-brand-accent' : 'text-brand-muted hover:text-white'
                   }`}
                 >
@@ -73,7 +73,7 @@ export function Navbar() {
                 <a
                   key={link.name}
                   href={link.href}
-                  className="text-[13px] uppercase tracking-[1.5px] font-bold text-brand-muted hover:text-white transition-colors relative"
+                  className="text-[11px] lg:text-[13px] uppercase tracking-[1px] lg:tracking-[1.5px] font-bold text-brand-muted hover:text-white transition-colors relative"
                 >
                   {link.name}
                 </a>
@@ -81,7 +81,7 @@ export function Navbar() {
             )}
             <a
               href="#contact"
-              className="hidden lg:inline-block px-[24px] py-[10px] border border-brand-accent text-brand-accent text-[12px] uppercase tracking-[2px] hover:bg-brand-accent hover:text-brand-bg transition-colors duration-300 font-sans font-black whitespace-nowrap"
+              className="hidden lg:inline-block px-[20px] py-[9px] border border-brand-accent text-brand-accent text-[11px] uppercase tracking-[2px] hover:bg-brand-accent hover:text-brand-bg transition-colors duration-300 font-sans font-black whitespace-nowrap"
             >
               Join Us
             </a>
