@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { motion, useSpring, useTransform, useMotionValue, MotionValue, useAnimationFrame } from 'motion/react';
 import { FadeIn } from '../components/FadeIn';
 
@@ -15,7 +15,7 @@ const images = [
 const ITEM_WIDTH = 340;
 const ITEM_GAP = 50;
 
-function Card({ src, index, parentX }: { src: string, index: number, parentX: MotionValue<number> }) {
+function Card({ src, index, parentX }: { src: string; index: number; parentX: MotionValue<number>; key?: React.Key }) {
   const [isHovered, setIsHovered] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
