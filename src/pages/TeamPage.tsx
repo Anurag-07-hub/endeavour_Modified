@@ -22,11 +22,11 @@ function TeamMemberCard({ member, delay }: { member: any; delay: number; key?: s
       onTouchEnd={deactivate}
       className={`bg-black/30 border overflow-hidden flex flex-col items-center transition-all duration-500 backdrop-blur-sm shadow-lg relative rounded-2xl cursor-pointer select-none
         ${isActive
-          ? 'border-brand-accent shadow-[0_0_25px_rgba(164,5,5,0.4)] -translate-y-2'
+          ? 'border-brand-accent shadow-[0_0_25px_rgba(164,5,5,0.4)] -translate-y-1'
           : 'border-white/10'
         }`}
     >
-      <div className="w-full relative pt-[100%] overflow-hidden bg-white/5">
+      <div className="w-full relative pt-[80%] overflow-hidden bg-white/5">
         {/* Skeleton Loader */}
         {!isLoaded && (
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full animate-[shimmer_1.5s_infinite] z-0" />
@@ -89,12 +89,12 @@ export function TeamPage() {
     : teamMembers.find(t => t.category === activeTab)?.members || [];
 
   return (
-    <div className="pt-[90px] md:pt-[150px] pb-[60px] md:pb-[100px] bg-brand-bg min-h-screen">
-      <div className="max-w-[1280px] mx-auto px-[30px] md:px-[60px]">
+    <div className="pt-[80px] min-[390px]:pt-[90px] md:pt-[150px] pb-[60px] md:pb-[100px] bg-brand-bg min-h-screen">
+      <div className="max-w-[1280px] mx-auto px-4 sm:px-[30px] md:px-[60px]">
         <div className="mb-20 text-center flex flex-col items-center">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: -100 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ type: 'spring', damping: 20, stiffness: 50 }}
             className="mb-6"
           >
@@ -129,7 +129,7 @@ export function TeamPage() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8"
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 md:gap-8"
         >
           {visibleMembers.map((member: any, i: number) => (
             <TeamMemberCard key={member?.name ?? i} member={member} delay={i * 0.05} />
