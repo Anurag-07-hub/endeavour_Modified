@@ -46,7 +46,7 @@ export function About() {
               <img 
                 src="https://images.unsplash.com/photo-1561557944-6e7860d1a7eb?q=80&w=1470&auto=format&fit=crop" 
                 alt="Robotics Team" 
-                className="w-full h-full object-cover grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all duration-700" 
+                className="w-full h-full object-cover transition-all duration-700" 
               />
             </FadeIn>
             <FadeIn direction="up" delay={0.4} className="absolute bottom-10 left-0 w-2/3 h-[300px] border border-brand-accent z-20 bg-black/30">
@@ -54,7 +54,7 @@ export function About() {
               <img 
                 src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1470&auto=format&fit=crop" 
                 alt="Engineering Workshop" 
-                className="w-full h-full object-cover grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all duration-700" 
+                className="w-full h-full object-cover transition-all duration-700" 
               />
             </FadeIn>
           </div>

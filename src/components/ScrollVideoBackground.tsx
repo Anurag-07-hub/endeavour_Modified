@@ -46,9 +46,9 @@ export function ScrollVideoBackground() {
     const updateImage = () => {
       // smooth lerping for that buttery feel
       currentScroll += (targetScroll - currentScroll) * 0.08;
-      
+
       const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-      
+
       if (maxScroll > 0) {
         const scrollProgress = currentScroll / maxScroll;
         // Map 0 -> 1 progress to 1 -> 192 frames
@@ -56,18 +56,18 @@ export function ScrollVideoBackground() {
           Math.max(Math.floor(scrollProgress * frameCount) + 1, 1),
           frameCount
         );
-        
+
         const frameImage = images[frameIndex - 1];
         if (frameImage && frameImage.complete && frameImage.naturalWidth > 0) {
-           ctx.drawImage(frameImage, 0, 0, canvas.width, canvas.height);
+          ctx.drawImage(frameImage, 0, 0, canvas.width, canvas.height);
         }
       }
-      
+
       animationFrameId = requestAnimationFrame(updateImage);
     };
 
     animationFrameId = requestAnimationFrame(updateImage);
-    
+
     return () => {
       window.removeEventListener('scroll', handleScroll);
       cancelAnimationFrame(animationFrameId);
@@ -76,9 +76,7 @@ export function ScrollVideoBackground() {
 
   return (
     <div className="fixed inset-0 w-full h-full -z-50 bg-black pointer-events-none">
-      {/* Dark overlay to make sure text is still perfectly legible over the frames */}
-      <div className="absolute inset-0 bg-black/20 z-10 pointer-events-none"></div>
-      
+
       <canvas
         ref={canvasRef}
         className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none"

@@ -19,7 +19,7 @@ export function Navbar() {
     { name: 'About', href: '/about', isRouterLink: true },
     { name: 'Team', href: '/team', isRouterLink: true },
     { name: 'Events', href: '/#events', isRouterLink: false },
-    { name: 'Gallery', href: '/#gallery', isRouterLink: false },
+    { name: 'Gallery', href: '/gallery', isRouterLink: true },
     { name: 'Contact', href: '#contact', isRouterLink: false },
     { name: 'Documentation', href: '/documentation', isRouterLink: true },
   ];

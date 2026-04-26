@@ -10,7 +10,7 @@ export function Hero() {
 
   return (
     <section
-      className="relative h-[768px] flex flex-col items-center justify-center overflow-hidden bg-black/30 group"
+      className="relative h-[768px] flex flex-col items-center justify-center overflow-hidden group"
     >
       <div className="absolute inset-0 z-0 opacity-[0.05] border-l border-white">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_2px_2px,var(--color-white)_1px,transparent_0)] bg-[size:40px_40px]"></div>

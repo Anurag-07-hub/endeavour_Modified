@@ -3,11 +3,11 @@ import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { About } from './components/About';
 import { Events } from './components/Events';
-import { Gallery } from './components/Gallery';
 import { Footer } from './components/Footer';
 import { AboutPage } from './pages/AboutPage';
 import { TeamPage } from './pages/TeamPage';
 import { DocumentationPage } from './pages/DocumentationPage';
+import { GalleryPage } from './pages/GalleryPage';
 import { ScrollVideoBackground } from './components/ScrollVideoBackground';
 
 function Home() {
@@ -16,7 +16,6 @@ function Home() {
       <Hero />
       <About />
       <Events />
-      <Gallery />
     </main>
   );
 }
@@ -31,6 +30,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/team" element={<TeamPage />} />
+          <Route path="/gallery" element={<GalleryPage />} />
           <Route path="/documentation" element={<DocumentationPage />} />
         </Routes>
         <Footer />

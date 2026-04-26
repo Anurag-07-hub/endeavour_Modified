@@ -90,81 +90,78 @@ export function DocumentationPage() {
           {sections.map((section, i) => {
             const Icon = section.icon;
             return (
-              <FadeIn key={section.title} direction="up" delay={0.1 + i * 0.08}>
-                <div
-                  className="
-                    flex flex-col h-full
-                    relative overflow-hidden
-                    rounded-2xl
-                    border border-brand-accent/25
-                    bg-brand-bg/30 backdrop-blur-xl
-                    shadow-[0_0_0_1px_rgba(164,5,5,0.08),0_4px_24px_rgba(164,5,5,0.10)]
-                    hover:border-brand-accent/60
-                    hover:shadow-[0_0_0_2px_rgba(164,5,5,0.18),0_8px_32px_rgba(164,5,5,0.18)]
-                    transition-all duration-300
-                    group
-                    p-[24px]
-                  "
-                >
-                  {/* Subtle glow ring top-right */}
-                  <div className="pointer-events-none absolute -top-8 -right-8 w-32 h-32 rounded-full bg-brand-accent/10 blur-2xl" />
+              <div
+                key={section.title}
+                className="
+                  flex flex-col h-full
+                  relative overflow-hidden
+                  rounded-2xl
+                  border border-brand-accent/25
+                  bg-brand-bg/30 backdrop-blur-xl
+                  shadow-[0_0_0_1px_rgba(164,5,5,0.08),0_4px_24px_rgba(164,5,5,0.10)]
+                  hover:border-brand-accent/60
+                  hover:shadow-[0_0_0_2px_rgba(164,5,5,0.18),0_8px_32px_rgba(164,5,5,0.18)]
+                  transition-all duration-300
+                  group
+                  p-[24px]
+                "
+              >
+                {/* Subtle glow ring top-right */}
+                <div className="pointer-events-none absolute -top-8 -right-8 w-32 h-32 rounded-full bg-brand-accent/10 blur-2xl" />
 
-                  {/* Header */}
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-9 h-9 rounded-full border border-brand-accent/40 flex items-center justify-center bg-brand-accent/5 group-hover:bg-brand-accent/15 transition-colors shrink-0">
-                      <Icon className="w-4 h-4 text-brand-accent" />
-                    </div>
-                    <h2 className="font-sans font-bold text-[13px] uppercase tracking-[2px]">
-                      <span className="text-brand-muted">{section.title.slice(0, Math.ceil(section.title.length / 2))}</span>
-                      <span className="text-brand-accent">{section.title.slice(Math.ceil(section.title.length / 2))}</span>
-                    </h2>
+                {/* Header */}
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-9 h-9 rounded-full border border-brand-accent/40 flex items-center justify-center bg-brand-accent/5 group-hover:bg-brand-accent/15 transition-colors shrink-0">
+                    <Icon className="w-4 h-4 text-brand-accent" />
                   </div>
-
-                  {/* Description */}
-                  <p className="font-sans text-brand-muted text-[12px] leading-[1.65] mb-4">
-                    {section.description}
-                  </p>
-
-                  {/* Links */}
-                  <ul className="space-y-[8px] mt-auto">
-                    {section.links.map((link) => (
-                      <li key={link.label}>
-                        <a
-                          href={link.href}
-                          className="flex items-center gap-2 text-[11px] font-sans font-medium text-brand-muted hover:text-brand-accent transition-colors uppercase tracking-[1px]"
-                        >
-                          <ChevronRight className="w-3 h-3 text-brand-accent shrink-0" />
-                          {link.label}
-                          <ExternalLink className="w-2.5 h-2.5 ml-auto opacity-40" />
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
+                  <h2 className="font-sans font-bold text-[13px] uppercase tracking-[2px]">
+                    <span className="text-brand-muted">{section.title.slice(0, Math.ceil(section.title.length / 2))}</span>
+                    <span className="text-brand-accent">{section.title.slice(Math.ceil(section.title.length / 2))}</span>
+                  </h2>
                 </div>
-              </FadeIn>
+
+                {/* Description */}
+                <p className="font-sans text-brand-muted text-[12px] leading-[1.65] mb-4">
+                  {section.description}
+                </p>
+
+                {/* Links */}
+                <ul className="space-y-[8px] mt-auto">
+                  {section.links.map((link) => (
+                    <li key={link.label}>
+                      <a
+                        href={link.href}
+                        className="flex items-center gap-2 text-[11px] font-sans font-medium text-brand-muted hover:text-brand-accent transition-colors uppercase tracking-[1px]"
+                      >
+                        <ChevronRight className="w-3 h-3 text-brand-accent shrink-0" />
+                        {link.label}
+                        <ExternalLink className="w-2.5 h-2.5 ml-auto opacity-40" />
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             );
           })}
         </div>
 
         {/* CTA */}
-        <FadeIn direction="up" delay={0.5}>
-          <div className="mt-[28px] rounded-2xl border border-brand-accent/25 bg-brand-bg/40 backdrop-blur-xl p-[28px] text-center shadow-[0_0_0_1px_rgba(164,5,5,0.08),0_4px_24px_rgba(164,5,5,0.10)]">
-            <p className="font-sans text-brand-muted text-[11px] uppercase tracking-[2px] mb-2">
-              Can't find what you're looking for?
-            </p>
-            <p className="font-sans text-[16px] font-bold mb-5">
-              <span className="text-brand-muted">Reach out to the </span>
-              <span className="text-brand-accent">Endeavour team</span>
-              <span className="text-brand-muted"> directly.</span>
-            </p>
-            <a
-              href="#contact"
-              className="inline-block px-[28px] py-[10px] rounded-full border border-brand-accent text-brand-accent text-[11px] uppercase tracking-[2px] font-bold hover:bg-brand-accent hover:text-brand-bg transition-colors duration-300"
-            >
-              Contact Us
-            </a>
-          </div>
-        </FadeIn>
+        <div className="mt-[28px] rounded-2xl border border-brand-accent/25 bg-brand-bg/40 backdrop-blur-xl p-[28px] text-center shadow-[0_0_0_1px_rgba(164,5,5,0.08),0_4px_24px_rgba(164,5,5,0.10)]">
+          <p className="font-sans text-brand-muted text-[11px] uppercase tracking-[2px] mb-2">
+            Can't find what you're looking for?
+          </p>
+          <p className="font-sans text-[16px] font-bold mb-5">
+            <span className="text-brand-muted">Reach out to the </span>
+            <span className="text-brand-accent">Endeavour team</span>
+            <span className="text-brand-muted"> directly.</span>
+          </p>
+          <a
+            href="#contact"
+            className="inline-block px-[28px] py-[10px] rounded-full border border-brand-accent text-brand-accent text-[11px] uppercase tracking-[2px] font-bold hover:bg-brand-accent hover:text-brand-bg transition-colors duration-300"
+          >
+            Contact Us
+          </a>
+        </div>
 
       </div>
     </div>
