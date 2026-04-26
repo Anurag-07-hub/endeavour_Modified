@@ -40,18 +40,18 @@ export function Navbar() {
         animate={{ y: 0 }}
         transition={{ duration: 0.8, ease: 'easeOut' }}
       >
-        <div className="max-w-[1024px] mx-auto px-5 md:px-6 py-4 md:py-6 flex items-center justify-between">
+        <div className="max-w-[1024px] mx-auto px-4 sm:px-5 md:px-6 lg:px-4 py-3 md:py-5 flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 lg:gap-3 group shrink-0">
+          <Link to="/" className="flex items-center gap-2 group shrink-0 lg:-ml-[60px]">
             <motion.img
               src="https://www.endeavoursliet.in/images/mainlogo.png"
               alt="Endeavour Logo"
-              className="w-[48px] md:w-[52px] lg:w-[68px] h-auto object-contain drop-shadow-[0_0_5px_rgba(164,5,5,0.5)]"
+              className="w-[40px] sm:w-[48px] md:w-[52px] lg:w-[64px] h-auto object-contain drop-shadow-[0_0_5px_rgba(164,5,5,0.5)]"
               animate={{ y: [-3, 3, -3], rotate: [-2, 2, -2], scale: [1, 1.05, 1] }}
               transition={{ repeat: Infinity, duration: 5, ease: 'easeInOut' }}
               referrerPolicy="no-referrer"
             />
-            <span className="hidden lg:inline font-sans font-black text-[18px] uppercase tracking-[4px] text-brand-accent">
+            <span className="font-sans font-black text-[13px] sm:text-[14px] lg:text-[18px] uppercase tracking-[2px] lg:tracking-[4px] text-brand-accent hidden sm:inline">
               ENDEAVOUR
             </span>
           </Link>
