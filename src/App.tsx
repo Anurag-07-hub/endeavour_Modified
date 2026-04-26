@@ -9,6 +9,7 @@ import { TeamPage } from './pages/TeamPage';
 import { DocumentationPage } from './pages/DocumentationPage';
 import { GalleryPage } from './pages/GalleryPage';
 import { ScrollVideoBackground } from './components/ScrollVideoBackground';
+import { ScrollToTop } from './components/ScrollToTop';
 
 function Home() {
   return (
@@ -23,6 +24,7 @@ function Home() {
 export default function App() {
   return (
     <Router>
+      <ScrollToTop />
       <ScrollVideoBackground />
       <div className="min-h-screen text-white selection:bg-brand-accent selection:text-white">
         <Navbar />
