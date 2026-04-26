@@ -53,7 +53,7 @@ export function Navbar() {
               transition={{ repeat: Infinity, duration: 5, ease: 'easeInOut' }}
               referrerPolicy="no-referrer"
             />
-            <span className="font-sans font-black text-[13px] sm:text-[14px] lg:text-[18px] uppercase tracking-[2px] lg:tracking-[4px] text-brand-accent hidden sm:inline">
+            <span className="font-sans font-black text-[13px] sm:text-[14px] lg:text-[18px] uppercase tracking-[2px] lg:tracking-[4px] text-brand-accent">
               ENDEAVOUR
             </span>
           </Link>
