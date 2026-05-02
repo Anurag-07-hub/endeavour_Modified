@@ -2,12 +2,19 @@ export const teamMembers = [
   {
     "name": "Amrik Sir",
     "position": "Faculty Advisor",
-    "image": "https://www.endeavoursliet.in/images/main%20mam%20image.jpeg", 
+    "image": "https://www.endeavoursliet.in/images/main%20mam%20image.jpeg",
     "linkedin": ""
   },
   {
     "category": "Executives",
     "members": [
+      {
+        "name": "Pragya",
+        "position": "Co-Coordinator & Social Media Head",
+        "image": "https://www.endeavoursliet.in/images/profilesBatch2023/Pragya.jpg",
+        "email": "2140147@gmail.com",
+        "linkedin": "http://www.linkedin.com/in/pragya-sinha-37a350245"
+      },
       {
         "name": "Ashutosh Mehta",
         "position": "Coordinator",
@@ -23,11 +30,11 @@ export const teamMembers = [
         "linkedin": "https://www.linkedin.com/in/anmol-ranjan-62aa16289"
       },
       {
-        "name": "Pragya",
-        "position": "Co-Coordinator & Social Media Head",
-        "image": "https://www.endeavoursliet.in/images/profilesBatch2023/Pragya.jpg",
-        "email": "2140147@gmail.com",
-        "linkedin": "http://www.linkedin.com/in/pragya-sinha-37a350245"
+        "name": "Priyanka Singh",
+        "position": "Mechanical Design & Analysis Head",
+        "image": "https://www.endeavoursliet.in/images/profilesBatch2023/Priyanka.jpg",
+        "email": "2346039@sliet.ac.in",
+        "linkedin": "https://www.linkedin.com/in/priyanka-singh-589707289"
       },
       {
         "name": "RAJ SINGH",
@@ -35,13 +42,6 @@ export const teamMembers = [
         "image": "https://www.endeavoursliet.in/images/profilesBatch2023/Raj.jpg",
         "email": "rs5534220@gmail.com",
         "linkedin": "https://www.linkedin.com/in/raj-singh-a1319b24b"
-      },
-      {
-        "name": "Priyanka Singh",
-        "position": "Mechanical Design & Analysis Head",
-        "image": "https://www.endeavoursliet.in/images/profilesBatch2023/Priyanka.jpg",
-        "email": "2346039@sliet.ac.in",
-        "linkedin": "https://www.linkedin.com/in/priyanka-singh-589707289"
       },
       {
         "name": "Anuj",
@@ -58,13 +58,6 @@ export const teamMembers = [
         "linkedin": "https://www.linkedin.com/in/rohit-kumar-91b4802b3"
       },
       {
-        "name": "Farhan Uddin Ahmed",
-        "position": "Fabrication & Asset Management Head",
-        "image": "https://www.endeavoursliet.in/images/profilesBatch2023/farhan.jpg",
-        "email": "ufarhan579@gmail.com",
-        "linkedin": "https://www.linkedin.com/in/farhanuahmed"
-      },
-      {
         "name": "Kalki",
         "position": "PR & Asset Management Head",
         "image": "https://www.endeavoursliet.in/images/profilesBatch2023/Kalki.jpg",
@@ -77,6 +70,11 @@ export const teamMembers = [
         "image": "https://www.endeavoursliet.in/images/profilesBatch2023/UNNAT GIRI.jpg",
         "email": "unnat_2434201@sliet.ac.in",
         "linkedin": "https://www.linkedin.com/in/unnati-giri-b6785b361"
+      },
+      {
+        "name": "Farhan",
+        "position": "Fabrication & Asset Management Head",
+        "image": "https://www.endeavoursliet.in/images/profilesBatch2023/farhan.jpg"
       }
     ]
   },
