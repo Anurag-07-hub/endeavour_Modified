@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import { useEffect, useState } from 'react';
-import { teamMembers } from '../data/team';
+import { useCMS } from '../context/CMSContext';
 import { Linkedin, Mail } from 'lucide-react';
 
 function TeamMemberCard({ member, delay }: { member: any; delay: number; key?: string | number }) {
@@ -83,10 +83,11 @@ export function TeamPage() {
   }, []);
 
   const [activeTab, setActiveTab] = useState('Executives');
+  const { team } = useCMS();
 
   const visibleMembers = activeTab === 'Faculty Advisor'
-    ? [teamMembers.find(t => !t.category)]
-    : teamMembers.find(t => t.category === activeTab)?.members || [];
+    ? [team.find(t => !t.category)]
+    : team.find(t => t.category === activeTab)?.members || [];
 
   return (
     <div className="pt-[80px] min-[390px]:pt-[90px] md:pt-[150px] pb-[60px] md:pb-[100px] bg-brand-bg min-h-screen">

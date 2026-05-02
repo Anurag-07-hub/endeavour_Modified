@@ -83,13 +83,13 @@ export function Navbar() {
                 </a>
               )
             )}
-            <a
-              href="#contact"
+            <Link
+              to="/join-us"
               onClick={scrollToTop}
               className="hidden lg:inline-block px-[20px] py-[9px] border border-brand-accent text-brand-accent text-[11px] uppercase tracking-[2px] hover:bg-brand-accent hover:text-brand-bg transition-colors duration-300 font-sans font-black whitespace-nowrap"
             >
               Join Us
-            </a>
+            </Link>
           </nav>
 
           {/* Mobile Hamburger */}
@@ -185,13 +185,13 @@ export function Navbar() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6 }}
               >
-                <a
-                  href="#contact"
+                <Link
+                  to="/join-us"
                   onClick={() => { scrollToTop(); setMobileOpen(false); }}
                   className="inline-block px-8 py-4 border-2 border-brand-accent text-brand-accent text-[13px] uppercase tracking-[3px] font-black hover:bg-brand-accent hover:text-white transition-colors duration-300"
                 >
                   Join Us
-                </a>
+                </Link>
               </motion.div>
             </nav>
 

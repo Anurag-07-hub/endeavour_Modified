@@ -1,9 +1,10 @@
 import { Mail, MapPin, Phone, Linkedin, Instagram, Facebook } from 'lucide-react';
 import { FadeIn } from './FadeIn';
 import { Link } from 'react-router-dom';
-
+import { useCMS } from '../context/CMSContext';
 
 export function Footer() {
+  const { contactInfo } = useCMS();
   return (
     <footer id="contact" className="bg-brand-bg border-t border-white/10 pt-[36px] pb-[24px]">
       <div className="max-w-[1024px] mx-auto px-5 md:px-[60px]">
@@ -50,30 +51,39 @@ export function Footer() {
           </FadeIn>
 
           {/* Contact — spans full width on mobile, 2 cols on lg */}
-          <FadeIn direction="up" delay={0.3} className="sm:col-span-2 lg:col-span-2">
+          <FadeIn direction="up" delay={0.5} className="sm:col-span-2 lg:col-span-2">
             <h4 className="font-sans font-bold text-white mb-5 md:mb-6 uppercase tracking-[2px] text-[12px]">Contact Us</h4>
             <div className="space-y-[12px] md:space-y-[15px]">
               <div className="flex items-start gap-[12px] md:gap-[15px] text-brand-muted">
                 <MapPin className="w-5 h-5 text-brand-accent shrink-0 mt-0.5" />
-                <p className="font-sans text-[13px] md:text-[14px] leading-[1.6]">
-                  T&amp;P Block, SLIET, Longowal, Sangrur, Punjab 148106, India
+                <p className="font-sans text-[13px] md:text-[14px] leading-[1.6] whitespace-pre-line">
+                  {contactInfo.address}
                 </p>
               </div>
               <div className="flex items-center gap-[12px] md:gap-[15px] text-brand-muted">
                 <Mail className="w-5 h-5 text-brand-accent shrink-0" />
-                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=endeavourinsliet@gmail.com" target="_blank" rel="noopener noreferrer" className="font-sans text-[13px] md:text-[14px] hover:text-brand-accent transition-colors break-all">
-                  endeavourinsliet@gmail.com
+                <a href={`mailto:${contactInfo.email}`} className="font-sans text-[13px] md:text-[14px] hover:text-brand-accent transition-colors break-all">
+                  {contactInfo.email}
                 </a>
               </div>
               <div className="flex items-start gap-[12px] md:gap-[15px] text-brand-muted">
                 <Phone className="w-5 h-5 text-brand-accent shrink-0 mt-0.5" />
-                <div className="flex flex-col gap-1">
-                  <a href="tel:+919027042638" className="font-sans text-[13px] md:text-[14px] hover:text-brand-accent transition-colors">
-                    Ashutosh Mehta : +91 9027042638
-                  </a>
-                  <a href="tel:+916201957167" className="font-sans text-[13px] md:text-[14px] hover:text-brand-accent transition-colors">
-                    Anmol Ranjan : +91 6201957167
-                  </a>
+                <div className="flex flex-col gap-2">
+                  {contactInfo.phone && (
+                    <a href={`tel:${contactInfo.phone}`} className="font-sans text-[13px] md:text-[14px] hover:text-brand-accent transition-colors block">
+                      {contactInfo.phone}
+                    </a>
+                  )}
+                  {contactInfo.contacts?.map((contact, idx) => (
+                    contact.name && contact.phone ? (
+                      <div key={idx} className="flex gap-2 items-center">
+                        <span className="font-black text-[13px] text-white tracking-[0.5px]">{contact.name}:</span>
+                        <a href={`tel:${contact.phone}`} className="font-sans text-[13px] md:text-[14px] hover:text-brand-accent transition-colors block">
+                          {contact.phone}
+                        </a>
+                      </div>
+                    ) : null
+                  ))}
                 </div>
               </div>
             </div>

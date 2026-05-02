@@ -96,20 +96,33 @@ function Card({ src, index, parentX }: { src: string; index: number; parentX: Mo
 export function GalleryPage() {
   const wrapWidth = images.length * (ITEM_WIDTH + ITEM_GAP);
   const x = useMotionValue(-wrapWidth);
-  const speed = 2.0; // Gentle continuous auto-scroll speed
+  
+  const baseSpeed = -2.0; 
+  const velocity = useRef(baseSpeed);
+  const isDragging = useRef(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  useAnimationFrame(() => {
-    let newX = x.get() - speed;
-    if (newX <= -wrapWidth * 2) {
-      newX += wrapWidth;
-    } else if (newX > -wrapWidth) {
-      newX -= wrapWidth;
+  const wrap = (val: number) => {
+    let newVal = val;
+    if (newVal <= -wrapWidth * 2) {
+      newVal += wrapWidth;
+    } else if (newVal > -wrapWidth) {
+      newVal -= wrapWidth;
     }
-    x.set(newX);
+    return newVal;
+  };
+
+  useAnimationFrame(() => {
+    if (!isDragging.current) {
+      // Smoothly return to base speed
+      velocity.current = velocity.current + (baseSpeed - velocity.current) * 0.05;
+      
+      let currentX = x.get() + velocity.current;
+      x.set(wrap(currentX));
+    }
   });
 
   // Duplicate images multiple times for seamless infinite scroll
@@ -136,13 +149,26 @@ export function GalleryPage() {
         style={{ perspective: "1500px" }}
       >
         <motion.div
-          drag="x"
-          dragConstraints={{ left: -10000, right: 10000 }}
-          onDrag={(e, info) => {
-            x.set(x.get() + info.delta.x * 1.5);
-          }}
-          className="absolute flex items-center w-max top-1/2 -translate-y-1/2"
+          className="absolute flex items-center w-max top-1/2 -translate-y-1/2 cursor-grab active:cursor-grabbing"
           style={{ x, left: '50%', transformStyle: 'preserve-3d', gap: `${ITEM_GAP}px` }}
+          onPanStart={() => {
+            isDragging.current = true;
+          }}
+          onPan={(e, info) => {
+            let currentX = x.get() + info.delta.x;
+            x.set(wrap(currentX));
+          }}
+          onPanEnd={(e, info) => {
+            isDragging.current = false;
+            // Kickstart momentum
+            velocity.current = info.velocity.x * 0.015; 
+          }}
+          onWheel={(e) => {
+            // Determine primary scroll direction
+            const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+            // Multiply by a factor for sensitivity. Negative because scrolling down (positive) should move the gallery left (negative)
+            velocity.current = -delta * 0.5;
+          }}
         >
           {totalImages.map((src, i) => (
             <Card key={i} src={src} index={i} parentX={x} />

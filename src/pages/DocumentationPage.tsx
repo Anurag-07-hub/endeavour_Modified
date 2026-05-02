@@ -1,5 +1,6 @@
 import { FadeIn } from '../components/FadeIn';
-import { BookOpen, Cpu, Wrench, FileText, ExternalLink, ChevronRight } from 'lucide-react';
+import { BookOpen, Cpu, Wrench, FileText, ExternalLink, ChevronRight, File } from 'lucide-react';
+import { useCMS } from '../context/CMSContext';
 
 const sections = [
   {
@@ -58,6 +59,8 @@ function SplitColorWord({ word, className = '' }: { word: string; className?: st
 export function DocumentationPage() {
   const titleWords = 'DOCUMENTATION'.split('');
   const mid = Math.ceil(titleWords.length / 2);
+  const { documents } = useCMS();
+  const publicDocs = documents.filter(d => d.isPublic);
 
   return (
     <div className="min-h-screen pt-[90px] md:pt-[140px] pb-[50px]">
@@ -84,6 +87,28 @@ export function DocumentationPage() {
 
         {/* Divider */}
         <div className="h-px w-full bg-white/10 mb-[28px]" />
+
+        {/* Dynamic Public Documents Section */}
+        {publicDocs.length > 0 && (
+          <div className="mb-8 p-6 rounded-2xl border border-brand-accent/50 bg-brand-accent/10 backdrop-blur-xl shadow-[0_0_15px_rgba(164,5,5,0.2)]">
+            <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+              <File className="w-5 h-5 text-brand-accent" />
+              <span className="text-brand-muted">Showcase </span>
+              <span className="text-brand-accent">Documents</span>
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {publicDocs.map(doc => (
+                <div key={doc.id} className="bg-black/50 p-4 rounded-xl border border-white/5 hover:border-brand-accent/40 transition-colors">
+                  <h3 className="font-semibold text-white mb-2">{doc.title}</h3>
+                  <p className="text-sm text-gray-400 mb-3">{doc.description}</p>
+                  <a href={doc.driveLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-brand-accent text-sm hover:underline font-medium">
+                    View Document <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Sections Grid — equal height cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-[20px] items-stretch">
