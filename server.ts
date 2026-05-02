@@ -61,8 +61,9 @@ app.post('/api/commit-team', (req, res) => {
     const msg = commitMessage || 'admin: update team data [auto]';
     execSync(`git -C "${REPO_ROOT}" add src/data/team.ts`, { stdio: 'pipe' });
     execSync(`git -C "${REPO_ROOT}" commit -m "${msg}"`, { stdio: 'pipe' });
+    execSync(`git -C "${REPO_ROOT}" push`, { stdio: 'pipe' });
 
-    return res.json({ success: true, message: 'Team data saved & committed to Git!' });
+    return res.json({ success: true, message: 'Team data saved, committed, and pushed to live site!' });
   } catch (err: any) {
     // If nothing changed git commit returns exit code 1 — treat as success
     if (err.message?.includes('nothing to commit')) {
@@ -98,8 +99,9 @@ app.post('/api/commit-contact', (req, res) => {
     const msg = commitMessage || 'admin: update contact info [auto]';
     execSync(`git -C "${REPO_ROOT}" add src/data/contact.ts`, { stdio: 'pipe' });
     execSync(`git -C "${REPO_ROOT}" commit -m "${msg}"`, { stdio: 'pipe' });
+    execSync(`git -C "${REPO_ROOT}" push`, { stdio: 'pipe' });
 
-    return res.json({ success: true, message: 'Contact info saved & committed to Git!' });
+    return res.json({ success: true, message: 'Contact info saved, committed, and pushed to live site!' });
   } catch (err: any) {
     if (err.message?.includes('nothing to commit')) {
       return res.json({ success: true, message: 'No changes detected — contact info is already up to date.' });
