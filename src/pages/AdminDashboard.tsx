@@ -18,6 +18,8 @@ export const AdminDashboard = () => {
   const [commitMessage, setCommitMessage] = useState('');
   const [contactCommitStatus, setContactCommitStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [contactCommitMessage, setContactCommitMessage] = useState('');
+  const [docCommitStatus, setDocCommitStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [docCommitMessage, setDocCommitMessage] = useState('');
 
   useEffect(() => {
     setDraftTeam(team);
@@ -310,6 +312,32 @@ export const AdminDashboard = () => {
       console.error('Git commit failed:', err);
       setContactCommitStatus('error');
       setTimeout(() => setContactCommitStatus('idle'), 5000);
+    }
+  };
+
+  const handleCommitDocsToGit = async () => {
+    setDocCommitStatus('loading');
+    try {
+      const res = await fetch('http://localhost:3001/api/commit-documents', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          documents,
+          commitMessage: docCommitMessage.trim() || undefined,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setDocCommitStatus('success');
+        setDocCommitMessage('');
+        setTimeout(() => setDocCommitStatus('idle'), 4000);
+      } else {
+        throw new Error(data.error || 'Unknown error');
+      }
+    } catch (err: any) {
+      console.error('Git commit failed:', err);
+      setDocCommitStatus('error');
+      setTimeout(() => setDocCommitStatus('idle'), 5000);
     }
   };
 

@@ -21,6 +21,7 @@ app.use((_req, res, next) => {
 
 const TEAM_FILE = path.join(__dirname, 'src', 'data', 'team.ts');
 const CONTACT_FILE = path.join(__dirname, 'src', 'data', 'contact.ts');
+const DOCUMENTS_FILE = path.join(__dirname, 'src', 'data', 'documents.ts');
 const REPO_ROOT = __dirname;
 
 /**
@@ -111,9 +112,47 @@ app.post('/api/commit-contact', (req, res) => {
   }
 });
 
+/**
+ * POST /api/commit-documents
+ * Body: { documents: DocumentInfo[], commitMessage?: string }
+ *
+ * Writes admin-updated documents to src/data/documents.ts and commits to Git.
+ */
+app.post('/api/commit-documents', (req, res) => {
+  const { documents, commitMessage } = req.body as {
+    documents: any[];
+    commitMessage?: string;
+  };
+
+  if (!documents || !Array.isArray(documents)) {
+    return res.status(400).json({ success: false, error: 'Invalid documents payload' });
+  }
+
+  try {
+    const fileContent =
+      `import type { DocumentInfo } from '../context/CMSContext';\n\n` +
+      `export const defaultDocuments: DocumentInfo[] = ${JSON.stringify(documents, null, 2)};\n`;
+    writeFileSync(DOCUMENTS_FILE, fileContent, 'utf8');
+
+    const msg = commitMessage || 'admin: update documents [auto]';
+    execSync(`git -C "${REPO_ROOT}" add src/data/documents.ts`, { stdio: 'pipe' });
+    execSync(`git -C "${REPO_ROOT}" commit -m "${msg}"`, { stdio: 'pipe' });
+    execSync(`git -C "${REPO_ROOT}" push`, { stdio: 'pipe' });
+
+    return res.json({ success: true, message: 'Documents saved, committed, and pushed to live site!' });
+  } catch (err: any) {
+    if (err.message?.includes('nothing to commit')) {
+      return res.json({ success: true, message: 'No changes detected — documents are already up to date.' });
+    }
+    console.error('[CMS Server] Commit error:', err.message);
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 const PORT = 3001;
 app.listen(PORT, () => {
   console.log(`\n  📡 Endeavour CMS API → http://localhost:${PORT}\n`);
-  console.log('  Team saves    → commits to Git ✓');
-  console.log('  Contact saves → commits to Git ✓\n');
+  console.log('  Team saves      → commits to Git ✓');
+  console.log('  Contact saves   → commits to Git ✓');
+  console.log('  Documents saves → commits to Git ✓\n');
 });
