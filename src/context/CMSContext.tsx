@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { teamMembers as initialTeamMembers } from '../data/team';
+import { defaultContact } from '../data/contact';
 
 export interface Member {
   id: string;
@@ -83,15 +84,7 @@ const initializeTeam = (data: any[]): TeamCategory[] => {
 export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [team, setTeamState] = useState<TeamCategory[]>([]);
   const [documents, setDocumentsState] = useState<DocumentInfo[]>([]);
-  const [contactInfo, setContactInfoState] = useState<ContactInfo>({
-    email: 'info@endeavoursliet.in',
-    phone: '+91 XXXXXXXXXX',
-    address: 'SLIET, Longowal, Punjab',
-    contacts: [
-      { name: '', phone: '' },
-      { name: '', phone: '' }
-    ]
-  });
+  const [contactInfo, setContactInfoState] = useState<ContactInfo>(defaultContact);
   const [deletedMembers, setDeletedMembersState] = useState<DeletedMember[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
 

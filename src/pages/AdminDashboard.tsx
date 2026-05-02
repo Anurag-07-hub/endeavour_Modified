@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCMS, TeamCategory, Member, DocumentInfo, ContactInfo, DeletedMember } from '../context/CMSContext';
-import { Users, FileText, Phone, Plus, Trash2, Edit2, LogOut, Check, X, Upload, RefreshCcw, Save, Undo, GripVertical } from 'lucide-react';
+import { Users, FileText, Phone, Plus, Trash2, Edit2, LogOut, Check, X, Upload, RefreshCcw, Save, Undo, GripVertical, GitBranch, Loader } from 'lucide-react';
 import { motion } from 'motion/react';
 
 export const AdminDashboard = () => {
@@ -14,6 +14,10 @@ export const AdminDashboard = () => {
   const [draftTeam, setDraftTeam] = useState<TeamCategory[]>(team);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [draggedMember, setDraggedMember] = useState<{catName: string, index: number} | null>(null);
+  const [commitStatus, setCommitStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [commitMessage, setCommitMessage] = useState('');
+  const [contactCommitStatus, setContactCommitStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [contactCommitMessage, setContactCommitMessage] = useState('');
 
   useEffect(() => {
     setDraftTeam(team);
@@ -252,6 +256,63 @@ export const AdminDashboard = () => {
     setHasUnsavedChanges(false);
   };
 
+  /**
+   * Calls the local CMS API server (port 3001) to write team.ts
+   * and create a git commit. Contact info is intentionally excluded —
+   * it stays in localStorage only and is never committed to Git.
+   */
+  const handleCommitToGit = async () => {
+    setCommitStatus('loading');
+    try {
+      const res = await fetch('http://localhost:3001/api/commit-team', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          team,
+          commitMessage: commitMessage.trim() || undefined,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setCommitStatus('success');
+        setCommitMessage('');
+        setTimeout(() => setCommitStatus('idle'), 4000);
+      } else {
+        throw new Error(data.error || 'Unknown error');
+      }
+    } catch (err: any) {
+      console.error('Git commit failed:', err);
+      setCommitStatus('error');
+      setTimeout(() => setCommitStatus('idle'), 5000);
+    }
+  };
+
+  const handleCommitContactToGit = async () => {
+    setContactCommitStatus('loading');
+    try {
+      const res = await fetch('http://localhost:3001/api/commit-contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contact: contactInfo,
+          commitMessage: contactCommitMessage.trim() || undefined,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setContactCommitStatus('success');
+        setContactCommitMessage('');
+        setTimeout(() => setContactCommitStatus('idle'), 4000);
+      } else {
+        throw new Error(data.error || 'Unknown error');
+      }
+    } catch (err: any) {
+      console.error('Git commit failed:', err);
+      setContactCommitStatus('error');
+      setTimeout(() => setContactCommitStatus('idle'), 5000);
+    }
+  };
+
   return (
     <div className="pt-24 pb-16 min-h-screen bg-brand-bg text-white relative">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -359,6 +420,47 @@ export const AdminDashboard = () => {
                   </button>
                 </div>
 
+                {/* Git Commit Panel */}
+                <div className="bg-[#0a0a0a] border border-brand-accent/30 rounded-xl p-4 mb-6">
+                  <div className="flex items-center gap-2 mb-3">
+                    <GitBranch className="w-4 h-4 text-brand-accent" />
+                    <span className="font-bold text-[12px] uppercase tracking-[1px] text-brand-accent">Commit Team to Git</span>
+                  </div>
+                  <p className="text-[11px] text-brand-muted mb-3 leading-[1.5]">
+                    This writes <code className="text-brand-accent bg-brand-accent/10 px-1 rounded">src/data/team.ts</code> and creates a git commit. Make sure the <code className="text-brand-accent bg-brand-accent/10 px-1 rounded">npm run server</code> CMS API is running on port 3001.
+                  </p>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="Commit message (optional)"
+                      value={commitMessage}
+                      onChange={e => setCommitMessage(e.target.value)}
+                      className="flex-1 bg-brand-bg border border-brand-accent/25 rounded-lg px-3 py-2 text-white text-[12px] focus:border-brand-accent focus:outline-none"
+                    />
+                    <button
+                      onClick={handleCommitToGit}
+                      disabled={commitStatus === 'loading'}
+                      className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-[12px] uppercase tracking-[1px] transition ${
+                        commitStatus === 'success'
+                          ? 'bg-green-600 text-white'
+                          : commitStatus === 'error'
+                          ? 'bg-red-600 text-white'
+                          : 'bg-brand-accent text-white hover:bg-brand-accent/90'
+                      } disabled:opacity-60`}
+                    >
+                      {commitStatus === 'loading' ? (
+                        <><Loader className="w-4 h-4 animate-spin" /> Committing...</>
+                      ) : commitStatus === 'success' ? (
+                        <><Check className="w-4 h-4" /> Committed!</>
+                      ) : commitStatus === 'error' ? (
+                        <><X className="w-4 h-4" /> Failed — check server</>  
+                      ) : (
+                        <><GitBranch className="w-4 h-4" /> Commit to Git</>
+                      )}
+                    </button>
+                  </div>
+                </div>
+
                 {/* List Members */}
                 <div className="space-y-6">
                   {/* Save/Undo Bar */}
@@ -404,6 +506,12 @@ export const AdminDashboard = () => {
                                   className="w-full bg-brand-bg border border-brand-accent/25 rounded px-2 py-1 text-white focus:border-brand-accent text-[12px] focus:outline-none" 
                                   placeholder="Position"
                                 />
+                                {editFormState.image && (
+                                  <div className="flex items-center gap-3 bg-brand-accent/5 border border-brand-accent/15 rounded p-2 mb-1">
+                                    <img src={editFormState.image} alt="Preview" className="w-12 h-12 rounded-full object-cover border border-brand-accent/30 shrink-0" onError={e => { (e.target as HTMLImageElement).src = 'https://via.placeholder.com/48?text=?'; }} />
+                                    <span className="text-[10px] text-brand-muted uppercase tracking-[1px]">Image preview</span>
+                                  </div>
+                                )}
                                 <div className="flex gap-2">
                                   <input 
                                     type="text" value={editFormState.image || ''} 
@@ -565,7 +673,48 @@ export const AdminDashboard = () => {
             {/* Contact Info Tab */}
             {activeTab === 'contact' && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                <h2 className="text-2xl font-black uppercase tracking-[1px] text-white mb-6">Contact Details</h2>
+                <h2 className="text-2xl font-black uppercase tracking-[1px] text-white mb-4">Contact Details</h2>
+
+                {/* Git Commit Panel for Contact */}
+                <div className="bg-[#0a0a0a] border border-brand-accent/30 rounded-xl p-4 mb-6">
+                  <div className="flex items-center gap-2 mb-3">
+                    <GitBranch className="w-4 h-4 text-brand-accent" />
+                    <span className="font-bold text-[12px] uppercase tracking-[1px] text-brand-accent">Commit Contact to Git</span>
+                  </div>
+                  <p className="text-[11px] text-brand-muted mb-3 leading-[1.5]">
+                    First save your changes below, then click this to write <code className="text-brand-accent bg-brand-accent/10 px-1 rounded">src/data/contact.ts</code> and create a git commit.
+                  </p>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="Commit message (optional)"
+                      value={contactCommitMessage}
+                      onChange={e => setContactCommitMessage(e.target.value)}
+                      className="flex-1 bg-brand-bg border border-brand-accent/25 rounded-lg px-3 py-2 text-white text-[12px] focus:border-brand-accent focus:outline-none"
+                    />
+                    <button
+                      onClick={handleCommitContactToGit}
+                      disabled={contactCommitStatus === 'loading'}
+                      className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-[12px] uppercase tracking-[1px] transition ${
+                        contactCommitStatus === 'success'
+                          ? 'bg-green-600 text-white'
+                          : contactCommitStatus === 'error'
+                          ? 'bg-red-600 text-white'
+                          : 'bg-brand-accent text-white hover:bg-brand-accent/90'
+                      } disabled:opacity-60`}
+                    >
+                      {contactCommitStatus === 'loading' ? (
+                        <><Loader className="w-4 h-4 animate-spin" /> Committing...</>
+                      ) : contactCommitStatus === 'success' ? (
+                        <><Check className="w-4 h-4" /> Committed!</>
+                      ) : contactCommitStatus === 'error' ? (
+                        <><X className="w-4 h-4" /> Failed — check server</>
+                      ) : (
+                        <><GitBranch className="w-4 h-4" /> Commit to Git</>
+                      )}
+                    </button>
+                  </div>
+                </div>
                 <div className="space-y-4 max-w-md">
                   <div>
                     <label className="block text-[11px] font-bold text-brand-muted uppercase tracking-[1px] mb-1">Email Address</label>
