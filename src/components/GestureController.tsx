@@ -105,12 +105,22 @@ export function GestureController() {
     });
     hands.onResults(onResults);
 
+    // Instantly stop gesture scrolling if the user touches the screen manually
+    const handleTouch = () => {
+      targetScrollVelocity = 0;
+      currentScrollVelocity = 0;
+      currentScrollY = window.scrollY;
+    };
+    window.addEventListener('touchstart', handleTouch, { passive: true });
+    window.addEventListener('touchmove', handleTouch, { passive: true });
+
     const camera = new (window as any).Camera(videoRef.current, {
       onFrame: async () => {
         if (videoRef.current) {
           await hands.send({ image: videoRef.current });
         }
       },
+      facingMode: 'user', // Ensure front camera is used on mobile
       width: 320,
       height: 240
     });
@@ -121,6 +131,8 @@ export function GestureController() {
       document.documentElement.style.scrollBehavior = ''; // Restore original CSS behavior
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('scroll', handleManualScroll);
+      window.removeEventListener('touchstart', handleTouch);
+      window.removeEventListener('touchmove', handleTouch);
       camera.stop();
       hands.close();
     };
