@@ -1,8 +1,9 @@
 import { motion, AnimatePresence, useScroll } from 'motion/react';
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { X, Menu, Hand } from 'lucide-react';
+import { X, Menu, Hand, Info } from 'lucide-react';
 import { useGesture } from '../context/GestureContext';
+import { GestureGuideModal } from './GestureGuideModal';
 
 export function Navbar() {
   const { scrollY } = useScroll();
@@ -10,6 +11,7 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
   const { isGestureEnabled, toggleGestures } = useGesture();
+  const [isGuideOpen, setIsGuideOpen] = useState(false);
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'instant' });
 
@@ -92,19 +94,29 @@ export function Navbar() {
             >
               Join Us
             </Link>
-            <button
-              onClick={toggleGestures}
-              className={`hidden lg:flex items-center gap-2 px-4 py-[9px] border rounded-md transition-all duration-300 ${
-                isGestureEnabled 
-                  ? 'bg-brand-accent border-brand-accent text-brand-bg shadow-[0_0_15px_rgba(164,5,5,0.4)]' 
-                  : 'bg-transparent border-brand-accent/25 text-brand-muted hover:border-brand-accent hover:text-brand-accent'
-              }`}
-            >
-              <Hand className="w-4 h-4" />
-              <span className="text-[11px] font-black uppercase tracking-[2px] whitespace-nowrap">
-                {isGestureEnabled ? 'Gestures ON' : 'Gestures OFF'}
-              </span>
-            </button>
+            <div className="hidden lg:flex items-center gap-2">
+              <button
+                onClick={toggleGestures}
+                className={`flex items-center gap-2 px-4 py-[9px] border rounded-md transition-all duration-300 ${
+                  isGestureEnabled 
+                    ? 'bg-brand-accent border-brand-accent text-brand-bg shadow-[0_0_15px_rgba(164,5,5,0.4)]' 
+                    : 'bg-transparent border-brand-accent/25 text-brand-muted hover:border-brand-accent hover:text-brand-accent'
+                }`}
+              >
+                <Hand className="w-4 h-4" />
+                <span className="text-[11px] font-black uppercase tracking-[2px] whitespace-nowrap">
+                  {isGestureEnabled ? 'Gestures ON' : 'Gestures OFF'}
+                </span>
+              </button>
+              <button
+                onClick={() => setIsGuideOpen(true)}
+                className="flex items-center justify-center w-[38px] h-[38px] border border-brand-accent/25 rounded-md text-brand-muted hover:border-brand-accent hover:text-brand-accent transition-all duration-300"
+                aria-label="Gesture Guide"
+                title="Gesture Guide"
+              >
+                <Info className="w-4 h-4" />
+              </button>
+            </div>
           </nav>
 
           {/* Mobile Hamburger */}
@@ -208,19 +220,28 @@ export function Navbar() {
                   Join Us
                 </Link>
                 
-                <button
-                  onClick={() => { toggleGestures(); setMobileOpen(false); }}
-                  className={`inline-flex justify-center items-center gap-3 px-8 py-4 border-2 rounded-lg transition-all duration-300 ${
-                    isGestureEnabled
-                      ? 'bg-brand-accent border-brand-accent text-white shadow-[0_0_15px_rgba(164,5,5,0.4)]'
-                      : 'bg-transparent border-brand-accent/25 text-brand-muted hover:border-brand-accent hover:text-brand-accent'
-                  }`}
-                >
-                  <Hand className="w-5 h-5" />
-                  <span className="text-[13px] uppercase tracking-[3px] font-black">
-                    {isGestureEnabled ? 'Gestures ON' : 'Gestures OFF'}
-                  </span>
-                </button>
+                <div className="flex gap-2 w-full">
+                  <button
+                    onClick={() => { toggleGestures(); setMobileOpen(false); }}
+                    className={`flex-1 flex justify-center items-center gap-3 px-8 py-4 border-2 rounded-lg transition-all duration-300 ${
+                      isGestureEnabled
+                        ? 'bg-brand-accent border-brand-accent text-white shadow-[0_0_15px_rgba(164,5,5,0.4)]'
+                        : 'bg-transparent border-brand-accent/25 text-brand-muted hover:border-brand-accent hover:text-brand-accent'
+                    }`}
+                  >
+                    <Hand className="w-5 h-5" />
+                    <span className="text-[13px] uppercase tracking-[3px] font-black">
+                      {isGestureEnabled ? 'Gestures ON' : 'Gestures OFF'}
+                    </span>
+                  </button>
+                  <button
+                    onClick={() => { setIsGuideOpen(true); setMobileOpen(false); }}
+                    className="flex items-center justify-center w-[58px] border-2 border-brand-accent/25 rounded-lg text-brand-muted hover:border-brand-accent hover:text-brand-accent transition-all duration-300"
+                    aria-label="Gesture Guide"
+                  >
+                    <Info className="w-6 h-6" />
+                  </button>
+                </div>
               </motion.div>
             </nav>
 
@@ -231,6 +252,11 @@ export function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <GestureGuideModal 
+        isOpen={isGuideOpen} 
+        onClose={() => setIsGuideOpen(false)} 
+      />
     </>
   );
 }
