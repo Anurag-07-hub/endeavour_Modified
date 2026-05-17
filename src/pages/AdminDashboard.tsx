@@ -629,6 +629,47 @@ export const AdminDashboard = () => {
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                 <h2 className="text-2xl font-black uppercase tracking-[1px] text-white mb-6">Documentation Management</h2>
                 
+                {/* Git Commit Panel for Documents */}
+                <div className="bg-[#0a0a0a] border border-brand-accent/30 rounded-xl p-4 mb-6">
+                  <div className="flex items-center gap-2 mb-3">
+                    <GitBranch className="w-4 h-4 text-brand-accent" />
+                    <span className="font-bold text-[12px] uppercase tracking-[1px] text-brand-accent">Commit Documents to Git</span>
+                  </div>
+                  <p className="text-[11px] text-brand-muted mb-3 leading-[1.5]">
+                    This writes <code className="text-brand-accent bg-brand-accent/10 px-1 rounded">src/data/documents.ts</code> and creates a git commit. Make sure the <code className="text-brand-accent bg-brand-accent/10 px-1 rounded">npm run server</code> CMS API is running on port 3001.
+                  </p>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="Commit message (optional)"
+                      value={docCommitMessage}
+                      onChange={e => setDocCommitMessage(e.target.value)}
+                      className="flex-1 bg-brand-bg border border-brand-accent/25 rounded-lg px-3 py-2 text-white text-[12px] focus:border-brand-accent focus:outline-none"
+                    />
+                    <button
+                      onClick={handleCommitDocsToGit}
+                      disabled={docCommitStatus === 'loading'}
+                      className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-[12px] uppercase tracking-[1px] transition ${
+                        docCommitStatus === 'success'
+                          ? 'bg-green-600 text-white'
+                          : docCommitStatus === 'error'
+                          ? 'bg-red-600 text-white'
+                          : 'bg-brand-accent text-white hover:bg-brand-accent/90'
+                      } disabled:opacity-60`}
+                    >
+                      {docCommitStatus === 'loading' ? (
+                        <><Loader className="w-4 h-4 animate-spin" /> Committing...</>
+                      ) : docCommitStatus === 'success' ? (
+                        <><Check className="w-4 h-4" /> Committed!</>
+                      ) : docCommitStatus === 'error' ? (
+                        <><X className="w-4 h-4" /> Failed — check server</>
+                      ) : (
+                        <><GitBranch className="w-4 h-4" /> Commit to Git</>
+                      )}
+                    </button>
+                  </div>
+                </div>
+
                 {/* Add Document Form */}
                 <div className="bg-brand-accent/5 p-4 rounded-xl mb-8 border border-brand-accent/25">
                   <h3 className="font-bold mb-4 text-brand-accent uppercase tracking-[1px] text-[13px]">Add Document (Up to 15GB Link)</h3>
