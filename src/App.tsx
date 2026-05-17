@@ -15,6 +15,8 @@ import { AdminDashboard } from './pages/AdminDashboard';
 import { UserDashboard } from './pages/UserDashboard';
 import { AuthProvider } from './context/AuthContext';
 import { CMSProvider } from './context/CMSContext';
+import { GestureProvider } from './context/GestureContext';
+import { GestureController } from './components/GestureController';
 
 function Home() {
   return (
@@ -30,24 +32,27 @@ export default function App() {
   return (
     <AuthProvider>
       <CMSProvider>
-        <Router>
-          <ScrollToTop />
-          <ScrollVideoBackground />
-          <div className="min-h-screen text-white selection:bg-brand-accent selection:text-white">
-            <Navbar />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/team" element={<TeamPage />} />
-              <Route path="/gallery" element={<GalleryPage />} />
-              <Route path="/documentation" element={<DocumentationPage />} />
-              <Route path="/join-us" element={<JoinUsPage />} />
-              <Route path="/admin-dashboard" element={<AdminDashboard />} />
-              <Route path="/user-dashboard" element={<UserDashboard />} />
-            </Routes>
-            <Footer />
-          </div>
-        </Router>
+        <GestureProvider>
+          <Router>
+            <GestureController />
+            <ScrollToTop />
+            <ScrollVideoBackground />
+            <div className="min-h-screen text-white selection:bg-brand-accent selection:text-white">
+              <Navbar />
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/team" element={<TeamPage />} />
+                <Route path="/gallery" element={<GalleryPage />} />
+                <Route path="/documentation" element={<DocumentationPage />} />
+                <Route path="/join-us" element={<JoinUsPage />} />
+                <Route path="/admin-dashboard" element={<AdminDashboard />} />
+                <Route path="/user-dashboard" element={<UserDashboard />} />
+              </Routes>
+              <Footer />
+            </div>
+          </Router>
+        </GestureProvider>
       </CMSProvider>
     </AuthProvider>
   );

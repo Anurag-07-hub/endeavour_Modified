@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Antigravity Interface | MediaPipe Gestures</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;600;900&display=swap');
+
+    :root {
+      --bg-dark: #050510;
+      --bg-light: #151530;
+      --accent: #00f0ff;
+      --accent-glow: rgba(0, 240, 255, 0.6);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, var(--bg-dark), var(--bg-light)) fixed;
+      color: white;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      /* Antigravity feel */
+      scroll-behavior: auto;
+    }
+
+    /* --- Navigation Header --- */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(5, 5, 16, 0.6);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    nav {
+      display: flex;
+      gap: 50px;
+    }
+
+    .tab {
+      font-size: 1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      cursor: pointer;
+      opacity: 0.4;
+      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      position: relative;
+    }
+
+    .tab.active {
+      opacity: 1;
+      text-shadow: 0 0 15px var(--accent-glow);
+    }
+
+    .tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--accent);
+      box-shadow: 0 0 10px var(--accent);
+    }
+
+    /* --- Content Sections --- */
+    #container {
+      display: flex;
+      width: 400vw;
+      /* Smooth slide transition between tabs */
+      transition: transform 0.9s cubic-bezier(0.25, 1, 0.2, 1);
+      will-change: transform;
+    }
+
+    section {
+      width: 100vw;
+      min-height: 250vh;
+      /* Tall for scrolling */
+      padding-top: 150px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .floating-content {
+      width: 80%;
+      max-width: 900px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      padding: 50px;
+      margin: 40px 0;
+      backdrop-filter: blur(5px);
+      /* Slow, continuous translateY hovering animation */
+      animation: float 7s ease-in-out infinite;
+    }
+
+    .floating-content h2 {
+      font-weight: 900;
+      font-size: 2.5rem;
+      margin-top: 0;
+      letter-spacing: 1px;
+    }
+
+    .floating-content p {
+      font-weight: 300;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: #b0b0c0;
+    }
+
+    .instruction {
+      background: rgba(0, 240, 255, 0.1);
+      border-left: 4px solid var(--accent);
+      padding: 20px;
+      border-radius: 0 12px 12px 0;
+      margin-top: 20px;
+    }
+
+    /* Animation Delays to feel organic */
+    .delay-1 {
+      animation-delay: 1.2s;
+    }
+
+    .delay-2 {
+      animation-delay: 2.4s;
+    }
+
+    .delay-3 {
+      animation-delay: 3.6s;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0px);
+      }
+
+      50% {
+        transform: translateY(-30px);
+      }
+
+      100% {
+        transform: translateY(0px);
+      }
+    }
+
+    /* --- Picture-in-Picture Camera --- */
+    #pip {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 240px;
+      height: 180px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 2px solid rgba(0, 240, 255, 0.5);
+      box-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
+      z-index: 2000;
+      background: #000;
+    }
+
+    video,
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scaleX(-1);
+      /* Mirror camera feed */
+    }
+
+    #loading {
+      position: fixed;
+      inset: 0;
+      background: var(--bg-dark);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.5s;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 3px solid rgba(255, 255, 255, 0.1);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+
+  <!-- MediaPipe Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+  <div id="loading">
+    <div class="spinner"></div>
+    <h3 style="margin-top: 20px; font-weight: 300;">Initializing Antigravity Engine...</h3>
+  </div>
+
+  <header>
+    <nav>
+      <div class="tab active" data-idx="0">Home</div>
+      <div class="tab" data-idx="1">About</div>
+      <div class="tab" data-idx="2">Team</div>
+      <div class="tab" data-idx="3">Others</div>
+    </nav>
+  </header>
+
+  <div id="container">
+    <!-- Home Section -->
+    <section id="home">
+      <div class="floating-content">
+        <h2>Antigravity Core</h2>
+        <p>Welcome to the zero-gravity interface. This environment is fully controlled by your gestures.</p>
+        <div class="instruction">
+          <strong>Gesture 1: Scroll</strong><br>
+          <em>Scroll Down:</em> Point your index finger straight up (other fingers closed).<br>
+          <em>Scroll Up:</em> Point index & middle fingers straight up (peace sign).<br>
+          <em>Stop:</em> Show your full open palm (5 fingers).
+        </div>
+      </div>
+  </div>
+  <div class="floating-content delay-1">
+    <h2>Linear Interpolation</h2>
+    <p>The scrolling utilizes a LERP function on the Y-axis. The raw hand coordinates are smoothed out heavily to
+      prevent jitter and emulate a frictionless vacuum environment.</p>
+  </div>
+  <div class="floating-content delay-2">
+    <h2>Deep Space</h2>
+    <p>Keep scrolling down using the gesture. To switch to the 'About' tab, use the double-flick outward gesture.
+    </p>
+  </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about">
+    <div class="floating-content delay-1">
+      <h2>Tab Navigation</h2>
+      <p>You have successfully triggered the forward navigation gesture.</p>
+      <div class="instruction">
+        <strong>Gesture 2: Tab Switching</strong><br>
+        <em>Forward:</em> Right hand starts half-closed, then rapidly flicks outward to a flat straight hand. Do this
+        twice quickly.<br>
+        <em>Backward:</em> Right hand starts flat/straight, then curls inward twice quickly.
+      </div>
+    </div>
+    <div class="floating-content delay-2">
+      <h2>Cooldown Protocol</h2>
+      <p>A strict 1500ms cooldown is applied after a successful tab switch to prevent accidental multi-page skips.</p>
+    </div>
+  </section>
+
+  <!-- Team Section -->
+  <section id="team">
+    <div class="floating-content delay-2">
+      <h2>The Team</h2>
+      <p>This layout operates on a horizontal track, translating -100vw for each tab change.</p>
+    </div>
+    <div class="floating-content delay-1">
+      <h2>State Machine</h2>
+      <p>The double-flick action uses a time-based state array measuring the distance ratio between your fingertips
+        and MCP joints against the wrist distance to determine "straight" vs "half-closed" states accurately across
+        different camera distances.</p>
+    </div>
+  </section>
+
+  <!-- Others Section -->
+  <section id="others">
+    <div class="floating-content delay-3">
+      <h2>Beyond Constraints</h2>
+      <p>You've reached the final tab. Flick inward twice to return to Team.</p>
+    </div>
+  </section>
+  </div>
+
+  <!-- Picture-in-Picture -->
+  <div id="pip">
+    <video id="video" autoplay playsinline></video>
+    <canvas id="canvas" width="320" height="240"></canvas>
+  </div>
+
+  <script>
+    // --- DOM Elements ---
+    const videoElement = document.getElementById('video');
+    const canvasElement = document.getElementById('canvas');
+    const canvasCtx = canvasElement.getContext('2d');
+    const container = document.getElementById('container');
+    const tabs = document.querySelectorAll('.tab');
+    const loading = document.getElementById('loading');
+
+    // --- Scroll State (Smooth Velocity Engine) ---
+    let currentScrollY = window.scrollY;
+    let targetScrollVelocity = 0;
+    let currentScrollVelocity = 0;
+    const SCROLL_SPEED = 18; // Pixels per frame
+
+    // Render loop for ultra-smooth 60fps scrolling
+    function updateScroll() {
+      if (targetScrollVelocity === 0) {
+        // Instant stop requested by user
+        currentScrollVelocity = 0;
+      } else {
+        // Smoothly interpolate the velocity when accelerating to prevent glitches
+        currentScrollVelocity = currentScrollVelocity + (targetScrollVelocity - currentScrollVelocity) * 0.15;
+      }
+      
+      if (Math.abs(currentScrollVelocity) > 0.1) {
+        currentScrollY += currentScrollVelocity;
+        
+        // Clamp to document bounds
+        if (currentScrollY < 0) { currentScrollY = 0; currentScrollVelocity = 0; }
+        const maxScroll = document.body.scrollHeight - window.innerHeight;
+        if (currentScrollY > maxScroll) { currentScrollY = maxScroll; currentScrollVelocity = 0; }
+
+        window.scrollTo(0, currentScrollY);
+      } else {
+        // Sync if idle to avoid fighting native manual scroll
+        currentScrollY = window.scrollY;
+        currentScrollVelocity = 0;
+      }
+      requestAnimationFrame(updateScroll);
+    }
+    requestAnimationFrame(updateScroll);
+
+    // Allow manual scroll to update target without jumping
+    window.addEventListener('scroll', () => {
+      if (Math.abs(currentScrollVelocity) < 1) {
+        currentScrollY = window.scrollY;
+      }
+    });
+
+    // --- Tab Navigation State ---
+    let currentTab = 0;
+
+    // State Machine for Double-Flick
+    let rightHandState = 'IDLE'; // 'IDLE', 'HALF_CLOSED', 'STRAIGHT'
+    let actionCount = 0;
+    let expectedAction = null; // 'OUTWARD' or 'INWARD'
+    let lastActionTime = 0;
+    let cooldownUntil = 0;
+
+    const DOUBLE_FLICK_TIMEOUT_MS = 800; // Timeframe to complete the double action
+    const TAB_COOLDOWN_MS = 1500; // Strict debounce after switching
+
+    function switchTab(direction) {
+      currentTab += direction;
+      if (currentTab < 0) currentTab = 0;
+      if (currentTab > 3) currentTab = 3;
+
+      // Update Header
+      tabs.forEach((t, i) => t.classList.toggle('active', i === currentTab));
+
+      // Smooth DOM Transition (cubic-bezier handled in CSS)
+      container.style.transform = `translateX(-${currentTab * 100}vw)`;
+
+      // Activate strict cooldown
+      cooldownUntil = Date.now() + TAB_COOLDOWN_MS;
+    }
+
+    // --- Math Helpers ---
+    function dist(p1, p2) {
+      return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
+    }
+
+    // --- Core Analysis Logic ---
+    function analyzeHand(landmarks, handedness) {
+      // Accept "Left" or "Right" due to potential camera mirroring
+      const isRightHand = handedness === 'Left' || handedness === 'Right';
+
+      const wrist = landmarks[0];
+      const distWristToMiddleMcp = dist(wrist, landmarks[9]);
+
+      // Check which fingers are extended
+      // A finger is extended if its tip is significantly further from the wrist than its MCP
+      const indexUp = dist(landmarks[8], wrist) > dist(landmarks[5], wrist) * 1.25;
+      const middleUp = dist(landmarks[12], wrist) > dist(landmarks[9], wrist) * 1.25;
+      const ringUp = dist(landmarks[16], wrist) > dist(landmarks[13], wrist) * 1.25;
+      const pinkyUp = dist(landmarks[20], wrist) > dist(landmarks[17], wrist) * 1.25;
+
+      // --- 1. Continuous Scrolling ---
+      const isPointingUp = indexUp && !middleUp && !ringUp && !pinkyUp;
+      const isPeaceSign = indexUp && middleUp && !ringUp && !pinkyUp;
+
+      if (isPointingUp) {
+        targetScrollVelocity = SCROLL_SPEED; // Scroll Down
+      } else if (isPeaceSign) {
+        targetScrollVelocity = -SCROLL_SPEED; // Scroll Up
+      } else {
+        targetScrollVelocity = 0; // Stop Scrolling
+      }
+
+      // --- 2. State Machine: Tab Gestures ---
+      const now = Date.now();
+      if (now > cooldownUntil && isRightHand) {
+
+        // Calculate hand openness for flick detection
+        let totalTipToMcp = dist(landmarks[8], landmarks[5]) + dist(landmarks[12], landmarks[9]) + dist(landmarks[16], landmarks[13]) + dist(landmarks[20], landmarks[17]);
+        const avgTipToMcp = totalTipToMcp / 4;
+        const handOpennessRatio = avgTipToMcp / (distWristToMiddleMcp || 1);
+
+        let currentState = rightHandState;
+
+        // Thresholds based on hand openness ratio
+        if (handOpennessRatio > 0.85) {
+          currentState = 'STRAIGHT';
+        } else if (handOpennessRatio < 0.5) {
+          currentState = 'HALF_CLOSED';
+        }
+
+        // Reset state machine if timeout expires without completing expected action
+        if (now - lastActionTime > DOUBLE_FLICK_TIMEOUT_MS && rightHandState !== 'IDLE') {
+          rightHandState = 'IDLE';
+          actionCount = 0;
+          expectedAction = null;
+        }
+
+        // Initialize Sequence
+        if (rightHandState === 'IDLE') {
+          if (currentState === 'HALF_CLOSED') rightHandState = 'HALF_CLOSED'; // Prepping for Outward
+          if (currentState === 'STRAIGHT') rightHandState = 'STRAIGHT';       // Prepping for Inward
+        }
+
+        // Detect Transitions
+        if (rightHandState === 'HALF_CLOSED' && currentState === 'STRAIGHT') {
+          // Triggered Outward Flick (Half-closed -> Straight)
+          if (expectedAction === 'OUTWARD' || actionCount === 0) {
+            actionCount++;
+            lastActionTime = now;
+            expectedAction = 'OUTWARD';
+            rightHandState = 'STRAIGHT';
+
+            if (actionCount === 2) {
+              console.log("DOUBLE FLICK OUTWARD -> NEXT TAB");
+              switchTab(1);
+              actionCount = 0;
+              expectedAction = null;
+              rightHandState = 'IDLE';
+            }
+          }
+        }
+        else if (rightHandState === 'STRAIGHT' && currentState === 'HALF_CLOSED') {
+          // Triggered Inward Flick (Straight -> Half-closed)
+          if (expectedAction === 'INWARD' || actionCount === 0) {
+            actionCount++;
+            lastActionTime = now;
+            expectedAction = 'INWARD';
+            rightHandState = 'HALF_CLOSED';
+
+            if (actionCount === 2) {
+              console.log("DOUBLE FLICK INWARD -> PREV TAB");
+              switchTab(-1);
+              actionCount = 0;
+              expectedAction = null;
+              rightHandState = 'IDLE';
+            }
+          }
+        }
+      }
+    }
+
+    // --- MediaPipe Initialization ---
+    function onResults(results) {
+      if (loading.style.opacity !== '0') {
+        loading.style.opacity = '0';
+        setTimeout(() => loading.style.display = 'none', 500);
+      }
+
+      canvasCtx.save();
+      canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+      // Draw mirrored image
+      canvasCtx.translate(canvasElement.width, 0);
+      canvasCtx.scale(-1, 1);
+      canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
+
+      if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
+        for (let i = 0; i < results.multiHandLandmarks.length; i++) {
+          const landmarks = results.multiHandLandmarks[i];
+          const handedness = results.multiHandedness[i].label;
+
+          drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, { color: 'rgba(0, 240, 255, 0.5)', lineWidth: 2 });
+          drawLandmarks(canvasCtx, landmarks, { color: '#ffffff', lineWidth: 1, radius: 2 });
+
+          analyzeHand(landmarks, handedness);
+        }
+      } else {
+        targetScrollVelocity = 0; // Stop scrolling if hand leaves camera
+      }
+      canvasCtx.restore();
+    }
+
+    const hands = new Hands({
+      locateFile: (file) => {
+        return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
+      }
+    });
+
+    hands.setOptions({
+      maxNumHands: 1, // Focus on 1 hand for stability
+      modelComplexity: 1,
+      minDetectionConfidence: 0.7,
+      minTrackingConfidence: 0.7
+    });
+    hands.onResults(onResults);
+
+    const camera = new Camera(videoElement, {
+      onFrame: async () => {
+        await hands.send({ image: videoElement });
+      },
+      width: 320,
+      height: 240
+    });
+
+    camera.start();
+
+    // Tab click logic for fallback
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => {
+        currentTab = index;
+        tabs.forEach((t, i) => t.classList.toggle('active', i === currentTab));
+        container.style.transform = `translateX(-${currentTab * 100}vw)`;
+      });
+    });
+
+  </script>
+</body>
+
+</html>

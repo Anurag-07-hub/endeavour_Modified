@@ -1,13 +1,15 @@
 import { motion, AnimatePresence, useScroll } from 'motion/react';
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { X, Menu } from 'lucide-react';
+import { X, Menu, Hand } from 'lucide-react';
+import { useGesture } from '../context/GestureContext';
 
 export function Navbar() {
   const { scrollY } = useScroll();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
+  const { isGestureEnabled, toggleGestures } = useGesture();
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'instant' });
 
@@ -44,7 +46,7 @@ export function Navbar() {
       >
         <div className="max-w-[1024px] mx-auto px-4 sm:px-5 md:px-6 lg:px-4 py-3 md:py-5 flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group shrink-0 lg:-ml-[60px]">
+          <Link to="/" className="flex items-center gap-2 group shrink-0 md:-ml-4 lg:-ml-[100px] mr-8 lg:mr-12">
             <motion.img
               src="https://www.endeavoursliet.in/images/mainlogo.png"
               alt="Endeavour Logo"
@@ -90,6 +92,19 @@ export function Navbar() {
             >
               Join Us
             </Link>
+            <button
+              onClick={toggleGestures}
+              className={`hidden lg:flex items-center gap-2 px-4 py-[9px] border rounded-md transition-all duration-300 ${
+                isGestureEnabled 
+                  ? 'bg-brand-accent border-brand-accent text-brand-bg shadow-[0_0_15px_rgba(164,5,5,0.4)]' 
+                  : 'bg-transparent border-brand-accent/25 text-brand-muted hover:border-brand-accent hover:text-brand-accent'
+              }`}
+            >
+              <Hand className="w-4 h-4" />
+              <span className="text-[11px] font-black uppercase tracking-[2px] whitespace-nowrap">
+                {isGestureEnabled ? 'Gestures ON' : 'Gestures OFF'}
+              </span>
+            </button>
           </nav>
 
           {/* Mobile Hamburger */}
@@ -180,7 +195,7 @@ export function Navbar() {
 
               {/* Join Us CTA */}
               <motion.div
-                className="mt-8"
+                className="mt-8 flex flex-col gap-4"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6 }}
@@ -188,10 +203,24 @@ export function Navbar() {
                 <Link
                   to="/join-us"
                   onClick={() => { scrollToTop(); setMobileOpen(false); }}
-                  className="inline-block px-8 py-4 border-2 border-brand-accent text-brand-accent text-[13px] uppercase tracking-[3px] font-black hover:bg-brand-accent hover:text-white transition-colors duration-300"
+                  className="inline-flex justify-center px-8 py-4 border-2 border-brand-accent text-brand-accent text-[13px] uppercase tracking-[3px] font-black hover:bg-brand-accent hover:text-white transition-colors duration-300"
                 >
                   Join Us
                 </Link>
+                
+                <button
+                  onClick={() => { toggleGestures(); setMobileOpen(false); }}
+                  className={`inline-flex justify-center items-center gap-3 px-8 py-4 border-2 rounded-lg transition-all duration-300 ${
+                    isGestureEnabled
+                      ? 'bg-brand-accent border-brand-accent text-white shadow-[0_0_15px_rgba(164,5,5,0.4)]'
+                      : 'bg-transparent border-brand-accent/25 text-brand-muted hover:border-brand-accent hover:text-brand-accent'
+                  }`}
+                >
+                  <Hand className="w-5 h-5" />
+                  <span className="text-[13px] uppercase tracking-[3px] font-black">
+                    {isGestureEnabled ? 'Gestures ON' : 'Gestures OFF'}
+                  </span>
+                </button>
               </motion.div>
             </nav>
 
