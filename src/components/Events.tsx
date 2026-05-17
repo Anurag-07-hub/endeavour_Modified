@@ -1,7 +1,7 @@
 import { FadeIn } from './FadeIn';
 import { AnimatedText } from './AnimatedText';
 import { Calendar, Trophy, Zap, Cpu } from 'lucide-react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 function EventCard({ event }: { event: any; key?: React.Key }): any {
   const [isActive, setIsActive] = useState(false);
