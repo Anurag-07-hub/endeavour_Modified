@@ -69,7 +69,7 @@ export function GestureController() {
       // Continuous Scrolling logic
       const isPointingUp = indexUp && !middleUp && !ringUp && !pinkyUp;
       const isPeaceSign = indexUp && middleUp && !ringUp && !pinkyUp;
-      const isTurnOffGesture = indexUp && middleUp && ringUp && pinkyUp && !thumbOut;
+      const isTurnOffGesture = indexUp && middleUp && ringUp && pinkyUp;
 
       if (isTurnOffGesture) {
         turnOffGestures();
