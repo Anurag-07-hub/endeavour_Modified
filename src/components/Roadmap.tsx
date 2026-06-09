@@ -61,7 +61,7 @@ function TimelineEvent({ event }: { event: any; key?: string | number }) {
     <motion.div 
       initial={{ opacity: 0, y: 50, x: isLeft ? -30 : 30 }}
       whileInView={{ opacity: 1, y: 0, x: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
+      viewport={{ once: false, margin: "-100px" }}
       transition={{ duration: 0.6, type: "spring", bounce: 0.4 }}
       className={`relative flex w-full my-12 md:my-8 justify-end md:${isLeft ? 'justify-start' : 'justify-end'}`}
     >
@@ -105,7 +105,7 @@ export function Roadmap() {
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: false }}
             className="font-sans text-[40px] md:text-[60px] font-black uppercase tracking-[-2px] text-white leading-[1]"
           >
             OUR <span className="text-brand-accent">ACHIEVEMENTS !</span>
@@ -128,7 +128,7 @@ export function Roadmap() {
                 <motion.div 
                   initial={{ opacity: 0, scale: 0.8 }}
                   whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true, margin: "-100px" }}
+                  viewport={{ once: false, margin: "-100px" }}
                   className="bg-brand-bg border-l-4 border-l-brand-accent border border-white/10 px-8 py-3 shadow-[0_0_20px_rgba(164,5,5,0.15)] ml-[48px] md:ml-0"
                 >
                   <div className="text-brand-muted text-[10px] md:text-xs font-bold tracking-[2px] mb-1">{section.year}</div>

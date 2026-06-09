@@ -14,7 +14,7 @@ function TeamMemberCard({ member, delay }: { member: any; delay: number; key?: s
     <motion.div
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
+      viewport={{ once: false, margin: "-50px" }}
       transition={{ delay, type: "spring", stiffness: 50 }}
       onMouseEnter={activate}
       onMouseLeave={deactivate}

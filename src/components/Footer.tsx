@@ -2,9 +2,14 @@ import { Mail, MapPin, Phone, Linkedin, Instagram, Facebook } from 'lucide-react
 import { FadeIn } from './FadeIn';
 import { Link } from 'react-router-dom';
 import { useCMS } from '../context/CMSContext';
+import { TextScramble } from './TextScramble';
+import { useRef } from 'react';
+import { useInView } from 'motion/react';
 
 export function Footer() {
   const { contactInfo } = useCMS();
+  const contactRef = useRef(null);
+  const isContactInView = useInView(contactRef, { once: false, amount: 0.5 });
   return (
     <footer id="contact" className="bg-brand-bg border-t border-white/10 pt-[36px] pb-[24px]">
       <div className="max-w-[1024px] mx-auto px-5 md:px-[60px]">
@@ -52,38 +57,42 @@ export function Footer() {
 
           {/* Contact — spans full width on mobile, 2 cols on lg */}
           <FadeIn direction="up" delay={0.5} className="sm:col-span-2 lg:col-span-2">
-            <h4 className="font-sans font-bold text-white mb-5 md:mb-6 uppercase tracking-[2px] text-[12px]">Contact Us</h4>
-            <div className="space-y-[12px] md:space-y-[15px]">
-              <div className="flex items-start gap-[12px] md:gap-[15px] text-brand-muted">
-                <MapPin className="w-5 h-5 text-brand-accent shrink-0 mt-0.5" />
-                <p className="font-sans text-[13px] md:text-[14px] leading-[1.6] whitespace-pre-line">
-                  {contactInfo.address}
-                </p>
-              </div>
-              <div className="flex items-center gap-[12px] md:gap-[15px] text-brand-muted">
-                <Mail className="w-5 h-5 text-brand-accent shrink-0" />
-                <a href={`mailto:${contactInfo.email}`} className="font-sans text-[13px] md:text-[14px] hover:text-brand-accent transition-colors break-all">
-                  {contactInfo.email}
-                </a>
-              </div>
-              <div className="flex items-start gap-[12px] md:gap-[15px] text-brand-muted">
-                <Phone className="w-5 h-5 text-brand-accent shrink-0 mt-0.5" />
-                <div className="flex flex-col gap-2">
-                  {contactInfo.phone && (
-                    <a href={`tel:${contactInfo.phone}`} className="font-sans text-[13px] md:text-[14px] hover:text-brand-accent transition-colors block">
-                      {contactInfo.phone}
-                    </a>
-                  )}
-                  {contactInfo.contacts?.map((contact, idx) => (
-                    contact.name && contact.phone ? (
-                      <div key={idx} className="flex gap-2 items-center">
-                        <span className="font-black text-[13px] text-white tracking-[0.5px]">{contact.name}:</span>
-                        <a href={`tel:${contact.phone}`} className="font-sans text-[13px] md:text-[14px] hover:text-brand-accent transition-colors block">
-                          {contact.phone}
-                        </a>
-                      </div>
-                    ) : null
-                  ))}
+            <div ref={contactRef}>
+              <h4 className="font-sans font-bold text-white mb-5 md:mb-6 uppercase tracking-[2px] text-[12px]">Contact Us</h4>
+              <div className="space-y-[12px] md:space-y-[15px]">
+                <div className="flex items-start gap-[12px] md:gap-[15px] text-brand-muted">
+                  <MapPin className="w-5 h-5 text-brand-accent shrink-0 mt-0.5" />
+                  <p className="font-sans text-[13px] md:text-[14px] leading-[1.6] whitespace-pre-line">
+                    <TextScramble as="span" duration={1.2} speed={0.03} trigger={isContactInView}>{contactInfo.address}</TextScramble>
+                  </p>
+                </div>
+                <div className="flex items-center gap-[12px] md:gap-[15px] text-brand-muted">
+                  <Mail className="w-5 h-5 text-brand-accent shrink-0" />
+                  <a href={`mailto:${contactInfo.email}`} className="font-sans text-[13px] md:text-[14px] hover:text-brand-accent transition-colors break-all">
+                    <TextScramble as="span" duration={1.2} speed={0.03} trigger={isContactInView}>{contactInfo.email}</TextScramble>
+                  </a>
+                </div>
+                <div className="flex items-start gap-[12px] md:gap-[15px] text-brand-muted">
+                  <Phone className="w-5 h-5 text-brand-accent shrink-0 mt-0.5" />
+                  <div className="flex flex-col gap-2">
+                    {contactInfo.phone && (
+                      <a href={`tel:${contactInfo.phone}`} className="font-sans text-[13px] md:text-[14px] hover:text-brand-accent transition-colors block">
+                        <TextScramble as="span" duration={1.2} speed={0.03} trigger={isContactInView}>{contactInfo.phone}</TextScramble>
+                      </a>
+                    )}
+                    {contactInfo.contacts?.map((contact, idx) => (
+                      contact.name && contact.phone ? (
+                        <div key={idx} className="flex gap-2 items-center">
+                          <span className="font-black text-[13px] text-white tracking-[0.5px]">
+                            <TextScramble as="span" duration={1.2} speed={0.03} trigger={isContactInView}>{contact.name + ':'}</TextScramble>
+                          </span>
+                          <a href={`tel:${contact.phone}`} className="font-sans text-[13px] md:text-[14px] hover:text-brand-accent transition-colors block">
+                            <TextScramble as="span" duration={1.2} speed={0.03} trigger={isContactInView}>{contact.phone}</TextScramble>
+                          </a>
+                        </div>
+                      ) : null
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>

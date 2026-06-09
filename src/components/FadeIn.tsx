@@ -10,7 +10,7 @@ interface FadeInProps {
   key?: Key;
 }
 
-export function FadeIn({ children, delay = 0, direction = 'up', className = '', once = true }: FadeInProps) {
+export function FadeIn({ children, delay = 0, direction = 'up', className = '', once = false }: FadeInProps) {
   const directions = {
     up: { y: 40, x: 0 },
     down: { y: -40, x: 0 },

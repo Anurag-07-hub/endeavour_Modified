@@ -6,9 +6,7 @@ import { Events } from './components/Events';
 import { Footer } from './components/Footer';
 import { AboutPage } from './pages/AboutPage';
 import { TeamPage } from './pages/TeamPage';
-import { DocumentationPage } from './pages/DocumentationPage';
 import { GalleryPage } from './pages/GalleryPage';
-import { ScrollVideoBackground } from './components/ScrollVideoBackground';
 import { ScrollToTop } from './components/ScrollToTop';
 import { JoinUsPage } from './pages/JoinUsPage';
 import { AdminDashboard } from './pages/AdminDashboard';
@@ -36,7 +34,6 @@ export default function App() {
           <Router>
             <GestureController />
             <ScrollToTop />
-            <ScrollVideoBackground />
             <div className="min-h-screen text-white selection:bg-brand-accent selection:text-white">
               <Navbar />
               <Routes>
@@ -44,7 +41,6 @@ export default function App() {
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/team" element={<TeamPage />} />
                 <Route path="/gallery" element={<GalleryPage />} />
-                <Route path="/documentation" element={<DocumentationPage />} />
                 <Route path="/join-us" element={<JoinUsPage />} />
                 <Route path="/admin-dashboard" element={<AdminDashboard />} />
                 <Route path="/user-dashboard" element={<UserDashboard />} />

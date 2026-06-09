@@ -1,258 +1,135 @@
-import { motion, AnimatePresence, useScroll } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { X, Menu, Hand, Info } from 'lucide-react';
+import { Home, Info, Users, Calendar, Image, Hand, Info as InfoIcon, UserPlus } from 'lucide-react';
 import { useGesture } from '../context/GestureContext';
 import { GestureGuideModal } from './GestureGuideModal';
 
+const navItems = [
+  { name: 'Home', url: '/', icon: Home, isRouterLink: true },
+  { name: 'About', url: '/about', icon: Info, isRouterLink: true },
+  { name: 'Team', url: '/team', icon: Users, isRouterLink: true },
+  { name: 'Events', url: '/#events', icon: Calendar, isRouterLink: false },
+  { name: 'Gallery', url: '/gallery', icon: Image, isRouterLink: true },
+];
+
 export function Navbar() {
-  const { scrollY } = useScroll();
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState(navItems[0].name);
   const location = useLocation();
   const { isGestureEnabled, toggleGestures } = useGesture();
   const [isGuideOpen, setIsGuideOpen] = useState(false);
 
+  useEffect(() => {
+    const current = navItems.find(item => item.url === location.pathname || item.url === location.hash);
+    if (current) setActiveTab(current.name);
+  }, [location]);
+
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'instant' });
-
-  useEffect(() => {
-    return scrollY.on('change', (latest) => {
-      setIsScrolled(latest > 50);
-    });
-  }, [scrollY]);
-
-  // Close mobile menu on route change
-  useEffect(() => {
-    setMobileOpen(false);
-  }, [location.pathname]);
-
-  const navLinks = [
-    { name: 'Home', href: '/', isRouterLink: true },
-    { name: 'About', href: '/about', isRouterLink: true },
-    { name: 'Team', href: '/team', isRouterLink: true },
-    { name: 'Events', href: '/#events', isRouterLink: false },
-    { name: 'Gallery', href: '/gallery', isRouterLink: true },
-    { name: 'Contact', href: '#contact', isRouterLink: false },
-    { name: 'Documentation', href: '/documentation', isRouterLink: true },
-  ];
 
   return (
     <>
-      <motion.header
-        className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${
-          isScrolled ? 'bg-brand-bg/95 backdrop-blur-md border-b border-white/10' : 'bg-brand-bg/60 backdrop-blur-sm border-b border-white/5'
-        }`}
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.8, ease: 'easeOut' }}
-      >
-        <div className="max-w-[1024px] mx-auto px-4 sm:px-5 md:px-6 lg:px-4 py-3 md:py-5 flex items-center justify-between">
+      <div className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 z-50 w-max max-w-[calc(100%-16px)] sm:max-w-none flex justify-center">
+        <div className="flex items-center gap-1 sm:gap-3 lg:gap-5 bg-brand-bg/80 border border-white/10 backdrop-blur-xl py-2 px-2 sm:px-4 rounded-[40px] shadow-[0_8px_32px_0_rgba(164,5,5,0.15)]">
+          
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group shrink-0 md:-ml-4 lg:-ml-[100px] mr-8 lg:mr-12">
-            <motion.img
-              src="https://www.endeavoursliet.in/images/mainlogo.png"
-              alt="Endeavour Logo"
-              className="w-[40px] sm:w-[48px] md:w-[52px] lg:w-[64px] h-auto object-contain drop-shadow-[0_0_5px_rgba(164,5,5,0.5)]"
-              animate={{ y: [-3, 3, -3], rotate: [-2, 2, -2], scale: [1, 1.05, 1] }}
-              transition={{ repeat: Infinity, duration: 5, ease: 'easeInOut' }}
-              referrerPolicy="no-referrer"
-            />
-            <span className="font-sans font-black text-[13px] sm:text-[14px] lg:text-[18px] uppercase tracking-[2px] lg:tracking-[4px] text-brand-accent">
-              ENDEAVOUR
-            </span>
+          <Link to="/" onClick={() => { scrollToTop(); setActiveTab('Home'); }} className="flex items-center justify-center w-10 h-10 sm:w-auto sm:px-3 lg:px-4 shrink-0 rounded-full hover:bg-white/5 transition-colors group">
+             <img src="https://www.endeavoursliet.in/images/mainlogo.png" alt="Endeavour" className="w-[26px] sm:w-[34px] h-auto object-contain drop-shadow-[0_0_5px_rgba(164,5,5,0.5)]" />
+             <span className="hidden lg:block ml-3 font-sans font-black text-[15px] uppercase tracking-[3px] text-brand-accent">
+               ENDEAVOUR
+             </span>
           </Link>
 
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-[16px] lg:gap-[28px]">
-            {navLinks.map((link) =>
-              link.isRouterLink ? (
-                <Link
-                  key={link.name}
-                  to={link.href}
-                  onClick={scrollToTop}
-                  className={`text-[11px] lg:text-[13px] uppercase tracking-[1px] lg:tracking-[1.5px] font-bold transition-colors relative ${
-                    location.pathname === link.href ? 'text-brand-accent' : 'text-brand-muted hover:text-white'
-                  }`}
-                >
-                  {link.name}
+          {/* Divider */}
+          <div className="w-px h-6 sm:h-8 bg-white/10 hidden sm:block"></div>
+
+          {/* Nav Items */}
+          <div className="flex items-center">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = activeTab === item.name;
+
+              const content = (
+                <>
+                  <span className="hidden md:inline text-[13px] lg:text-[14px] uppercase tracking-[1.5px] whitespace-nowrap">{item.name}</span>
+                  <span className="md:hidden flex items-center justify-center w-10 h-10">
+                    <Icon size={20} strokeWidth={isActive ? 2.5 : 2} />
+                  </span>
+                  {isActive && (
+                    <motion.div
+                      layoutId="lamp"
+                      className="absolute inset-0 w-full bg-brand-accent/10 rounded-full -z-10"
+                      initial={false}
+                      transition={{
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 30,
+                      }}
+                    >
+                      <div className="absolute -top-1.5 sm:-top-2 left-1/2 -translate-x-1/2 w-8 md:w-10 h-1.5 bg-brand-accent rounded-t-full">
+                        <div className="absolute w-10 md:w-14 h-8 bg-brand-accent/20 rounded-full blur-md -top-2 -left-1 md:-left-2" />
+                        <div className="absolute w-8 md:w-10 h-8 bg-brand-accent/20 rounded-full blur-md -top-1" />
+                        <div className="absolute w-4 md:w-5 h-4 md:h-5 bg-brand-accent/20 rounded-full blur-sm top-0 left-2 md:left-2.5" />
+                      </div>
+                    </motion.div>
+                  )}
+                </>
+              );
+
+              const className = `relative flex items-center justify-center cursor-pointer font-bold px-1 py-1 md:px-6 md:py-3 rounded-full transition-colors ${
+                    isActive ? 'text-brand-accent' : 'text-brand-muted hover:text-white'
+                  }`;
+
+              return item.isRouterLink ? (
+                <Link key={item.name} to={item.url} onClick={() => { setActiveTab(item.name); scrollToTop(); }} className={className}>
+                  {content}
                 </Link>
               ) : (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={scrollToTop}
-                  className="text-[11px] lg:text-[13px] uppercase tracking-[1px] lg:tracking-[1.5px] font-bold text-brand-muted hover:text-white transition-colors relative"
-                >
-                  {link.name}
+                <a key={item.name} href={item.url} onClick={() => { setActiveTab(item.name); scrollToTop(); }} className={className}>
+                  {content}
                 </a>
-              )
-            )}
-            <Link
+              );
+            })}
+          </div>
+
+          {/* Divider */}
+          <div className="w-px h-6 sm:h-8 bg-white/10 hidden sm:block"></div>
+
+          {/* Actions */}
+          <div className="flex items-center gap-1 sm:pl-1 sm:pr-2">
+             <Link
               to="/join-us"
               onClick={scrollToTop}
-              className="hidden lg:inline-block px-[20px] py-[9px] border border-brand-accent text-brand-accent text-[11px] uppercase tracking-[2px] hover:bg-brand-accent hover:text-brand-bg transition-colors duration-300 font-sans font-black whitespace-nowrap"
+              className="flex items-center justify-center w-10 h-10 md:w-auto md:h-auto md:px-[24px] md:py-[12px] rounded-full border border-brand-accent text-brand-accent text-[13px] uppercase tracking-[2px] hover:bg-brand-accent hover:text-brand-bg transition-colors duration-300 font-sans font-black whitespace-nowrap"
+              title="Join Us"
             >
-              Join Us
+              <span className="hidden md:inline">Join Us</span>
+              <UserPlus className="w-[18px] h-[18px] md:hidden" />
             </Link>
-            <div className="hidden lg:flex items-center gap-2">
+            
+            <div className="hidden lg:flex items-center gap-1 ml-1">
               <button
-                onClick={toggleGestures}
-                className={`flex items-center gap-2 px-4 py-[9px] border rounded-md transition-all duration-300 ${
-                  isGestureEnabled 
-                    ? 'bg-brand-accent border-brand-accent text-brand-bg shadow-[0_0_15px_rgba(164,5,5,0.4)]' 
-                    : 'bg-transparent border-brand-accent/25 text-brand-muted hover:border-brand-accent hover:text-brand-accent'
-                }`}
-              >
-                <Hand className="w-4 h-4" />
-                <span className="text-[11px] font-black uppercase tracking-[2px] whitespace-nowrap">
-                  {isGestureEnabled ? 'Gestures ON' : 'Gestures OFF'}
-                </span>
+                  onClick={toggleGestures}
+                  className={`flex items-center justify-center w-[40px] h-[40px] rounded-full transition-all duration-300 ${
+                    isGestureEnabled 
+                      ? 'bg-brand-accent border-brand-accent text-brand-bg shadow-[0_0_15px_rgba(164,5,5,0.4)]' 
+                      : 'bg-transparent border border-transparent text-brand-muted hover:border-brand-accent/30 hover:text-brand-accent'
+                  }`}
+                  title={isGestureEnabled ? "Disable Gestures" : "Enable Gestures"}
+                >
+                  <Hand className="w-[18px] h-[18px]" />
               </button>
               <button
                 onClick={() => setIsGuideOpen(true)}
-                className="flex items-center justify-center w-[38px] h-[38px] border border-brand-accent/25 rounded-md text-brand-muted hover:border-brand-accent hover:text-brand-accent transition-all duration-300"
-                aria-label="Gesture Guide"
+                className="flex items-center justify-center w-[40px] h-[40px] rounded-full border border-transparent text-brand-muted hover:border-brand-accent/30 hover:text-brand-accent transition-all duration-300"
                 title="Gesture Guide"
               >
-                <Info className="w-4 h-4" />
+                <InfoIcon className="w-[18px] h-[18px]" />
               </button>
             </div>
-          </nav>
+          </div>
 
-          {/* Mobile Hamburger */}
-          <button
-            className="md:hidden flex items-center justify-center w-10 h-10 text-brand-muted hover:text-brand-accent transition-colors"
-            onClick={() => setMobileOpen((v) => !v)}
-            aria-label="Toggle menu"
-          >
-            {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
         </div>
-      </motion.header>
-
-      {/* Full-screen Mobile Menu Overlay */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            className="fixed inset-0 z-[60] md:hidden flex flex-col bg-brand-bg overflow-hidden"
-            initial={{ clipPath: 'inset(0 0 100% 0)' }}
-            animate={{ clipPath: 'inset(0 0 0% 0)' }}
-            exit={{ clipPath: 'inset(0 0 100% 0)' }}
-            transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
-          >
-            {/* Top bar inside overlay */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-white/10 shrink-0">
-              <Link
-                to="/"
-                onClick={() => { scrollToTop(); setMobileOpen(false); }}
-                className="flex items-center gap-2"
-              >
-                <img
-                  src="https://www.endeavoursliet.in/images/mainlogo.png"
-                  alt="Endeavour Logo"
-                  className="w-[36px] h-auto object-contain"
-                  referrerPolicy="no-referrer"
-                />
-                <span className="font-sans font-black text-[13px] uppercase tracking-[3px] text-brand-accent">
-                  ENDEAVOUR
-                </span>
-              </Link>
-              <button
-                onClick={() => setMobileOpen(false)}
-                className="w-10 h-10 flex items-center justify-center text-brand-muted hover:text-white transition-colors"
-                aria-label="Close menu"
-              >
-                <X className="w-6 h-6" />
-              </button>
-            </div>
-
-            {/* Nav links — staggered reveal */}
-            <nav className="flex flex-col flex-1 justify-center px-8 gap-0">
-              {navLinks.map((link, i) => (
-                <motion.div
-                  key={link.name}
-                  className="overflow-hidden border-b border-white/5"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.1 + i * 0.07 }}
-                >
-                  <motion.div
-                    initial={{ y: '100%' }}
-                    animate={{ y: 0 }}
-                    exit={{ y: '100%' }}
-                    transition={{ duration: 0.4, delay: 0.1 + i * 0.07, ease: [0.76, 0, 0.24, 1] }}
-                  >
-                    {link.isRouterLink ? (
-                      <Link
-                        to={link.href}
-                        onClick={() => { scrollToTop(); setMobileOpen(false); }}
-                        className={`block py-5 text-[28px] font-black uppercase tracking-[-0.5px] transition-colors leading-none ${
-                          location.pathname === link.href ? 'text-brand-accent' : 'text-white'
-                        }`}
-                      >
-                        {link.name}
-                      </Link>
-                    ) : (
-                      <a
-                        href={link.href}
-                        onClick={() => { scrollToTop(); setMobileOpen(false); }}
-                        className="block py-5 text-[28px] font-black uppercase tracking-[-0.5px] text-white transition-colors leading-none"
-                      >
-                        {link.name}
-                      </a>
-                    )}
-                  </motion.div>
-                </motion.div>
-              ))}
-
-              {/* Join Us CTA */}
-              <motion.div
-                className="mt-8 flex flex-col gap-4"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6 }}
-              >
-                <Link
-                  to="/join-us"
-                  onClick={() => { scrollToTop(); setMobileOpen(false); }}
-                  className="inline-flex justify-center px-8 py-4 border-2 border-brand-accent text-brand-accent text-[13px] uppercase tracking-[3px] font-black hover:bg-brand-accent hover:text-white transition-colors duration-300"
-                >
-                  Join Us
-                </Link>
-                
-                <div className="flex gap-2 w-full">
-                  <button
-                    onClick={() => { toggleGestures(); setMobileOpen(false); }}
-                    className={`flex-1 flex justify-center items-center gap-3 px-8 py-4 border-2 rounded-lg transition-all duration-300 ${
-                      isGestureEnabled
-                        ? 'bg-brand-accent border-brand-accent text-white shadow-[0_0_15px_rgba(164,5,5,0.4)]'
-                        : 'bg-transparent border-brand-accent/25 text-brand-muted hover:border-brand-accent hover:text-brand-accent'
-                    }`}
-                  >
-                    <Hand className="w-5 h-5" />
-                    <span className="text-[13px] uppercase tracking-[3px] font-black">
-                      {isGestureEnabled ? 'Gestures ON' : 'Gestures OFF'}
-                    </span>
-                  </button>
-                  <button
-                    onClick={() => { setIsGuideOpen(true); setMobileOpen(false); }}
-                    className="flex items-center justify-center w-[58px] border-2 border-brand-accent/25 rounded-lg text-brand-muted hover:border-brand-accent hover:text-brand-accent transition-all duration-300"
-                    aria-label="Gesture Guide"
-                  >
-                    <Info className="w-6 h-6" />
-                  </button>
-                </div>
-              </motion.div>
-            </nav>
-
-            {/* Bottom bar */}
-            <div className="px-8 py-6 border-t border-white/10 shrink-0">
-              <p className="text-[11px] text-brand-muted uppercase tracking-[2px]">EST. 2009 — SLIET LONGOWAL</p>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
+      </div>
       <GestureGuideModal 
         isOpen={isGuideOpen} 
         onClose={() => setIsGuideOpen(false)} 

@@ -1,4 +1,5 @@
 import { FadeIn } from './FadeIn';
+import { RevealText } from './RevealText';
 
 export function About() {
   return (
@@ -8,9 +9,10 @@ export function About() {
           
           <div>
             <FadeIn direction="right" delay={0.1}>
-              <h2 className="font-sans text-[36px] md:text-[48px] lg:text-[64px] font-black uppercase tracking-[-2px] text-white mb-5 md:mb-6 leading-[0.9]">
-                Empowering the innovators of <span className="text-brand-accent">tomorrow</span>.
-              </h2>
+              <RevealText 
+                text="Empowering the innovators of tomorrow." 
+                className="font-sans text-[36px] md:text-[48px] lg:text-[64px] font-black uppercase tracking-[-2px] mb-5 md:mb-6 leading-[0.9]"
+              />
             </FadeIn>
             <FadeIn direction="right" delay={0.2}>
               <p className="text-brand-muted text-[15px] md:text-[16px] leading-[1.6] mb-6 md:mb-8 font-sans">
