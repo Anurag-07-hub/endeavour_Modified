@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCMS, TeamCategory, Member, DocumentInfo, ContactInfo, DeletedMember } from '../context/CMSContext';
-import { Users, FileText, Phone, Plus, Trash2, Edit2, LogOut, Check, X, Upload, RefreshCcw, Save, Undo, GripVertical, GitBranch, Loader } from 'lucide-react';
+import { GalleryItem } from '../data/gallery';
+import { Users, FileText, Phone, Plus, Trash2, Edit2, LogOut, Check, X, Upload, RefreshCcw, Save, Undo, GripVertical, GitBranch, Loader, Image as ImageIcon } from 'lucide-react';
 import { motion } from 'motion/react';
 
 export const AdminDashboard = () => {
   const { user, isAdmin, logout } = useAuth();
-  const { team, documents, contactInfo, deletedMembers, saveTeam, saveDocuments, saveContactInfo, saveDeletedMembers } = useCMS();
-  const [activeTab, setActiveTab] = useState<'team' | 'docs' | 'contact' | 'recycle'>('team');
+  const { team, documents, contactInfo, deletedMembers, gallery, saveTeam, saveDocuments, saveContactInfo, saveDeletedMembers, saveGallery } = useCMS();
+  const [activeTab, setActiveTab] = useState<'team' | 'docs' | 'contact' | 'recycle' | 'gallery'>('team');
 
   // Draft Team State for reordering
   const [draftTeam, setDraftTeam] = useState<TeamCategory[]>(team);
@@ -20,6 +21,8 @@ export const AdminDashboard = () => {
   const [contactCommitMessage, setContactCommitMessage] = useState('');
   const [docCommitStatus, setDocCommitStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [docCommitMessage, setDocCommitMessage] = useState('');
+  const [galleryCommitStatus, setGalleryCommitStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [galleryCommitMessage, setGalleryCommitMessage] = useState('');
 
   useEffect(() => {
     setDraftTeam(team);
@@ -31,6 +34,9 @@ export const AdminDashboard = () => {
 
   // Docs State
   const [newDoc, setNewDoc] = useState<Partial<DocumentInfo>>({});
+
+  // Gallery State
+  const [newGalleryItem, setNewGalleryItem] = useState<{ url: string; type: 'image' | 'video' }>({ url: '', type: 'image' });
 
   if (!user || !isAdmin) {
     return <Navigate to="/join-us" />;
@@ -63,6 +69,36 @@ export const AdminDashboard = () => {
 
   const removeDoc = (id: string) => {
     saveDocuments(documents.filter(d => d.id !== id));
+  };
+
+  const handleAddGalleryItem = () => {
+    if (newGalleryItem.url) {
+      const item: GalleryItem = {
+        id: Math.random().toString(36).substr(2, 9),
+        type: newGalleryItem.type,
+        url: newGalleryItem.url,
+      };
+      saveGallery([...gallery, item]);
+      setNewGalleryItem({ url: '', type: 'image' });
+    } else {
+      alert("Please provide an image or video URL");
+    }
+  };
+
+  const removeGalleryItem = (id: string) => {
+    saveGallery(gallery.filter(g => g.id !== id));
+  };
+
+  const handleGalleryUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const isVideo = file.type.startsWith('video/');
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setNewGalleryItem({ url: reader.result as string, type: isVideo ? 'video' : 'image' });
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   // Simple Team Member Addition to first category for simplicity in demo
@@ -341,6 +377,32 @@ export const AdminDashboard = () => {
     }
   };
 
+  const handleCommitGalleryToGit = async () => {
+    setGalleryCommitStatus('loading');
+    try {
+      const res = await fetch('http://localhost:3001/api/commit-gallery', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          gallery,
+          commitMessage: galleryCommitMessage.trim() || undefined,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setGalleryCommitStatus('success');
+        setGalleryCommitMessage('');
+        setTimeout(() => setGalleryCommitStatus('idle'), 4000);
+      } else {
+        throw new Error(data.error || 'Unknown error');
+      }
+    } catch (err: any) {
+      console.error('Git commit failed:', err);
+      setGalleryCommitStatus('error');
+      setTimeout(() => setGalleryCommitStatus('idle'), 5000);
+    }
+  };
+
   return (
     <div className="pt-24 pb-16 min-h-screen bg-brand-bg text-white relative">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -381,6 +443,14 @@ export const AdminDashboard = () => {
               }`}
             >
               <Trash2 className="w-5 h-5" /> Recycle Bin
+            </button>
+            <button
+              onClick={() => setActiveTab('gallery')}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all border font-bold text-[12px] uppercase tracking-[1px] ${
+                activeTab === 'gallery' ? 'bg-brand-accent border-brand-accent text-white shadow-[0_0_15px_rgba(164,5,5,0.4)]' : 'bg-transparent border-brand-accent/25 text-brand-muted hover:border-brand-accent/60'
+              }`}
+            >
+              <ImageIcon className="w-5 h-5" /> Gallery
             </button>
             <button
               onClick={() => setActiveTab('docs')}
@@ -841,6 +911,123 @@ export const AdminDashboard = () => {
                   <button onClick={handleContactSave} className="bg-brand-accent text-white font-bold uppercase tracking-[1px] text-[12px] px-6 py-3 rounded-lg hover:bg-brand-accent/90 transition mt-4">
                     Save Changes
                   </button>
+                </div>
+              </motion.div>
+            )}
+
+            {/* Gallery Tab */}
+            {activeTab === 'gallery' && (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                <h2 className="text-2xl font-black uppercase tracking-[1px] text-white mb-6">Gallery Management</h2>
+                
+                {/* Git Commit Panel for Gallery */}
+                <div className="bg-[#0a0a0a] border border-brand-accent/30 rounded-xl p-4 mb-6">
+                  <div className="flex items-center gap-2 mb-3">
+                    <GitBranch className="w-4 h-4 text-brand-accent" />
+                    <span className="font-bold text-[12px] uppercase tracking-[1px] text-brand-accent">Commit Gallery to Git</span>
+                  </div>
+                  <p className="text-[11px] text-brand-muted mb-3 leading-[1.5]">
+                    This writes <code className="text-brand-accent bg-brand-accent/10 px-1 rounded">src/data/gallery.ts</code> and creates a git commit. Make sure the <code className="text-brand-accent bg-brand-accent/10 px-1 rounded">npm run server</code> CMS API is running on port 3001.
+                  </p>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="Commit message (optional)"
+                      value={galleryCommitMessage}
+                      onChange={e => setGalleryCommitMessage(e.target.value)}
+                      className="flex-1 bg-brand-bg border border-brand-accent/25 rounded-lg px-3 py-2 text-white text-[12px] focus:border-brand-accent focus:outline-none"
+                    />
+                    <button
+                      onClick={handleCommitGalleryToGit}
+                      disabled={galleryCommitStatus === 'loading'}
+                      className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-[12px] uppercase tracking-[1px] transition ${
+                        galleryCommitStatus === 'success'
+                          ? 'bg-green-600 text-white'
+                          : galleryCommitStatus === 'error'
+                          ? 'bg-red-600 text-white'
+                          : 'bg-brand-accent text-white hover:bg-brand-accent/90'
+                      } disabled:opacity-60`}
+                    >
+                      {galleryCommitStatus === 'loading' ? (
+                        <><Loader className="w-4 h-4 animate-spin" /> Committing...</>
+                      ) : galleryCommitStatus === 'success' ? (
+                        <><Check className="w-4 h-4" /> Committed!</>
+                      ) : galleryCommitStatus === 'error' ? (
+                        <><X className="w-4 h-4" /> Failed — check server</>
+                      ) : (
+                        <><GitBranch className="w-4 h-4" /> Commit to Git</>
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                {/* 20 Box Grid */}
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                  {Array.from({ length: 20 }).map((_, index) => {
+                    const item = gallery[index] || { id: `empty-${index}`, type: 'empty', url: '' };
+                    return (
+                      <div key={index} className="relative group bg-[#050505] rounded-lg overflow-hidden border border-brand-accent/20 aspect-[3/4] flex flex-col items-center justify-center">
+                        {item.type === 'video' && item.url ? (
+                          <video src={item.url} className="w-full h-full object-cover opacity-80" muted loop autoPlay playsInline />
+                        ) : item.type === 'image' && item.url ? (
+                          <img src={item.url} alt={`Box ${index + 1}`} className="w-full h-full object-cover opacity-80" />
+                        ) : (
+                          <div className="text-center text-brand-muted font-bold text-[10px] uppercase tracking-[1px] p-2 break-words">
+                            Empty Box<br/>{index + 1}
+                          </div>
+                        )}
+                        <div className="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-2 gap-2 backdrop-blur-sm">
+                           <div className="text-brand-accent font-black text-[12px] uppercase mb-1">Box {index + 1}</div>
+                           <input 
+                             type="text" 
+                             placeholder="Paste URL + Enter"
+                             className="w-full bg-black/50 border border-brand-accent/30 rounded p-1 text-[9px] text-white outline-none focus:border-brand-accent"
+                             onKeyDown={(e) => {
+                               if (e.key === 'Enter') {
+                                 const val = e.currentTarget.value;
+                                 if (val) {
+                                   const newGallery = [...gallery];
+                                   while (newGallery.length <= index) newGallery.push({ id: `empty-${newGallery.length}`, type: 'empty', url: '' });
+                                   newGallery[index] = { id: `box-${index}-${Date.now()}`, type: val.includes('.mp4') || val.includes('video') ? 'video' : 'image', url: val };
+                                   saveGallery(newGallery);
+                                   e.currentTarget.value = '';
+                                 }
+                               }
+                             }}
+                           />
+                           <label className="text-[10px] bg-brand-accent/20 text-brand-accent px-2 py-1 rounded cursor-pointer hover:bg-brand-accent hover:text-white transition w-full text-center">
+                             Upload File
+                             <input type="file" accept="image/*,video/*" className="hidden" onChange={(e) => {
+                               const file = e.target.files?.[0];
+                               if (file) {
+                                 const isVideo = file.type.startsWith('video/');
+                                 const reader = new FileReader();
+                                 reader.onloadend = () => {
+                                   const newGallery = [...gallery];
+                                   while (newGallery.length <= index) newGallery.push({ id: `empty-${newGallery.length}`, type: 'empty', url: '' });
+                                   newGallery[index] = { id: `box-${index}-${Date.now()}`, type: isVideo ? 'video' : 'image', url: reader.result as string };
+                                   saveGallery(newGallery);
+                                 };
+                                 reader.readAsDataURL(file);
+                               }
+                             }} />
+                           </label>
+                           {item.type !== 'empty' && (
+                             <button 
+                               onClick={() => {
+                                 const newGallery = [...gallery];
+                                 newGallery[index] = { id: `empty-${index}`, type: 'empty', url: '' };
+                                 saveGallery(newGallery);
+                               }}
+                               className="text-[10px] text-red-500 hover:text-white hover:bg-red-500 px-2 py-1 rounded transition w-full text-center"
+                             >
+                               Clear Box
+                             </button>
+                           )}
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </motion.div>
             )}

@@ -60,8 +60,11 @@ export function useParticlesBackground() {
           }
         },
         draw(ctx: CanvasRenderingContext2D) {
-          ctx.fillStyle = `rgba(${255 - (Math.random() * 255) / 2}, 255, 255, ${this.opacity})`;
-          ctx.fillRect(this.x, this.y, 0.4, Math.random() * 2 + 1);
+          ctx.shadowBlur = 8;
+          ctx.shadowColor = `rgba(255, 255, 255, ${this.opacity})`;
+          ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+          ctx.fillRect(this.x, this.y, 1.5, Math.random() * 3 + 1.5);
+          ctx.shadowBlur = 0;
         },
       };
 

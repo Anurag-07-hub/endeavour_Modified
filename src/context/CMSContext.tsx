@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { teamMembers as initialTeamMembers } from '../data/team';
 import { defaultContact } from '../data/contact';
 import { defaultDocuments } from '../data/documents';
+import { defaultGallery, GalleryItem } from '../data/gallery';
 
 export interface Member {
   id: string;
@@ -63,6 +64,9 @@ interface CMSContextType {
   saveDocuments: (newDocs: DocumentInfo[]) => void;
   saveContactInfo: (newContact: ContactInfo) => void;
   saveDeletedMembers: (newDeleted: DeletedMember[]) => void;
+  gallery: GalleryItem[];
+  setGallery: React.Dispatch<React.SetStateAction<GalleryItem[]>>;
+  saveGallery: (newGallery: GalleryItem[]) => void;
 }
 
 const CMSContext = createContext<CMSContextType | undefined>(undefined);
@@ -87,6 +91,7 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [documents, setDocumentsState] = useState<DocumentInfo[]>(defaultDocuments);
   const [contactInfo, setContactInfoState] = useState<ContactInfo>(defaultContact);
   const [deletedMembers, setDeletedMembersState] = useState<DeletedMember[]>([]);
+  const [gallery, setGalleryState] = useState<GalleryItem[]>(defaultGallery);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -123,6 +128,17 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       } catch (e) {}
     }
 
+    const storedGallery = localStorage.getItem('endeavour_gallery');
+    if (storedGallery) {
+      try {
+        setGalleryState(JSON.parse(storedGallery));
+      } catch (e) {
+        setGalleryState(defaultGallery);
+      }
+    } else {
+      setGalleryState(defaultGallery);
+    }
+
     setIsLoaded(true);
   }, []);
 
@@ -146,6 +162,11 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     localStorage.setItem('endeavour_deleted_members', JSON.stringify(newDeleted));
   };
 
+  const saveGallery = (newGallery: GalleryItem[]) => {
+    setGalleryState(newGallery);
+    localStorage.setItem('endeavour_gallery', JSON.stringify(newGallery));
+  };
+
   if (!isLoaded) return null;
 
   return (
@@ -163,6 +184,9 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         saveDocuments,
         saveContactInfo,
         saveDeletedMembers,
+        gallery,
+        setGallery: setGalleryState,
+        saveGallery,
       }}
     >
       {children}

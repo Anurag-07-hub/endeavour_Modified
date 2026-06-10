@@ -22,6 +22,7 @@ app.use((_req, res, next) => {
 const TEAM_FILE = path.join(__dirname, 'src', 'data', 'team.ts');
 const CONTACT_FILE = path.join(__dirname, 'src', 'data', 'contact.ts');
 const DOCUMENTS_FILE = path.join(__dirname, 'src', 'data', 'documents.ts');
+const GALLERY_FILE = path.join(__dirname, 'src', 'data', 'gallery.ts');
 const REPO_ROOT = __dirname;
 
 /**
@@ -149,10 +150,49 @@ app.post('/api/commit-documents', (req, res) => {
   }
 });
 
+/**
+ * POST /api/commit-gallery
+ * Body: { gallery: GalleryItem[], commitMessage?: string }
+ *
+ * Writes admin-updated gallery to src/data/gallery.ts and commits to Git.
+ */
+app.post('/api/commit-gallery', (req, res) => {
+  const { gallery, commitMessage } = req.body as {
+    gallery: any[];
+    commitMessage?: string;
+  };
+
+  if (!gallery || !Array.isArray(gallery)) {
+    return res.status(400).json({ success: false, error: 'Invalid gallery payload' });
+  }
+
+  try {
+    const fileContent =
+      `import type { GalleryItem } from './gallery';\n\n` +
+      `export type { GalleryItem };\n` +
+      `export const defaultGallery: GalleryItem[] = ${JSON.stringify(gallery, null, 2)};\n`;
+    writeFileSync(GALLERY_FILE, fileContent, 'utf8');
+
+    const msg = commitMessage || 'admin: update gallery [auto]';
+    execSync(`git -C "${REPO_ROOT}" add src/data/gallery.ts`, { stdio: 'pipe' });
+    execSync(`git -C "${REPO_ROOT}" commit -m "${msg}"`, { stdio: 'pipe' });
+    execSync(`git -C "${REPO_ROOT}" push`, { stdio: 'pipe' });
+
+    return res.json({ success: true, message: 'Gallery saved, committed, and pushed to live site!' });
+  } catch (err: any) {
+    if (err.message?.includes('nothing to commit')) {
+      return res.json({ success: true, message: 'No changes detected — gallery is already up to date.' });
+    }
+    console.error('[CMS Server] Commit error:', err.message);
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 const PORT = 3001;
 app.listen(PORT, () => {
   console.log(`\n  📡 Endeavour CMS API → http://localhost:${PORT}\n`);
   console.log('  Team saves      → commits to Git ✓');
   console.log('  Contact saves   → commits to Git ✓');
-  console.log('  Documents saves → commits to Git ✓\n');
+  console.log('  Documents saves → commits to Git ✓');
+  console.log('  Gallery saves   → commits to Git ✓\n');
 });

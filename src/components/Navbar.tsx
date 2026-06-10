@@ -28,7 +28,7 @@ export function Navbar() {
 
   return (
     <>
-      <div className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 z-50 w-max max-w-[calc(100%-16px)] sm:max-w-none flex justify-center">
+      <div id="main-navbar" className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 z-50 w-max max-w-[calc(100%-16px)] sm:max-w-none flex justify-center transition-opacity duration-300">
         <div className="flex items-center gap-1 sm:gap-3 lg:gap-5 bg-brand-bg/80 border border-white/10 backdrop-blur-xl py-2 px-2 sm:px-4 rounded-[40px] shadow-[0_8px_32px_0_rgba(164,5,5,0.15)]">
           
           {/* Logo */}
