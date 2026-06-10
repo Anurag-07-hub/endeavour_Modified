@@ -38,3 +38,28 @@ body {
     transform: translateX(100%);
   }
 }
+
+@keyframes blob-morph {
+  0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+  33% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+  66% { border-radius: 40% 50% 60% 30% / 70% 40% 50% 60%; }
+  100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+}
+
+.animate-blob-morph {
+  animation: blob-morph 8s ease-in-out infinite;
+}
+
+@keyframes fluid-gradient {
+  0% { background-position: 0% 0%; }
+  25% { background-position: 100% 0%; }
+  50% { background-position: 100% 100%; }
+  75% { background-position: 0% 100%; }
+  100% { background-position: 0% 0%; }
+}
+
+.bg-maroon-fluid {
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.8) 0%, rgba(255, 100, 100, 0.4) 15%, #a40505 40%, #500000 100%);
+  background-size: 250% 250%;
+  animation: fluid-gradient 10s ease-in-out infinite;
+}

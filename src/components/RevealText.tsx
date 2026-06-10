@@ -12,6 +12,7 @@ interface RevealTextProps {
   springDuration?: number;
   letterImages?: string[];
   accentWords?: string[];
+  showImages?: boolean;
 }
 
 export function RevealText({
@@ -29,7 +30,8 @@ export function RevealText({
     "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
     "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
     "https://images.unsplash.com/photo-1504384764586-bb4cdc1707b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-  ]
+  ],
+  showImages = true
 }: RevealTextProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [showRedText, setShowRedText] = useState(false);
@@ -94,7 +96,7 @@ export function RevealText({
                   <motion.span 
                     className={`block ${colorClass}`}
                     animate={{ 
-                      opacity: hoveredIndex === index ? 0 : 1 
+                      opacity: (showImages && hoveredIndex === index) ? 0 : 1 
                     }}
                     transition={{ duration: 0.1 }}
                   >
@@ -102,27 +104,29 @@ export function RevealText({
                   </motion.span>
                   
                   {/* Image text layer with background panning */}
-                  <motion.span
-                    className="absolute inset-0 text-transparent bg-clip-text bg-cover bg-no-repeat"
-                    animate={{ 
-                      opacity: hoveredIndex === index ? 1 : 0,
-                      backgroundPosition: hoveredIndex === index ? "10% center" : "0% center"
-                    }}
-                    transition={{ 
-                      opacity: { duration: 0.1 },
-                      backgroundPosition: { 
-                        duration: 3,
-                        ease: "easeInOut"
-                      }
-                    }}
-                    style={{
-                      backgroundImage: `url('${letterImages[index % letterImages.length]}')`,
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent",
-                    }}
-                  >
-                    {letter}
-                  </motion.span>
+                  {showImages && (
+                    <motion.span
+                      className="absolute inset-0 text-transparent bg-clip-text bg-cover bg-no-repeat"
+                      animate={{ 
+                        opacity: hoveredIndex === index ? 1 : 0,
+                        backgroundPosition: hoveredIndex === index ? "10% center" : "0% center"
+                      }}
+                      transition={{ 
+                        opacity: { duration: 0.1 },
+                        backgroundPosition: { 
+                          duration: 3,
+                          ease: "easeInOut"
+                        }
+                      }}
+                      style={{
+                        backgroundImage: `url('${letterImages[index % letterImages.length]}')`,
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                      }}
+                    >
+                      {letter}
+                    </motion.span>
+                  )}
                   
                   {/* Overlay text layer that sweeps across each letter */}
                   {showRedText && (

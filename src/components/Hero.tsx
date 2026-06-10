@@ -2,6 +2,8 @@ import { motion, useScroll, useTransform } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { Circle } from 'lucide-react';
 import { FadeIn } from './FadeIn';
+import { RevealText } from './RevealText';
+import { MagneticText } from './MagneticText';
 
 function ElegantShape({
     className,
@@ -170,27 +172,29 @@ export function Hero() {
               </span>
           </motion.div>
 
-          <motion.h1
-            className="font-sans text-[48px] sm:text-[64px] lg:text-[96px] leading-[1.05] font-bold tracking-tighter text-white relative whitespace-normal flex flex-wrap justify-center gap-x-[12px] md:gap-x-[20px]"
+          <motion.div
+            className="font-display leading-[1.05] font-bold tracking-tighter text-white relative whitespace-normal flex justify-center w-full"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
           >
-            {['Strive', 'to', 'create', 'difference.'].map((word, i) => (
-              <span key={i} className="overflow-hidden inline-block pb-2">
-                <motion.span
-                  variants={textVariants}
-                  className={`inline-block ${
-                    word === 'difference.'
-                      ? 'text-transparent bg-clip-text bg-gradient-to-r from-brand-accent to-[#ff4b4b]'
-                      : ''
-                  }`}
-                >
-                  {word}
-                </motion.span>
-              </span>
-            ))}
-          </motion.h1>
+            <MagneticText
+              hoverText="ENDEAVOUR"
+              bubbleSize={280}
+              hoverTextClassName="text-[50px] sm:text-[70px] lg:text-[100px] tracking-[0.3em] font-black"
+              baseContent={
+                <RevealText 
+                  text="STRIVE TO CREATE DIFFERENCE." 
+                  className="justify-center uppercase text-[40px] sm:text-[56px] lg:text-[80px]"
+                  accentWords={["DIFFERENCE."]} 
+                  showImages={false}
+                  letterDelay={0.05}
+                  overlayDelay={0.03}
+                  overlayDuration={0.5}
+                />
+              }
+            />
+          </motion.div>
 
           <motion.div
               custom={2}
