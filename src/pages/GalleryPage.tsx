@@ -7,7 +7,7 @@ import { useCMS } from '../context/CMSContext';
 export type AnimationPhase = "scatter" | "line" | "circle" | "bottom-strip";
 
 interface FlipCardProps {
-    item: { id: string; type: 'image'|'video'; url: string };
+    item: { id: string; type: 'image'|'video'|'empty'; url: string };
     index: number;
     total: number;
     phase: AnimationPhase;
@@ -28,7 +28,6 @@ function FlipCard({
 }: FlipCardProps) {
     return (
         <motion.div
-            onClick={onClick}
             animate={{
                 x: target.x,
                 y: target.y,
@@ -433,7 +432,7 @@ export function GalleryPage() {
                                 total={displayGallery.length}
                                 phase={introPhase}
                                 target={target}
-                                onClick={() => setSelectedItem({ type: item.type, url: item.url })}
+                                onClick={() => { if (item.type !== 'empty') setSelectedItem({ type: item.type, url: item.url }) }}
                             />
                         );
                     })}

@@ -633,7 +633,7 @@ export const AdminDashboard = () => {
                                   <div className="text-brand-muted/50 hover:text-brand-accent transition cursor-grab active:cursor-grabbing px-1">
                                     <GripVertical className="w-5 h-5" />
                                   </div>
-                                  <img src={member.image} alt={member.name} className="w-10 h-10 rounded-full object-cover border border-brand-accent/20" pointerEvents="none" />
+                                  <img src={member.image} alt={member.name} className="w-10 h-10 rounded-full object-cover border border-brand-accent/20" style={{ pointerEvents: "none" }} />
                                   <div>
                                     <p className="font-bold text-[13px] uppercase tracking-[1px]">{member.name}</p>
                                     <p className="text-[11px] uppercase tracking-[1px] text-brand-muted">{member.position}</p>

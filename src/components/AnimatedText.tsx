@@ -25,7 +25,7 @@ export function AnimatedText({ text, className = '', once = true, delay = 0, spl
       opacity: 1,
       y: 0,
       transition: {
-        type: 'spring',
+        type: 'spring' as const,
         damping: 12,
         stiffness: 100,
       },
@@ -34,7 +34,7 @@ export function AnimatedText({ text, className = '', once = true, delay = 0, spl
       opacity: 0,
       y: 40,
       transition: {
-        type: 'spring',
+        type: 'spring' as const,
         damping: 12,
         stiffness: 100,
       },
