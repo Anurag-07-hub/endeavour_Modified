@@ -1,6 +1,7 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useEffect, useRef } from 'react';
 import { Roadmap } from '../components/Roadmap';
+import { TextReveal } from '../components/TextReveal';
 
 export function AboutPage() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -36,7 +37,13 @@ export function AboutPage() {
           </motion.div>
           
           <h1 className="font-sans text-[60px] md:text-[120px] lg:text-[180px] font-black uppercase tracking-[-3px] md:tracking-[-8px] leading-[0.85] text-white">
-            OUR <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent to-red-600 italic pr-4">STORY</span>
+            OUR <br /> 
+            <TextReveal 
+              text="STORY" 
+              color="#ef4444"
+              hoverColor="#ef4444"
+              className="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent to-red-600 italic pr-4" 
+            />
           </h1>
         </motion.div>
       </div>
