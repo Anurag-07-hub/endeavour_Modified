@@ -70,7 +70,7 @@ export function TeamPage() {
     window.scrollTo(0, 0);
   }, []);
 
-  const [activeTab, setActiveTab] = useState('Faculty Advisor');
+  const [activeTab, setActiveTab] = useState('Executives');
   const { team } = useCMS();
 
   const visibleMembers = team.find(t => t.category === activeTab)?.members || [];
@@ -96,7 +96,7 @@ export function TeamPage() {
             transition={{ delay: 0.2 }}
             className="flex flex-wrap gap-3 justify-center"
           >
-            {['Faculty Advisor', 'Executives', 'Core Committee', 'Alumni'].map((tab) => (
+            {['Executives', 'Faculty Advisor', 'Core Committee', 'Alumni'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
