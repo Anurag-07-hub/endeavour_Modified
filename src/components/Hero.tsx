@@ -235,7 +235,7 @@ export function Hero() {
       <div className="absolute inset-0 bg-gradient-to-t from-brand-bg via-transparent to-brand-bg/80 pointer-events-none z-0" />
 
       {isTransitioning && (
-        <LetsBeginTransition onComplete={() => navigate('/about')} />
+        <LetsBeginTransition onComplete={() => navigate('/about', { state: { fromLetsBegin: true } })} />
       )}
     </section>
   );

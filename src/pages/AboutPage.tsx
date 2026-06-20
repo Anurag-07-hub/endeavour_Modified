@@ -1,11 +1,15 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Roadmap } from '../components/Roadmap';
 import { TextReveal } from '../components/TextReveal';
 import { EndeavourScene } from '../components/EndeavourScene';
 
 export function AboutPage() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const location = useLocation();
+  const fromLetsBegin = location.state?.fromLetsBegin;
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"]
@@ -22,9 +26,9 @@ export function AboutPage() {
     <motion.div 
       ref={containerRef} 
       className="bg-black/30 relative origin-center"
-      initial={{ scale: 0.9, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
+      initial={fromLetsBegin ? { x: '100vw' } : { y: 50, opacity: 0 }}
+      animate={fromLetsBegin ? { x: 0 } : { y: 0, opacity: 1 }}
+      transition={{ duration: fromLetsBegin ? 0.8 : 0.4, ease: fromLetsBegin ? [0.16, 1, 0.3, 1] : "easeOut" }}
     >
       
       {/* Sticky Hero */}

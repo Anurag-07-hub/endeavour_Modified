@@ -29,7 +29,7 @@ export function Navbar() {
   return (
     <>
       <div id="main-navbar" className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 z-50 w-max max-w-[calc(100%-16px)] sm:max-w-none flex justify-center transition-opacity duration-300">
-        <div className="flex items-center gap-1 sm:gap-3 lg:gap-5 bg-brand-bg/80 border border-white/10 backdrop-blur-xl py-2 px-2 sm:px-4 rounded-[40px] shadow-[0_8px_32px_0_rgba(164,5,5,0.15)]">
+        <div className="flex items-center gap-1 sm:gap-3 lg:gap-5 bg-brand-bg/80 border border-white/10 backdrop-blur-xl py-2 px-2 sm:px-4 rounded-[40px] shadow-[0_8px_32px_0_rgba(164,5,5,0.15)] overflow-x-auto overflow-y-visible [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           
           {/* Logo */}
           <Link to="/" onClick={() => { scrollToTop(); setActiveTab('Home'); }} className="flex items-center justify-center h-10 sm:h-auto sm:px-3 lg:px-4 shrink-0 rounded-full hover:bg-white/5 transition-colors group">
@@ -38,7 +38,7 @@ export function Navbar() {
                initial={{ width: 0, opacity: 0, marginLeft: 0 }}
                animate={{ width: "auto", opacity: 1, marginLeft: 12 }}
                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.5 }}
-               className="hidden lg:flex overflow-hidden items-center"
+               className="hidden lg:flex overflow-hidden items-center shrink-0"
              >
                <motion.span 
                  initial={{ x: -20 }}
@@ -52,10 +52,10 @@ export function Navbar() {
           </Link>
 
           {/* Divider */}
-          <div className="w-px h-6 sm:h-8 bg-white/10 hidden sm:block"></div>
+          <div className="w-px h-6 sm:h-8 bg-white/10 shrink-0 hidden sm:block"></div>
 
           {/* Nav Items */}
-          <div className="flex items-center">
+          <div className="flex items-center shrink-0">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.name;
@@ -63,7 +63,7 @@ export function Navbar() {
               const content = (
                 <>
                   <span className="hidden md:inline text-[13px] lg:text-[14px] uppercase tracking-[1.5px] whitespace-nowrap">{item.name}</span>
-                  <span className="md:hidden flex items-center justify-center w-10 h-10">
+                  <span className="md:hidden flex items-center justify-center w-10 h-10 shrink-0">
                     <Icon size={20} strokeWidth={isActive ? 2.5 : 2} />
                   </span>
                   {isActive && (
@@ -104,24 +104,24 @@ export function Navbar() {
           </div>
 
           {/* Divider */}
-          <div className="w-px h-6 sm:h-8 bg-white/10 hidden sm:block"></div>
+          <div className="w-px h-6 sm:h-8 bg-white/10 shrink-0 hidden sm:block"></div>
 
           {/* Actions */}
-          <div className="flex items-center gap-1 sm:pl-1 sm:pr-2">
+          <div className="flex items-center gap-1 sm:pl-1 sm:pr-2 shrink-0">
              <Link
               to="/join-us"
               onClick={scrollToTop}
-              className="flex items-center justify-center w-10 h-10 md:w-auto md:h-auto md:px-[24px] md:py-[12px] rounded-full border border-brand-accent text-brand-accent text-[13px] uppercase tracking-[2px] hover:bg-brand-accent hover:text-brand-bg transition-colors duration-300 font-sans font-black whitespace-nowrap"
+              className="flex items-center justify-center w-10 h-10 md:w-auto md:h-auto md:px-[24px] md:py-[12px] rounded-full border border-brand-accent text-brand-accent text-[13px] uppercase tracking-[2px] hover:bg-brand-accent hover:text-brand-bg transition-colors duration-300 font-sans font-black whitespace-nowrap shrink-0"
               title="Join Us"
             >
               <span className="hidden md:inline">Join Us</span>
               <UserPlus className="w-[18px] h-[18px] md:hidden" />
             </Link>
             
-            <div className="hidden lg:flex items-center gap-1 ml-1">
+            <div className="flex items-center gap-1 ml-1 shrink-0">
               <button
                   onClick={toggleGestures}
-                  className={`flex items-center justify-center w-[40px] h-[40px] rounded-full transition-all duration-300 ${
+                  className={`flex items-center justify-center w-10 h-10 shrink-0 rounded-full transition-all duration-300 ${
                     isGestureEnabled 
                       ? 'bg-brand-accent border-brand-accent text-brand-bg shadow-[0_0_15px_rgba(164,5,5,0.4)]' 
                       : 'bg-transparent border border-transparent text-brand-muted hover:border-brand-accent/30 hover:text-brand-accent'
@@ -132,7 +132,7 @@ export function Navbar() {
               </button>
               <button
                 onClick={() => setIsGuideOpen(true)}
-                className="flex items-center justify-center w-[40px] h-[40px] rounded-full border border-transparent text-brand-muted hover:border-brand-accent/30 hover:text-brand-accent transition-all duration-300"
+                className="flex items-center justify-center w-10 h-10 shrink-0 rounded-full border border-transparent text-brand-muted hover:border-brand-accent/30 hover:text-brand-accent transition-all duration-300"
                 title="Gesture Guide"
               >
                 <InfoIcon className="w-[18px] h-[18px]" />

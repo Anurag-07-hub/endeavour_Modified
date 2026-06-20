@@ -95,7 +95,7 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    const storedTeam = localStorage.getItem('endeavour_team');
+    const storedTeam = localStorage.getItem('endeavour_team_v3');
     if (storedTeam) {
       try {
         setTeamState(JSON.parse(storedTeam));
@@ -144,7 +144,7 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const saveTeam = (newTeam: TeamCategory[]) => {
     setTeamState(newTeam);
-    localStorage.setItem('endeavour_team', JSON.stringify(newTeam));
+    localStorage.setItem('endeavour_team_v3', JSON.stringify(newTeam));
   };
 
   const saveDocuments = (newDocs: DocumentInfo[]) => {
