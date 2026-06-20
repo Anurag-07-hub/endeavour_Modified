@@ -2,6 +2,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { useEffect, useRef } from 'react';
 import { Roadmap } from '../components/Roadmap';
 import { TextReveal } from '../components/TextReveal';
+import { EndeavourScene } from '../components/EndeavourScene';
 
 export function AboutPage() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -18,7 +19,13 @@ export function AboutPage() {
   }, []);
 
   return (
-    <div ref={containerRef} className="bg-black/30 relative">
+    <motion.div 
+      ref={containerRef} 
+      className="bg-black/30 relative origin-center"
+      initial={{ scale: 0.9, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+    >
       
       {/* Sticky Hero */}
       <div className="h-screen sticky top-0 flex flex-col items-center justify-center overflow-hidden z-0 bg-black">
@@ -48,8 +55,11 @@ export function AboutPage() {
         </motion.div>
       </div>
 
+      {/* Big Endeavour Logo */}
+      <EndeavourScene />
+
       {/* Canva Style About Us Content */}
-      <div className="relative z-10 bg-black pt-[60px] md:pt-[100px] pb-[60px] md:pb-[100px] overflow-hidden">
+      <div className="relative z-10 bg-black pt-[60px] md:pt-[100px] pb-[60px] md:pb-[100px] overflow-hidden -mt-[50px]">
         
         {/* Scattered Scrapbook Background Elements */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
@@ -130,6 +140,6 @@ export function AboutPage() {
         
         <Roadmap />
       </div>
-    </div>
+    </motion.div>
   );
 }

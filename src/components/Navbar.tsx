@@ -32,11 +32,23 @@ export function Navbar() {
         <div className="flex items-center gap-1 sm:gap-3 lg:gap-5 bg-brand-bg/80 border border-white/10 backdrop-blur-xl py-2 px-2 sm:px-4 rounded-[40px] shadow-[0_8px_32px_0_rgba(164,5,5,0.15)]">
           
           {/* Logo */}
-          <Link to="/" onClick={() => { scrollToTop(); setActiveTab('Home'); }} className="flex items-center justify-center w-10 h-10 sm:w-auto sm:px-3 lg:px-4 shrink-0 rounded-full hover:bg-white/5 transition-colors group">
-             <img src="https://www.endeavoursliet.in/images/mainlogo.png" alt="Endeavour" className="w-[26px] sm:w-[34px] h-auto object-contain drop-shadow-[0_0_5px_rgba(164,5,5,0.5)]" />
-             <span className="hidden lg:block ml-3 font-sans font-black text-[15px] uppercase tracking-[3px] text-brand-accent">
-               ENDEAVOUR
-             </span>
+          <Link to="/" onClick={() => { scrollToTop(); setActiveTab('Home'); }} className="flex items-center justify-center h-10 sm:h-auto sm:px-3 lg:px-4 shrink-0 rounded-full hover:bg-white/5 transition-colors group">
+             <img src="https://www.endeavoursliet.in/images/mainlogo.png" alt="Endeavour" className="w-[26px] sm:w-[34px] h-auto object-contain drop-shadow-[0_0_5px_rgba(164,5,5,0.5)] z-10" />
+             <motion.div
+               initial={{ width: 0, opacity: 0, marginLeft: 0 }}
+               animate={{ width: "auto", opacity: 1, marginLeft: 12 }}
+               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.5 }}
+               className="hidden lg:flex overflow-hidden items-center"
+             >
+               <motion.span 
+                 initial={{ x: -20 }}
+                 animate={{ x: 0 }}
+                 transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.5 }}
+                 className="font-sans font-black text-[15px] uppercase tracking-[3px] text-brand-accent whitespace-nowrap"
+               >
+                 ENDEAVOUR
+               </motion.span>
+             </motion.div>
           </Link>
 
           {/* Divider */}

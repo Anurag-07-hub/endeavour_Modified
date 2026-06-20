@@ -1,9 +1,11 @@
 import { motion, useScroll, useTransform } from 'motion/react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { Circle } from 'lucide-react';
 import { FadeIn } from './FadeIn';
 import { RevealText } from './RevealText';
 import { MagneticText } from './MagneticText';
+import { LetsBeginTransition } from './LetsBeginTransition';
 
 function ElegantShape({
     className,
@@ -65,6 +67,8 @@ function ElegantShape({
 
 export function Hero() {
   const { scrollY } = useScroll();
+  const navigate = useNavigate();
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const y1 = useTransform(scrollY, [0, 1000], [0, 200]);
   const opacity = useTransform(scrollY, [0, 400], [1, 0]);
@@ -216,12 +220,12 @@ export function Hero() {
           >
             <div className="relative inline-block w-full sm:w-auto">
               <div className="absolute inset-0 backdrop-blur-sm bg-brand-bg/30 pointer-events-none rounded-sm -inset-[3px]" />
-              <Link
-                to="/about"
+              <button
+                onClick={() => setIsTransitioning(true)}
                 className="relative block sm:inline-block text-center px-[40px] py-[16px] border-2 border-brand-accent text-brand-accent text-[13px] uppercase tracking-[3px] hover:bg-brand-accent hover:text-brand-bg transition-colors duration-300 font-sans font-black shadow-[0_0_20px_rgba(164,5,5,0.15)] hover:shadow-[0_0_30px_rgba(164,5,5,0.3)]"
               >
                 EXPLORE ABOUT US
-              </Link>
+              </button>
             </div>
           </motion.div>
         </div>
@@ -229,6 +233,10 @@ export function Hero() {
       
       {/* Base gradient layer to map fade into below content */}
       <div className="absolute inset-0 bg-gradient-to-t from-brand-bg via-transparent to-brand-bg/80 pointer-events-none z-0" />
+
+      {isTransitioning && (
+        <LetsBeginTransition onComplete={() => navigate('/about')} />
+      )}
     </section>
   );
 }
