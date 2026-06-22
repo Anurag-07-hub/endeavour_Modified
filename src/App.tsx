@@ -7,6 +7,7 @@ import { Footer } from './components/Footer';
 import { AboutPage } from './pages/AboutPage';
 import { TeamPage } from './pages/TeamPage';
 import { GalleryPage } from './pages/GalleryPage';
+import { DomainsPage } from './pages/DomainsPage';
 import { ScrollToTop } from './components/ScrollToTop';
 import { JoinUsPage } from './pages/JoinUsPage';
 import { AdminDashboard } from './pages/AdminDashboard';
@@ -40,6 +41,7 @@ export default function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/team" element={<TeamPage />} />
+                <Route path="/domains" element={<DomainsPage />} />
                 <Route path="/gallery" element={<GalleryPage />} />
                 <Route path="/join-us" element={<JoinUsPage />} />
                 <Route path="/admin-dashboard" element={<AdminDashboard />} />

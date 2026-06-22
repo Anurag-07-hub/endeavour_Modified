@@ -2,7 +2,6 @@ import { Mail, MapPin, Phone, Linkedin, Instagram, Facebook } from 'lucide-react
 import { FadeIn } from './FadeIn';
 import { Link } from 'react-router-dom';
 import { useCMS } from '../context/CMSContext';
-import { TextScramble } from './TextScramble';
 import { useRef } from 'react';
 import { useInView } from 'motion/react';
 import { motion } from 'framer-motion';
@@ -123,7 +122,7 @@ export function Footer() {
                   <div>
                     <div className="text-[10px] font-bold uppercase tracking-widest text-brand-muted mb-1">Location</div>
                     <p className="font-sans text-[13px] leading-[1.6] whitespace-pre-line text-white/90">
-                      <TextScramble as="span" duration={1.2} speed={0.03} trigger={isContactInView}>{contactInfo.address}</TextScramble>
+                      {contactInfo.address}
                     </p>
                   </div>
                 </motion.div>
@@ -139,7 +138,7 @@ export function Footer() {
                   <div className="min-w-0">
                     <div className="text-[10px] font-bold uppercase tracking-widest text-brand-muted mb-1">Email</div>
                     <a href={`mailto:${contactInfo.email}`} className="font-sans text-[13px] text-white/90 hover:text-brand-accent transition-colors truncate block">
-                      <TextScramble as="span" duration={1.2} speed={0.03} trigger={isContactInView}>{contactInfo.email}</TextScramble>
+                      {contactInfo.email}
                     </a>
                   </div>
                 </motion.div>
@@ -156,7 +155,7 @@ export function Footer() {
                     <div className="min-w-0">
                       <div className="text-[10px] font-bold uppercase tracking-widest text-brand-muted mb-1">Phone</div>
                       <a href={`tel:${contactInfo.phone}`} className="font-sans text-[13px] text-white/90 hover:text-brand-accent transition-colors block">
-                        <TextScramble as="span" duration={1.2} speed={0.03} trigger={isContactInView}>{contactInfo.phone}</TextScramble>
+                        {contactInfo.phone}
                       </a>
                     </div>
                   </motion.div>
@@ -175,10 +174,10 @@ export function Footer() {
                       </div>
                       <div className="min-w-0">
                         <div className="text-[10px] font-bold uppercase tracking-widest text-brand-muted mb-1">
-                          <TextScramble as="span" duration={1.2} speed={0.03} trigger={isContactInView}>{contact.name}</TextScramble>
+                          {contact.name}
                         </div>
                         <a href={`tel:${contact.phone}`} className="font-sans text-[13px] text-white/90 hover:text-brand-accent transition-colors block">
-                          <TextScramble as="span" duration={1.2} speed={0.03} trigger={isContactInView}>{contact.phone}</TextScramble>
+                          {contact.phone}
                         </a>
                       </div>
                     </motion.div>

@@ -4,12 +4,13 @@ import { Link, useLocation } from 'react-router-dom';
 import { Home, Info, Users, Calendar, Image, Hand, Info as InfoIcon, UserPlus } from 'lucide-react';
 import { useGesture } from '../context/GestureContext';
 import { GestureGuideModal } from './GestureGuideModal';
+import { LiquidMorphButton } from './LiquidMorphButton';
 
 const navItems = [
   { name: 'Home', url: '/', icon: Home, isRouterLink: true },
   { name: 'About', url: '/about', icon: Info, isRouterLink: true },
   { name: 'Team', url: '/team', icon: Users, isRouterLink: true },
-  { name: 'Events', url: '/#events', icon: Calendar, isRouterLink: false },
+  { name: 'Domains', url: '/domains', icon: Calendar, isRouterLink: true },
   { name: 'Gallery', url: '/gallery', icon: Image, isRouterLink: true },
 ];
 
@@ -108,15 +109,7 @@ export function Navbar() {
 
           {/* Actions */}
           <div className="flex items-center gap-1 sm:pl-1 sm:pr-2 shrink-0">
-             <Link
-              to="/join-us"
-              onClick={scrollToTop}
-              className="flex items-center justify-center w-10 h-10 md:w-auto md:h-auto md:px-[24px] md:py-[12px] rounded-full border border-brand-accent text-brand-accent text-[13px] uppercase tracking-[2px] hover:bg-brand-accent hover:text-brand-bg transition-colors duration-300 font-sans font-black whitespace-nowrap shrink-0"
-              title="Join Us"
-            >
-              <span className="hidden md:inline">Join Us</span>
-              <UserPlus className="w-[18px] h-[18px] md:hidden" />
-            </Link>
+             <LiquidMorphButton onClick={scrollToTop} />
             
             <div className="flex items-center gap-1 ml-1 shrink-0">
               <button
