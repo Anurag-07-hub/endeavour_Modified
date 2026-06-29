@@ -188,9 +188,9 @@ export function Hero() {
               hoverTextClassName="text-[50px] sm:text-[70px] lg:text-[100px] tracking-[0.15em] font-bebas font-bold"
               baseContent={
                 <RevealText 
-                  text="STRIVE TO CREATE DIFFERENCE." 
+                  text="STRIVE TO CREATE DIFFERENCE" 
                   className="justify-center uppercase text-[40px] sm:text-[56px] lg:text-[80px] font-bebas tracking-[2px] font-bold"
-                  accentWords={["DIFFERENCE."]} 
+                  accentWords={["DIFFERENCE"]} 
                   showImages={false}
                   letterDelay={0.05}
                   overlayDelay={0.03}

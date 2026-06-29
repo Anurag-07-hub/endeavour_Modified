@@ -150,12 +150,8 @@ export function AboutPage() {
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="bg-brand-accent text-center my-20 py-10 px-4 md:py-14 md:px-8 relative overflow-hidden max-w-[1024px] mx-auto border border-white/10 shadow-2xl rounded-lg"
         >
-          {/* Diagnostic grid/stats overlay at low opacity */}
-          <div className="absolute top-3 left-4 font-mono text-[9px] text-[#ffffff]/45 tracking-widest uppercase">DIRECTIVE // 10.14</div>
-          <div className="absolute bottom-3 right-4 font-mono text-[9px] text-[#ffffff]/45 tracking-widest uppercase">SYS.STATUS // OK</div>
-          
           <h2 className="font-bebas text-[42px] sm:text-[72px] md:text-[105px] leading-[0.85] text-[#ffffff] tracking-[-0.01em] uppercase select-none font-bold">
-            BEST TEAMWORK ALLOW YOU TO ACHIEVE ANYTHING
+            BEST TEAMWORK CAN ACHIEVE ANYTHING
           </h2>
         </motion.div>
         

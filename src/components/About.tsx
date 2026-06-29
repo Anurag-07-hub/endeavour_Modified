@@ -10,7 +10,7 @@ export function About() {
           <div>
             <FadeIn direction="right" delay={0.1}>
               <RevealText 
-                text="Empowering the innovators of tomorrow." 
+                text="Empowering the innovators of tomorrow" 
                 className="font-sans text-[36px] md:text-[48px] lg:text-[64px] font-black uppercase tracking-[-2px] mb-5 md:mb-6 leading-[0.9]"
               />
             </FadeIn>

@@ -16,7 +16,7 @@ interface RevealTextProps {
 }
 
 export function RevealText({
-  text = "Empowering the innovators of tomorrow.",
+  text = "Empowering the innovators of tomorrow",
   className = "",
   textColor = "text-white",
   overlayColor = "text-brand-accent",
