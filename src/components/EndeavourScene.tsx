@@ -34,7 +34,7 @@ export function EndeavourScene() {
   const finalBlur = useTransform(scrollYProgress, [0.6, 0.8], ["blur(10px)", "blur(0px)"]);
 
   return (
-    <div ref={containerRef} className="relative w-full h-[150vh] bg-black z-20">
+    <div ref={containerRef} className="relative w-full h-[120vh] bg-black z-20 cursor-none">
       
       {/* Sticky container holds the animation in the viewport while scrolling the 150vh */}
       <div className="sticky top-0 h-screen w-full flex flex-col justify-center items-center overflow-hidden">

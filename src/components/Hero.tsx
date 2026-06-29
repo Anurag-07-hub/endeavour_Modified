@@ -58,7 +58,7 @@ function ElegantShape({
                 className="relative"
             >
                 <div
-                    className={`absolute inset-0 rounded-full bg-gradient-to-r to-transparent ${gradient} backdrop-blur-[4px] border-2 border-brand-accent/[0.4] shadow-[0_8px_32px_0_rgba(164,5,5,0.3)] after:absolute after:inset-0 after:rounded-full after:bg-[radial-gradient(circle_at_50%_50%,rgba(164,5,5,0.5),transparent_70%)]`}
+                    className={`absolute inset-0 rounded-full bg-gradient-to-r to-transparent ${gradient} backdrop-blur-[4px] border-2 border-brand-accent/[0.7] shadow-[0_8px_32px_0_rgba(164,5,5,0.65)] after:absolute after:inset-0 after:rounded-full after:bg-[radial-gradient(circle_at_50%_50%,rgba(164,5,5,0.8),transparent_70%)]`}
                 />
             </motion.div>
         </motion.div>
@@ -113,7 +113,7 @@ export function Hero() {
               width={600}
               height={140}
               rotate={12}
-              gradient="from-brand-accent/[0.4]"
+              gradient="from-brand-accent/[0.7]"
               className="left-[-10%] md:left-[-5%] top-[15%] md:top-[20%]"
           />
 
@@ -122,7 +122,7 @@ export function Hero() {
               width={500}
               height={120}
               rotate={-15}
-              gradient="from-[#ff4b4b]/[0.4]"
+              gradient="from-[#ff4b4b]/[0.7]"
               className="right-[-5%] md:right-[0%] top-[70%] md:top-[75%]"
           />
 
@@ -131,7 +131,7 @@ export function Hero() {
               width={300}
               height={80}
               rotate={-8}
-              gradient="from-brand-accent/[0.4]"
+              gradient="from-brand-accent/[0.7]"
               className="left-[5%] md:left-[10%] bottom-[5%] md:bottom-[10%]"
           />
 
@@ -140,7 +140,7 @@ export function Hero() {
               width={200}
               height={60}
               rotate={20}
-              gradient="from-[#ff4b4b]/[0.4]"
+              gradient="from-[#ff4b4b]/[0.7]"
               className="right-[15%] md:right-[20%] top-[10%] md:top-[15%]"
           />
 
@@ -149,7 +149,7 @@ export function Hero() {
               width={150}
               height={40}
               rotate={-25}
-              gradient="from-brand-accent/[0.4]"
+              gradient="from-brand-accent/[0.7]"
               className="left-[20%] md:left-[25%] top-[5%] md:top-[10%]"
           />
       </div>
@@ -185,11 +185,11 @@ export function Hero() {
             <MagneticText
               hoverText="ENDEAVOUR"
               bubbleSize={280}
-              hoverTextClassName="text-[50px] sm:text-[70px] lg:text-[100px] tracking-[0.3em] font-black"
+              hoverTextClassName="text-[50px] sm:text-[70px] lg:text-[100px] tracking-[0.15em] font-bebas font-bold"
               baseContent={
                 <RevealText 
                   text="STRIVE TO CREATE DIFFERENCE." 
-                  className="justify-center uppercase text-[40px] sm:text-[56px] lg:text-[80px]"
+                  className="justify-center uppercase text-[40px] sm:text-[56px] lg:text-[80px] font-bebas tracking-[2px] font-bold"
                   accentWords={["DIFFERENCE."]} 
                   showImages={false}
                   letterDelay={0.05}

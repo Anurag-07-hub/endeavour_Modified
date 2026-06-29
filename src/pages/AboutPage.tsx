@@ -1,7 +1,7 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Roadmap } from '../components/Roadmap';
+import { HistoryCircuit } from '../components/HistoryCircuit';
 import { TextReveal } from '../components/TextReveal';
 import { EndeavourScene } from '../components/EndeavourScene';
 
@@ -63,7 +63,7 @@ export function AboutPage() {
       <EndeavourScene />
 
       {/* Canva Style About Us Content */}
-      <div className="relative z-10 bg-black pt-[60px] md:pt-[100px] pb-[60px] md:pb-[100px] overflow-hidden -mt-[50px]">
+      <div className="relative z-35 bg-black pt-16 md:pt-24 pb-[60px] md:pb-[100px] overflow-hidden -mt-[80px] md:-mt-[100px]">
         
         {/* Scattered Scrapbook Background Elements */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
@@ -111,7 +111,7 @@ export function AboutPage() {
               transition={{ type: 'spring', damping: 20, stiffness: 50 }}
             >
               <p className="text-[16px] md:text-[18px] text-brand-muted leading-[1.8] font-sans md:pl-20 border-l border-white/10 md:border-transparent">
-                Endeavour is a robotics team based in SLIET, Punjab. It has had its presence in the national robotics scene for the past half a decade, over years the team has worked on projects such as E-yantra (Bombay), TEQIP (GOI &amp; World bank), SAE Aero Design Challenge, and other projects for social welfare. The team has also participated in several prestigious events held at premier institutions in our country, including Techfest (IIT Bombay), ABU ROBOCON, Indian drone racing league (IIT Delhi &amp; VIT Vellore), APOGEE (BITS Pilani), Technex (IIT BHU), Techkriti (IIT Kanpur) and Advitya (IIT Ropar) to name a few. The team has brought many laurels to the college proving its excellence. We provide a platform where one can bridge the gap between theoretical and practical knowledge. When the world stalled, we were still able to make progress with our continued efforts and hard work. We strive to create a difference.
+                Endeavour is a robotics team based in SLIET, Punjab. It has had its presence in the national robotics scene for the past half a decade, over years the team has worked on projects such as E-yantra (Bombay), TEQIP (GOI &amp; World bank), SAE Aero Design Challenge, and other projects for social welfare. The team has also participated in several prestigious events held at premier institutions in our country, including Techfest (IIT Bombay), ABU ROBOCON, Indian drone racing league (IIT Delhi &amp; VIT Vellore), APOGEE (BITS Pilani), Technex (IIT BHU), Techkriti (IIT Kanpur) and Advitya (IIT Ropar) to name a few. The team has brought many laurels to the college proving its excellence. We provide a platform where one can bridge the gap between theoretical and practical knowledge. When the world stalled, we were still able to make progress with our continued efforts and hard work.
               </p>
             </motion.div>
           </div>
@@ -141,8 +141,25 @@ export function AboutPage() {
             </motion.div>
           </div>
         </div>
+
+        {/* Full-Width High-Impact Bebas Neue Statement */}
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.3 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="bg-brand-accent text-center my-20 py-10 px-4 md:py-14 md:px-8 relative overflow-hidden max-w-[1024px] mx-auto border border-white/10 shadow-2xl rounded-lg"
+        >
+          {/* Diagnostic grid/stats overlay at low opacity */}
+          <div className="absolute top-3 left-4 font-mono text-[9px] text-[#ffffff]/45 tracking-widest uppercase">DIRECTIVE // 10.14</div>
+          <div className="absolute bottom-3 right-4 font-mono text-[9px] text-[#ffffff]/45 tracking-widest uppercase">SYS.STATUS // OK</div>
+          
+          <h2 className="font-bebas text-[42px] sm:text-[72px] md:text-[105px] leading-[0.85] text-[#ffffff] tracking-[-0.01em] uppercase select-none font-bold">
+            WE STRIVE TO CREATE A DIFFERENCE
+          </h2>
+        </motion.div>
         
-        <Roadmap />
+        <HistoryCircuit />
       </div>
     </motion.div>
   );
