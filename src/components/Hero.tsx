@@ -1,11 +1,106 @@
 import { motion, useScroll, useTransform } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Circle } from 'lucide-react';
 import { FadeIn } from './FadeIn';
 import { RevealText } from './RevealText';
 import { MagneticText } from './MagneticText';
 import { LetsBeginTransition } from './LetsBeginTransition';
+
+// Glitch block reveal — plays on page entry, blocks dissolve away to reveal the hero
+function GlitchReveal() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [done, setDone] = useState(false);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const COLS = 24;
+    const ROWS = 16;
+    const blockW = Math.ceil(canvas.width / COLS);
+    const blockH = Math.ceil(canvas.height / ROWS);
+    const palette = ['#c8102e', '#1a0508', '#ffffff', '#27151b', '#e63946', '#0d0d0d'];
+
+    const cells = Array.from({ length: COLS * ROWS }, (_, idx) => {
+      const col = idx % COLS;
+      const row = Math.floor(idx / COLS);
+      return {
+        x: col * blockW,
+        y: row * blockH,
+        color: palette[Math.floor(Math.random() * palette.length)],
+        opacity: 1,
+        // Stagger: dissolve outward from center
+        dissolveAt: 100 + (col / COLS) * 300 + (row / ROWS) * 180 + Math.random() * 100,
+        dissolved: false,
+      };
+    });
+
+    const DONE_AT = 900;
+    let startTime: number | null = null;
+    let rafId: number;
+    let finished = false;
+
+    function draw(ts: number) {
+      if (!startTime) startTime = ts;
+      const elapsed = ts - startTime;
+
+      if (elapsed >= DONE_AT) {
+        if (!finished) {
+          finished = true;
+          setDone(true);
+        }
+        return;
+      }
+
+      ctx!.clearRect(0, 0, canvas!.width, canvas!.height);
+
+      cells.forEach((cell) => {
+        if (cell.dissolved) return;
+        if (elapsed >= cell.dissolveAt) {
+          // Flicker briefly then dissolve
+          if (Math.random() < 0.3) {
+            cell.color = palette[Math.floor(Math.random() * palette.length)];
+          }
+          cell.opacity = Math.max(0, 1 - (elapsed - cell.dissolveAt) / 180);
+          if (cell.opacity <= 0) { cell.dissolved = true; return; }
+        }
+        ctx!.globalAlpha = cell.opacity;
+        ctx!.fillStyle = cell.color;
+        ctx!.fillRect(cell.x, cell.y, blockW, blockH);
+        if (Math.random() < 0.06) {
+          ctx!.globalAlpha = 0.8;
+          ctx!.fillStyle = '#ffffff';
+          ctx!.fillRect(cell.x, cell.y, blockW, 1);
+        }
+      });
+
+      ctx!.globalAlpha = 1;
+      rafId = requestAnimationFrame(draw);
+    }
+
+    rafId = requestAnimationFrame(draw);
+    return () => cancelAnimationFrame(rafId);
+  }, []);
+
+  if (done) return null;
+
+  return (
+    <div className="fixed inset-0 z-[9998] pointer-events-none">
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 w-full h-full"
+        style={{ imageRendering: 'pixelated' }}
+      />
+    </div>
+  );
+}
+
 
 function ElegantShape({
     className,
@@ -220,6 +315,7 @@ export function Hero() {
       {isTransitioning && (
         <LetsBeginTransition onComplete={() => navigate('/about', { state: { fromLetsBegin: true } })} />
       )}
+      <GlitchReveal />
     </section>
   );
 }
