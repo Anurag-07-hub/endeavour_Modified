@@ -155,7 +155,7 @@ export function AboutPage() {
           <div className="absolute bottom-3 right-4 font-mono text-[9px] text-[#ffffff]/45 tracking-widest uppercase">SYS.STATUS // OK</div>
           
           <h2 className="font-bebas text-[42px] sm:text-[72px] md:text-[105px] leading-[0.85] text-[#ffffff] tracking-[-0.01em] uppercase select-none font-bold">
-            WE STRIVE TO CREATE A DIFFERENCE
+            BEST TEAMWORK ALLOW YOU TO ACHIEVE ANYTHING
           </h2>
         </motion.div>
         
