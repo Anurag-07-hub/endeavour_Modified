@@ -10,12 +10,17 @@ const __dirname = path.dirname(__filename);
 const app = express();
 app.use(express.json({ limit: '10mb' }));
 
-// Allow CORS from Vite dev server (port 3000)
-app.use((_req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+// Allow CORS from Vite dev server dynamically
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (origin) {
+    res.header('Access-Control-Allow-Origin', origin);
+  } else {
+    res.header('Access-Control-Allow-Origin', '*');
+  }
   res.header('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type');
-  if (_req.method === 'OPTIONS') return res.sendStatus(200);
+  if (req.method === 'OPTIONS') return res.sendStatus(200);
   next();
 });
 
@@ -188,11 +193,55 @@ app.post('/api/commit-gallery', (req, res) => {
   }
 });
 
+const MODEL3D_FILE = path.join(__dirname, 'src', 'data', 'model3d.ts');
+
+/**
+ * POST /api/commit-model3d
+ * Body: { config: Model3DConfig, commitMessage?: string }
+ *
+ * Writes admin-updated 3D model configuration to src/data/model3d.ts and commits to Git.
+ */
+app.post('/api/commit-model3d', (req, res) => {
+  const { config, commitMessage } = req.body as {
+    config: any;
+    commitMessage?: string;
+  };
+
+  if (!config || typeof config !== 'object') {
+    return res.status(400).json({ success: false, error: 'Invalid 3D model configuration payload' });
+  }
+
+  try {
+    const fileContent =
+      `export interface Model3DConfig {\n` +
+      `  scale: number;\n` +
+      `  position: [number, number, number];\n` +
+      `  rotation: [number, number, number];\n` +
+      `}\n\n` +
+      `export const defaultModel3D: Model3DConfig = ${JSON.stringify(config, null, 2)};\n`;
+    writeFileSync(MODEL3D_FILE, fileContent, 'utf8');
+
+    const msg = commitMessage || 'admin: update 3d model parameters [auto]';
+    execSync(`git -C "${REPO_ROOT}" add src/data/model3d.ts`, { stdio: 'pipe' });
+    execSync(`git -C "${REPO_ROOT}" commit -m "${msg}"`, { stdio: 'pipe' });
+    execSync(`git -C "${REPO_ROOT}" push`, { stdio: 'pipe' });
+
+    return res.json({ success: true, message: '3D model configuration saved, committed, and pushed to live site!' });
+  } catch (err: any) {
+    if (err.message?.includes('nothing to commit')) {
+      return res.json({ success: true, message: 'No changes detected — 3D model configuration is already up to date.' });
+    }
+    console.error('[CMS Server] Commit error:', err.message);
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 const PORT = 3001;
 app.listen(PORT, () => {
   console.log(`\n  📡 Endeavour CMS API → http://localhost:${PORT}\n`);
   console.log('  Team saves      → commits to Git ✓');
   console.log('  Contact saves   → commits to Git ✓');
   console.log('  Documents saves → commits to Git ✓');
-  console.log('  Gallery saves   → commits to Git ✓\n');
+  console.log('  Gallery saves   → commits to Git ✓');
+  console.log('  3D Model saves  → commits to Git ✓\n');
 });

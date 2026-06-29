@@ -2,6 +2,7 @@ import React, { useRef, Suspense, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { useGLTF, Environment, OrbitControls } from '@react-three/drei';
+import { useCMS } from '../context/CMSContext';
 
 class ModelErrorBoundary extends React.Component<{children: React.ReactNode}, {hasError: boolean, error: Error | null}> {
   constructor(props: {children: React.ReactNode}) {
@@ -24,16 +25,21 @@ class ModelErrorBoundary extends React.Component<{children: React.ReactNode}, {h
   }
 }
 
-function CarModel() {
+interface CarModelProps {
+  scale: number;
+  position: [number, number, number];
+  rotation: [number, number, number];
+}
+
+function CarModel({ scale, position, rotation }: CarModelProps) {
   const { scene } = useGLTF('/textured_mesh.glb');
 
-  // Locked values: scale={3.4}, position={[0.3, -0.3, 0.0]}, rotation={[0.02, 0.89, 0.02]}
   return (
     <primitive 
       object={scene} 
-      scale={3.4}
-      position={[0.3, -0.3, 0.0]}
-      rotation={[0.02, 0.89, 0.02]}
+      scale={scale}
+      position={position}
+      rotation={rotation}
     />
   );
 }
@@ -98,6 +104,7 @@ function InteractiveControls() {
 }
 
 export function EndeavourBanner() {
+  const { model3D } = useCMS();
   const containerRef = useRef<HTMLDivElement>(null);
   
   // Subtle parallax effect for depth
@@ -154,7 +161,11 @@ export function EndeavourBanner() {
                 <directionalLight position={[-10, 5, -5]} intensity={0.8} color="#c8102e" />
                 <Environment preset="city" />
                 <ModelErrorBoundary>
-                  <CarModel />
+                  <CarModel 
+                    scale={model3D.scale}
+                    position={model3D.position}
+                    rotation={model3D.rotation}
+                  />
                 </ModelErrorBoundary>
                 <InteractiveControls />
               </Suspense>

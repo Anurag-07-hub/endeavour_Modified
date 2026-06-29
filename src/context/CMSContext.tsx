@@ -3,6 +3,9 @@ import { teamMembers as initialTeamMembers } from '../data/team';
 import { defaultContact } from '../data/contact';
 import { defaultDocuments } from '../data/documents';
 import { defaultGallery, GalleryItem } from '../data/gallery';
+import { defaultModel3D, Model3DConfig } from '../data/model3d';
+
+export type { Model3DConfig };
 
 export interface Member {
   id: string;
@@ -67,6 +70,8 @@ interface CMSContextType {
   gallery: GalleryItem[];
   setGallery: React.Dispatch<React.SetStateAction<GalleryItem[]>>;
   saveGallery: (newGallery: GalleryItem[]) => void;
+  model3D: Model3DConfig;
+  saveModel3D: (newConfig: Model3DConfig) => void;
 }
 
 const CMSContext = createContext<CMSContextType | undefined>(undefined);
@@ -92,6 +97,7 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [contactInfo, setContactInfoState] = useState<ContactInfo>(defaultContact);
   const [deletedMembers, setDeletedMembersState] = useState<DeletedMember[]>([]);
   const [gallery, setGalleryState] = useState<GalleryItem[]>(defaultGallery);
+  const [model3D, setModel3DState] = useState<Model3DConfig>(defaultModel3D);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -139,6 +145,13 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       setGalleryState(defaultGallery);
     }
 
+    const storedModel3D = localStorage.getItem('endeavour_model3d');
+    if (storedModel3D) {
+      try {
+        setModel3DState(JSON.parse(storedModel3D));
+      } catch (e) {}
+    }
+
     setIsLoaded(true);
   }, []);
 
@@ -167,6 +180,11 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     localStorage.setItem('endeavour_gallery', JSON.stringify(newGallery));
   };
 
+  const saveModel3D = (newConfig: Model3DConfig) => {
+    setModel3DState(newConfig);
+    localStorage.setItem('endeavour_model3d', JSON.stringify(newConfig));
+  };
+
   if (!isLoaded) return null;
 
   return (
@@ -187,6 +205,8 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         gallery,
         setGallery: setGalleryState,
         saveGallery,
+        model3D,
+        saveModel3D,
       }}
     >
       {children}

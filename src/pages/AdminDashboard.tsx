@@ -1,15 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCMS, TeamCategory, Member, DocumentInfo, ContactInfo, DeletedMember } from '../context/CMSContext';
 import { GalleryItem } from '../data/gallery';
-import { Users, FileText, Phone, Plus, Trash2, Edit2, LogOut, Check, X, Upload, RefreshCcw, Save, Undo, GripVertical, GitBranch, Loader, Image as ImageIcon } from 'lucide-react';
+import { Users, FileText, Phone, Plus, Trash2, Edit2, LogOut, Check, X, Upload, RefreshCcw, Save, Undo, GripVertical, GitBranch, Loader, Image as ImageIcon, Sliders } from 'lucide-react';
 import { motion } from 'motion/react';
+import { Canvas } from '@react-three/fiber';
+import { useGLTF, Environment } from '@react-three/drei';
+
+function AdminCarModel({ scale, position, rotation }: { scale: number; position: [number, number, number]; rotation: [number, number, number] }) {
+  const { scene } = useGLTF('/textured_mesh.glb');
+  return <primitive object={scene} scale={scale} position={position} rotation={rotation} />;
+}
 
 export const AdminDashboard = () => {
   const { user, isAdmin, logout } = useAuth();
-  const { team, documents, contactInfo, deletedMembers, gallery, saveTeam, saveDocuments, saveContactInfo, saveDeletedMembers, saveGallery } = useCMS();
-  const [activeTab, setActiveTab] = useState<'team' | 'docs' | 'contact' | 'recycle' | 'gallery'>('team');
+  const { team, documents, contactInfo, deletedMembers, gallery, model3D, saveTeam, saveDocuments, saveContactInfo, saveDeletedMembers, saveGallery, saveModel3D } = useCMS();
+  const [activeTab, setActiveTab] = useState<'team' | 'docs' | 'contact' | 'recycle' | 'gallery' | 'model3d'>('team');
+
+  const apiBase = `http://${window.location.hostname}:3001`;
 
   // Draft Team State for reordering
   const [draftTeam, setDraftTeam] = useState<TeamCategory[]>(team);
@@ -23,6 +32,85 @@ export const AdminDashboard = () => {
   const [docCommitMessage, setDocCommitMessage] = useState('');
   const [galleryCommitStatus, setGalleryCommitStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [galleryCommitMessage, setGalleryCommitMessage] = useState('');
+
+  // 3D Model Local Editing States
+  const [modelScale, setModelScale] = useState<number>(model3D ? model3D.scale : 3.4);
+  const [modelPosX, setModelPosX] = useState<number>(model3D ? model3D.position[0] : 0.3);
+  const [modelPosY, setModelPosY] = useState<number>(model3D ? model3D.position[1] : -0.3);
+  const [modelPosZ, setModelPosZ] = useState<number>(model3D ? model3D.position[2] : 0.0);
+  const [modelRotX, setModelRotX] = useState<number>(model3D ? model3D.rotation[0] : 0.02);
+  const [modelRotY, setModelRotY] = useState<number>(model3D ? model3D.rotation[1] : 0.89);
+  const [modelRotZ, setModelRotZ] = useState<number>(model3D ? model3D.rotation[2] : 0.02);
+
+  const [modelCommitStatus, setModelCommitStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [modelCommitMessage, setModelCommitMessage] = useState('');
+
+  // Sync state if CMS model3D updates
+  useEffect(() => {
+    if (model3D) {
+      setModelScale(model3D.scale);
+      setModelPosX(model3D.position[0]);
+      setModelPosY(model3D.position[1]);
+      setModelPosZ(model3D.position[2]);
+      setModelRotX(model3D.rotation[0]);
+      setModelRotY(model3D.rotation[1]);
+      setModelRotZ(model3D.rotation[2]);
+    }
+  }, [model3D]);
+
+  const handleModel3DChange = (key: string, value: number) => {
+    let nextScale = modelScale;
+    let nextPosX = modelPosX;
+    let nextPosY = modelPosY;
+    let nextPosZ = modelPosZ;
+    let nextRotX = modelRotX;
+    let nextRotY = modelRotY;
+    let nextRotZ = modelRotZ;
+
+    if (key === 'scale') { setModelScale(value); nextScale = value; }
+    else if (key === 'posX') { setModelPosX(value); nextPosX = value; }
+    else if (key === 'posY') { setModelPosY(value); nextPosY = value; }
+    else if (key === 'posZ') { setModelPosZ(value); nextPosZ = value; }
+    else if (key === 'rotX') { setModelRotX(value); nextRotX = value; }
+    else if (key === 'rotY') { setModelRotY(value); nextRotY = value; }
+    else if (key === 'rotZ') { setModelRotZ(value); nextRotZ = value; }
+
+    saveModel3D({
+      scale: nextScale,
+      position: [nextPosX, nextPosY, nextPosZ],
+      rotation: [nextRotX, nextRotY, nextRotZ]
+    });
+  };
+
+  const handleCommitModel3DToGit = async () => {
+    setModelCommitStatus('loading');
+    try {
+      const res = await fetch(`${apiBase}/api/commit-model3d`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          config: {
+            scale: modelScale,
+            position: [modelPosX, modelPosY, modelPosZ],
+            rotation: [modelRotX, modelRotY, modelRotZ]
+          },
+          commitMessage: modelCommitMessage.trim() || undefined,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setModelCommitStatus('success');
+        setModelCommitMessage('');
+        setTimeout(() => setModelCommitStatus('idle'), 4000);
+      } else {
+        throw new Error(data.error || 'Unknown error');
+      }
+    } catch (err: any) {
+      console.error('Git commit failed:', err);
+      setModelCommitStatus('error');
+      setTimeout(() => setModelCommitStatus('idle'), 5000);
+    }
+  };
 
   useEffect(() => {
     setDraftTeam(team);
@@ -302,7 +390,7 @@ export const AdminDashboard = () => {
   const handleCommitToGit = async () => {
     setCommitStatus('loading');
     try {
-      const res = await fetch('http://localhost:3001/api/commit-team', {
+      const res = await fetch(`${apiBase}/api/commit-team`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -328,7 +416,7 @@ export const AdminDashboard = () => {
   const handleCommitContactToGit = async () => {
     setContactCommitStatus('loading');
     try {
-      const res = await fetch('http://localhost:3001/api/commit-contact', {
+      const res = await fetch(`${apiBase}/api/commit-contact`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -354,7 +442,7 @@ export const AdminDashboard = () => {
   const handleCommitDocsToGit = async () => {
     setDocCommitStatus('loading');
     try {
-      const res = await fetch('http://localhost:3001/api/commit-documents', {
+      const res = await fetch(`${apiBase}/api/commit-documents`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -380,7 +468,7 @@ export const AdminDashboard = () => {
   const handleCommitGalleryToGit = async () => {
     setGalleryCommitStatus('loading');
     try {
-      const res = await fetch('http://localhost:3001/api/commit-gallery', {
+      const res = await fetch(`${apiBase}/api/commit-gallery`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -467,6 +555,14 @@ export const AdminDashboard = () => {
               }`}
             >
               <Phone className="w-5 h-5" /> Contact Info
+            </button>
+            <button
+              onClick={() => setActiveTab('model3d')}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all border font-bold text-[12px] uppercase tracking-[1px] ${
+                activeTab === 'model3d' ? 'bg-brand-accent border-brand-accent text-white shadow-[0_0_15px_rgba(164,5,5,0.4)]' : 'bg-transparent border-brand-accent/25 text-brand-muted hover:border-brand-accent/60'
+              }`}
+            >
+              <Sliders className="w-5 h-5" /> 3D Model Settings
             </button>
           </div>
 
@@ -1028,6 +1124,182 @@ export const AdminDashboard = () => {
                       </div>
                     );
                   })}
+                </div>
+              </motion.div>
+            )}
+
+            {/* 3D Model Tab */}
+            {activeTab === 'model3d' && (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                <h2 className="text-2xl font-black uppercase tracking-[1px] text-white mb-6">3D Model Configuration</h2>
+
+                {/* Git Commit Panel for 3D Model */}
+                <div className="bg-[#0a0a0a] border border-brand-accent/30 rounded-xl p-4 mb-8">
+                  <div className="flex items-center gap-2 mb-3">
+                    <GitBranch className="w-4 h-4 text-brand-accent" />
+                    <span className="font-bold text-[12px] uppercase tracking-[1px] text-brand-accent">Commit 3D Model to Git</span>
+                  </div>
+                  <p className="text-[11px] text-brand-muted mb-3 leading-[1.5]">
+                    This writes <code className="text-brand-accent bg-brand-accent/10 px-1 rounded">src/data/model3d.ts</code> and commits + pushes to GitHub. Make sure the backend server is running on port 3001.
+                  </p>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="Commit message (optional)"
+                      value={modelCommitMessage}
+                      onChange={e => setModelCommitMessage(e.target.value)}
+                      className="flex-1 bg-brand-bg border border-brand-accent/25 rounded-lg px-3 py-2 text-white text-[12px] focus:border-brand-accent focus:outline-none"
+                    />
+                    <button
+                      onClick={handleCommitModel3DToGit}
+                      disabled={modelCommitStatus === 'loading'}
+                      className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-[12px] uppercase tracking-[1px] transition ${
+                        modelCommitStatus === 'success'
+                          ? 'bg-green-600 text-white'
+                          : modelCommitStatus === 'error'
+                          ? 'bg-red-600 text-white'
+                          : 'bg-brand-accent text-white hover:bg-brand-accent/90'
+                      } disabled:opacity-60`}
+                    >
+                      {modelCommitStatus === 'loading' ? (
+                        <><Loader className="w-4 h-4 animate-spin" /> Committing...</>
+                      ) : modelCommitStatus === 'success' ? (
+                        <><Check className="w-4 h-4" /> Committed!</>
+                      ) : modelCommitStatus === 'error' ? (
+                        <><X className="w-4 h-4" /> Failed — check server</>
+                      ) : (
+                        <><GitBranch className="w-4 h-4" /> Commit to Git</>
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  {/* Sliders Column */}
+                  <div className="space-y-4">
+                    <h3 className="text-[13px] font-bold uppercase tracking-[2px] text-brand-muted mb-4 border-b border-brand-accent/25 pb-2">Adjust Parameters</h3>
+                    
+                    {/* Scale */}
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-xs font-mono">
+                        <span>Scale</span>
+                        <span className="text-brand-accent">{modelScale.toFixed(2)}</span>
+                      </div>
+                      <input 
+                        type="range" min="0.5" max="10" step="0.1" 
+                        value={modelScale} 
+                        onChange={e => handleModel3DChange('scale', parseFloat(e.target.value))}
+                        className="w-full accent-brand-accent h-1 bg-[#1a1a1a] rounded-lg appearance-none cursor-pointer"
+                      />
+                    </div>
+
+                    {/* Position X */}
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-xs font-mono">
+                        <span>Position X</span>
+                        <span className="text-brand-accent">{modelPosX.toFixed(2)}</span>
+                      </div>
+                      <input 
+                        type="range" min="-10" max="10" step="0.1" 
+                        value={modelPosX} 
+                        onChange={e => handleModel3DChange('posX', parseFloat(e.target.value))}
+                        className="w-full accent-brand-accent h-1 bg-[#1a1a1a] rounded-lg appearance-none cursor-pointer"
+                      />
+                    </div>
+
+                    {/* Position Y */}
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-xs font-mono">
+                        <span>Position Y</span>
+                        <span className="text-brand-accent">{modelPosY.toFixed(2)}</span>
+                      </div>
+                      <input 
+                        type="range" min="-10" max="10" step="0.1" 
+                        value={modelPosY} 
+                        onChange={e => handleModel3DChange('posY', parseFloat(e.target.value))}
+                        className="w-full accent-brand-accent h-1 bg-[#1a1a1a] rounded-lg appearance-none cursor-pointer"
+                      />
+                    </div>
+
+                    {/* Position Z */}
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-xs font-mono">
+                        <span>Position Z</span>
+                        <span className="text-brand-accent">{modelPosZ.toFixed(2)}</span>
+                      </div>
+                      <input 
+                        type="range" min="-20" max="20" step="0.1" 
+                        value={modelPosZ} 
+                        onChange={e => handleModel3DChange('posZ', parseFloat(e.target.value))}
+                        className="w-full accent-brand-accent h-1 bg-[#1a1a1a] rounded-lg appearance-none cursor-pointer"
+                      />
+                    </div>
+
+                    {/* Rotation X */}
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-xs font-mono">
+                        <span>Rotation X</span>
+                        <span className="text-brand-accent">{modelRotX.toFixed(2)} rad</span>
+                      </div>
+                      <input 
+                        type="range" min="-3.14" max="3.14" step="0.01" 
+                        value={modelRotX} 
+                        onChange={e => handleModel3DChange('rotX', parseFloat(e.target.value))}
+                        className="w-full accent-brand-accent h-1 bg-[#1a1a1a] rounded-lg appearance-none cursor-pointer"
+                      />
+                    </div>
+
+                    {/* Rotation Y */}
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-xs font-mono">
+                        <span>Rotation Y</span>
+                        <span className="text-brand-accent">{modelRotY.toFixed(2)} rad</span>
+                      </div>
+                      <input 
+                        type="range" min="-3.14" max="3.14" step="0.01" 
+                        value={modelRotY} 
+                        onChange={e => handleModel3DChange('rotY', parseFloat(e.target.value))}
+                        className="w-full accent-brand-accent h-1 bg-[#1a1a1a] rounded-lg appearance-none cursor-pointer"
+                      />
+                    </div>
+
+                    {/* Rotation Z */}
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-xs font-mono">
+                        <span>Rotation Z</span>
+                        <span className="text-brand-accent">{modelRotZ.toFixed(2)} rad</span>
+                      </div>
+                      <input 
+                        type="range" min="-3.14" max="3.14" step="0.01" 
+                        value={modelRotZ} 
+                        onChange={e => handleModel3DChange('rotZ', parseFloat(e.target.value))}
+                        className="w-full accent-brand-accent h-1 bg-[#1a1a1a] rounded-lg appearance-none cursor-pointer"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Real-time 3D Viewport Column */}
+                  <div className="flex flex-col">
+                    <h3 className="text-[13px] font-bold uppercase tracking-[2px] text-brand-muted mb-4 border-b border-brand-accent/25 pb-2">Live Viewport</h3>
+                    <div className="flex-1 min-h-[300px] bg-[#050505] rounded-xl border border-brand-accent/20 overflow-hidden relative">
+                      <Canvas camera={{ position: [0, 2, 10], fov: 45 }} style={{ background: 'transparent' }}>
+                        <Suspense fallback={null}>
+                          <ambientLight intensity={0.6} />
+                          <directionalLight position={[10, 10, 5]} intensity={1.5} color="#ffffff" />
+                          <directionalLight position={[-10, 5, -5]} intensity={0.8} color="#c8102e" />
+                          <Environment preset="city" />
+                          <AdminCarModel 
+                            scale={modelScale}
+                            position={[modelPosX, modelPosY, modelPosZ]}
+                            rotation={[modelRotX, modelRotY, modelRotZ]}
+                          />
+                        </Suspense>
+                      </Canvas>
+                      <div className="absolute bottom-3 left-3 bg-[#0a0a0a]/90 px-2 py-1 rounded text-[10px] font-mono border border-white/5 text-brand-muted">
+                        CAM: [0, 2, 10] | FOV: 45
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             )}
