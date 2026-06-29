@@ -12,7 +12,6 @@ import { DomainsPage } from './pages/DomainsPage';
 import { ScrollToTop } from './components/ScrollToTop';
 import { JoinUsPage } from './pages/JoinUsPage';
 import { AdminDashboard } from './pages/AdminDashboard';
-import { UserDashboard } from './pages/UserDashboard';
 import { AuthProvider } from './context/AuthContext';
 import { CMSProvider } from './context/CMSContext';
 import { GestureProvider } from './context/GestureContext';
@@ -47,7 +46,6 @@ export default function App() {
                 <Route path="/gallery" element={<GalleryPage />} />
                 <Route path="/join-us" element={<JoinUsPage />} />
                 <Route path="/admin-dashboard" element={<AdminDashboard />} />
-                <Route path="/user-dashboard" element={<UserDashboard />} />
               </Routes>
               <Footer />
             </div>

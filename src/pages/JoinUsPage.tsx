@@ -307,7 +307,6 @@ const Shader: React.FC<ShaderProps> = ({ source, uniforms, maxFps = 60 }) => {
 
 // --- Main Page Component ---
 export const JoinUsPage = () => {
-  const [role, setRole] = useState<'admin' | 'user'>('user');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { login } = useAuth();
@@ -315,13 +314,9 @@ export const JoinUsPage = () => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // Mock login
-    login(role);
-    if (role === 'admin') {
-      navigate('/admin-dashboard');
-    } else {
-      navigate('/user-dashboard');
-    }
+    // Mock login as admin only
+    login('admin');
+    navigate('/admin-dashboard');
   };
 
   return (
@@ -352,29 +347,8 @@ export const JoinUsPage = () => {
           </div>
         </div>
 
-        <h1 className="text-3xl font-black text-white text-center mb-2 uppercase tracking-[1px]">Welcome Back</h1>
-        <p className="text-brand-muted text-[13px] uppercase tracking-[1px] text-center mb-8">Login to access your dashboard</p>
-
-        <div className="flex gap-4 mb-6">
-          <button
-            onClick={() => setRole('user')}
-            className={`flex-1 py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all border ${
-              role === 'user' ? 'bg-brand-accent border-brand-accent text-white shadow-[0_0_15px_rgba(164,5,5,0.4)]' : 'bg-transparent border-brand-accent/25 text-brand-muted hover:border-brand-accent/60'
-            }`}
-          >
-            <User className="w-5 h-5" />
-            <span className="font-bold text-[12px] uppercase tracking-[1px]">User</span>
-          </button>
-          <button
-            onClick={() => setRole('admin')}
-            className={`flex-1 py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all border ${
-              role === 'admin' ? 'bg-brand-accent border-brand-accent text-white shadow-[0_0_15px_rgba(164,5,5,0.4)]' : 'bg-transparent border-brand-accent/25 text-brand-muted hover:border-brand-accent/60'
-            }`}
-          >
-            <Shield className="w-5 h-5" />
-            <span className="font-bold text-[12px] uppercase tracking-[1px]">Admin</span>
-          </button>
-        </div>
+        <h1 className="text-3xl font-black text-white text-center mb-2 uppercase tracking-[1px]">Admin Login</h1>
+        <p className="text-brand-muted text-[13px] uppercase tracking-[1px] text-center mb-8">Access the administrator dashboard</p>
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
@@ -384,7 +358,7 @@ export const JoinUsPage = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-3 bg-brand-bg border border-brand-accent/25 rounded-lg text-white focus:outline-none focus:border-brand-accent transition-colors"
-              placeholder={`demo@${role}.com`}
+              placeholder="admin@endeavour.com"
               required
             />
           </div>
@@ -404,14 +378,10 @@ export const JoinUsPage = () => {
             type="submit"
             className="w-full py-4 mt-4 bg-white text-black border border-white hover:bg-transparent hover:text-white transition-colors duration-300 font-black uppercase tracking-[2px] rounded-lg flex items-center justify-center gap-2 group"
           >
-            <span>Login as {role === 'admin' ? 'Admin' : 'User'}</span>
+            <span>Login as Admin</span>
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </button>
         </form>
-        
-        <p className="mt-6 text-[10px] uppercase tracking-[1px] text-center text-brand-muted">
-          * This is a demonstration login. Any email/password will work.
-        </p>
       </motion.div>
     </div>
   );
