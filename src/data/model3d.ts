@@ -1,4 +1,8 @@
-import type { Model3DConfig } from '../context/CMSContext';
+export interface Model3DConfig {
+  scale: number;
+  position: [number, number, number];
+  rotation: [number, number, number];
+}
 
 export const defaultModel3D: Model3DConfig = {
   "scale": 3.4,
