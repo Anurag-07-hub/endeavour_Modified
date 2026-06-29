@@ -1,5 +1,6 @@
 import { Navbar } from '../components/Navbar';
 import { Hero } from '../components/Hero';
+import { EndeavourBanner } from '../components/EndeavourBanner';
 import { About } from '../components/About';
 import { Events } from '../components/Events';
 import { Gallery } from '../components/Gallery';
@@ -11,6 +12,7 @@ export function Home() {
       <Navbar />
       <main>
         <Hero />
+        <EndeavourBanner />
         <About />
         <Events />
         <Gallery />

@@ -5,28 +5,17 @@
 
 
 
-/* Custom Scrollbar for elegant feel */
+/* Hide Scrollbar completely */
 ::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--color-brand-bg);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--color-white);
-  border-radius: 0px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-brand-accent);
+  display: none;
 }
 
 /* Smooth scrolling behavior for html */
 html {
   scroll-behavior: smooth;
   overflow-x: hidden;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
 }
 
 body {

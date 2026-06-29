@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
+import { EndeavourBanner } from './components/EndeavourBanner';
 import { About } from './components/About';
 import { Events } from './components/Events';
 import { Footer } from './components/Footer';
@@ -21,6 +22,7 @@ function Home() {
   return (
     <main>
       <Hero />
+      <EndeavourBanner />
       <About />
       <Events />
     </main>
