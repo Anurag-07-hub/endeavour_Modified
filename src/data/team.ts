@@ -36,18 +36,18 @@ export const teamMembers = [
         "linkedin": "https://www.linkedin.com/in/anmol-ranjan-62aa16289"
       },
       {
-        "name": "Pragya",
-        "position": "Co-Coordinator & Social Media Head",
-        "image": "https://www.endeavoursliet.in/images/profilesBatch2023/Pragya.jpg",
-        "email": "2140147@gmail.com",
-        "linkedin": "http://www.linkedin.com/in/pragya-sinha-37a350245"
-      },
-      {
         "name": "RAJ SINGH",
         "position": "Convener",
         "image": "https://www.endeavoursliet.in/images/profilesBatch2023/Raj.jpg",
         "email": "rs5534220@gmail.com",
         "linkedin": "https://www.linkedin.com/in/raj-singh-a1319b24b"
+      },
+      {
+        "name": "Pragya",
+        "position": "Co-Coordinator & Social Media Head",
+        "image": "https://www.endeavoursliet.in/images/profilesBatch2023/Pragya.jpg",
+        "email": "2140147@gmail.com",
+        "linkedin": "http://www.linkedin.com/in/pragya-sinha-37a350245"
       },
       {
         "name": "Priyanka Singh",
