@@ -28,15 +28,50 @@ const TEAM_FILE = path.join(__dirname, 'src', 'data', 'team.ts');
 const CONTACT_FILE = path.join(__dirname, 'src', 'data', 'contact.ts');
 const DOCUMENTS_FILE = path.join(__dirname, 'src', 'data', 'documents.ts');
 const GALLERY_FILE = path.join(__dirname, 'src', 'data', 'gallery.ts');
+const MODEL3D_FILE = path.join(__dirname, 'src', 'data', 'model3d.ts');
 const REPO_ROOT = __dirname;
+
+/**
+ * Centered Helper to run git commands with robust error checking
+ */
+function runGitCommands(repoRoot: string, fileRelativePath: string, commitMsg: string) {
+  try {
+    // Stage file
+    execSync(`git -C "${repoRoot}" add "${fileRelativePath}"`, { stdio: 'pipe' });
+    
+    // Commit changes
+    execSync(`git -C "${repoRoot}" commit -m "${commitMsg}"`, { stdio: 'pipe' });
+    
+    // Push changes
+    execSync(`git -C "${repoRoot}" push`, { stdio: 'pipe' });
+    
+    return { success: true, message: 'Changes saved, committed, and pushed!' };
+  } catch (err: any) {
+    const stdout = err.stdout?.toString() || '';
+    const stderr = err.stderr?.toString() || '';
+    const outputCombined = stdout + '\n' + stderr + '\n' + err.message;
+    
+    // Check if the exit code 1 was just because there was nothing to commit
+    if (
+      outputCombined.toLowerCase().includes('nothing to commit') || 
+      outputCombined.toLowerCase().includes('working tree clean') || 
+      outputCombined.toLowerCase().includes('no changes added to commit')
+    ) {
+      console.log(`[CMS Server] Git status: No changes to commit for ${fileRelativePath}`);
+      return { success: true, message: 'No changes detected — repository is already up to date.' };
+    }
+    
+    console.error(`[CMS Server] Git Command Failed for ${fileRelativePath}:`, err.message);
+    if (stdout) console.error('[Git stdout]:', stdout);
+    if (stderr) console.error('[Git stderr]:', stderr);
+    
+    throw new Error(stderr || stdout || err.message);
+  }
+}
 
 /**
  * POST /api/commit-team
  * Body: { team: TeamCategory[], commitMessage?: string }
- *
- * Writes admin-updated team data to src/data/team.ts and commits to Git.
- * NOTE: Contact info is intentionally NOT committed to Git — it lives in
- *       localStorage only and is NOT sent to this endpoint.
  */
 app.post('/api/commit-team', (req, res) => {
   const { team, commitMessage } = req.body as {
@@ -57,7 +92,6 @@ app.post('/api/commit-team', (req, res) => {
           members: group.members.map(({ id: _id, ...rest }: any) => rest),
         };
       }
-      // Faculty advisor (no members array) — strip id too
       const { id: _id, ...rest } = group;
       return rest;
     });
@@ -66,17 +100,10 @@ app.post('/api/commit-team', (req, res) => {
     writeFileSync(TEAM_FILE, fileContent, 'utf8');
 
     const msg = commitMessage || 'admin: update team data [auto]';
-    execSync(`git -C "${REPO_ROOT}" add src/data/team.ts`, { stdio: 'pipe' });
-    execSync(`git -C "${REPO_ROOT}" commit -m "${msg}"`, { stdio: 'pipe' });
-    execSync(`git -C "${REPO_ROOT}" push`, { stdio: 'pipe' });
-
-    return res.json({ success: true, message: 'Team data saved, committed, and pushed to live site!' });
+    const result = runGitCommands(REPO_ROOT, 'src/data/team.ts', msg);
+    
+    return res.json({ success: true, message: result.message });
   } catch (err: any) {
-    // If nothing changed git commit returns exit code 1 — treat as success
-    if (err.message?.includes('nothing to commit')) {
-      return res.json({ success: true, message: 'No changes detected — team data is already up to date.' });
-    }
-    console.error('[CMS Server] Commit error:', err.message);
     return res.status(500).json({ success: false, error: err.message });
   }
 });
@@ -84,8 +111,6 @@ app.post('/api/commit-team', (req, res) => {
 /**
  * POST /api/commit-contact
  * Body: { contact: ContactInfo, commitMessage?: string }
- *
- * Writes admin-updated contact info to src/data/contact.ts and commits to Git.
  */
 app.post('/api/commit-contact', (req, res) => {
   const { contact, commitMessage } = req.body as {
@@ -104,16 +129,10 @@ app.post('/api/commit-contact', (req, res) => {
     writeFileSync(CONTACT_FILE, fileContent, 'utf8');
 
     const msg = commitMessage || 'admin: update contact info [auto]';
-    execSync(`git -C "${REPO_ROOT}" add src/data/contact.ts`, { stdio: 'pipe' });
-    execSync(`git -C "${REPO_ROOT}" commit -m "${msg}"`, { stdio: 'pipe' });
-    execSync(`git -C "${REPO_ROOT}" push`, { stdio: 'pipe' });
-
-    return res.json({ success: true, message: 'Contact info saved, committed, and pushed to live site!' });
+    const result = runGitCommands(REPO_ROOT, 'src/data/contact.ts', msg);
+    
+    return res.json({ success: true, message: result.message });
   } catch (err: any) {
-    if (err.message?.includes('nothing to commit')) {
-      return res.json({ success: true, message: 'No changes detected — contact info is already up to date.' });
-    }
-    console.error('[CMS Server] Commit error:', err.message);
     return res.status(500).json({ success: false, error: err.message });
   }
 });
@@ -121,8 +140,6 @@ app.post('/api/commit-contact', (req, res) => {
 /**
  * POST /api/commit-documents
  * Body: { documents: DocumentInfo[], commitMessage?: string }
- *
- * Writes admin-updated documents to src/data/documents.ts and commits to Git.
  */
 app.post('/api/commit-documents', (req, res) => {
   const { documents, commitMessage } = req.body as {
@@ -141,16 +158,10 @@ app.post('/api/commit-documents', (req, res) => {
     writeFileSync(DOCUMENTS_FILE, fileContent, 'utf8');
 
     const msg = commitMessage || 'admin: update documents [auto]';
-    execSync(`git -C "${REPO_ROOT}" add src/data/documents.ts`, { stdio: 'pipe' });
-    execSync(`git -C "${REPO_ROOT}" commit -m "${msg}"`, { stdio: 'pipe' });
-    execSync(`git -C "${REPO_ROOT}" push`, { stdio: 'pipe' });
-
-    return res.json({ success: true, message: 'Documents saved, committed, and pushed to live site!' });
+    const result = runGitCommands(REPO_ROOT, 'src/data/documents.ts', msg);
+    
+    return res.json({ success: true, message: result.message });
   } catch (err: any) {
-    if (err.message?.includes('nothing to commit')) {
-      return res.json({ success: true, message: 'No changes detected — documents are already up to date.' });
-    }
-    console.error('[CMS Server] Commit error:', err.message);
     return res.status(500).json({ success: false, error: err.message });
   }
 });
@@ -158,8 +169,6 @@ app.post('/api/commit-documents', (req, res) => {
 /**
  * POST /api/commit-gallery
  * Body: { gallery: GalleryItem[], commitMessage?: string }
- *
- * Writes admin-updated gallery to src/data/gallery.ts and commits to Git.
  */
 app.post('/api/commit-gallery', (req, res) => {
   const { gallery, commitMessage } = req.body as {
@@ -179,27 +188,17 @@ app.post('/api/commit-gallery', (req, res) => {
     writeFileSync(GALLERY_FILE, fileContent, 'utf8');
 
     const msg = commitMessage || 'admin: update gallery [auto]';
-    execSync(`git -C "${REPO_ROOT}" add src/data/gallery.ts`, { stdio: 'pipe' });
-    execSync(`git -C "${REPO_ROOT}" commit -m "${msg}"`, { stdio: 'pipe' });
-    execSync(`git -C "${REPO_ROOT}" push`, { stdio: 'pipe' });
-
-    return res.json({ success: true, message: 'Gallery saved, committed, and pushed to live site!' });
+    const result = runGitCommands(REPO_ROOT, 'src/data/gallery.ts', msg);
+    
+    return res.json({ success: true, message: result.message });
   } catch (err: any) {
-    if (err.message?.includes('nothing to commit')) {
-      return res.json({ success: true, message: 'No changes detected — gallery is already up to date.' });
-    }
-    console.error('[CMS Server] Commit error:', err.message);
     return res.status(500).json({ success: false, error: err.message });
   }
 });
 
-const MODEL3D_FILE = path.join(__dirname, 'src', 'data', 'model3d.ts');
-
 /**
  * POST /api/commit-model3d
  * Body: { config: Model3DConfig, commitMessage?: string }
- *
- * Writes admin-updated 3D model configuration to src/data/model3d.ts and commits to Git.
  */
 app.post('/api/commit-model3d', (req, res) => {
   const { config, commitMessage } = req.body as {
@@ -222,16 +221,10 @@ app.post('/api/commit-model3d', (req, res) => {
     writeFileSync(MODEL3D_FILE, fileContent, 'utf8');
 
     const msg = commitMessage || 'admin: update 3d model parameters [auto]';
-    execSync(`git -C "${REPO_ROOT}" add src/data/model3d.ts`, { stdio: 'pipe' });
-    execSync(`git -C "${REPO_ROOT}" commit -m "${msg}"`, { stdio: 'pipe' });
-    execSync(`git -C "${REPO_ROOT}" push`, { stdio: 'pipe' });
-
-    return res.json({ success: true, message: '3D model configuration saved, committed, and pushed to live site!' });
+    const result = runGitCommands(REPO_ROOT, 'src/data/model3d.ts', msg);
+    
+    return res.json({ success: true, message: result.message });
   } catch (err: any) {
-    if (err.message?.includes('nothing to commit')) {
-      return res.json({ success: true, message: 'No changes detected — 3D model configuration is already up to date.' });
-    }
-    console.error('[CMS Server] Commit error:', err.message);
     return res.status(500).json({ success: false, error: err.message });
   }
 });
