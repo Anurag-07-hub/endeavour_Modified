@@ -30,9 +30,9 @@ function CarModel() {
   return (
     <primitive 
       object={scene} 
-      scale={5.5}
-      position={[0.8, -0.2, 6.2]}
-      rotation={[0, 0.78, 0]}
+      scale={2.6}
+      position={[1.6, -1.2, 0]}
+      rotation={[0.2, 0.78, 0]}
     />
   );
 }
