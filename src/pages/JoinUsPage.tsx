@@ -309,14 +309,20 @@ const Shader: React.FC<ShaderProps> = ({ source, uniforms, maxFps = 60 }) => {
 export const JoinUsPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // Mock login as admin only
-    login('admin');
-    navigate('/admin-dashboard');
+    setError('');
+    
+    if (email === 'anurag852007@gmail.com' && password === 'a') {
+      login('admin');
+      navigate('/admin-dashboard');
+    } else {
+      setError('Invalid admin credentials. Please try again.');
+    }
   };
 
   return (
@@ -349,6 +355,12 @@ export const JoinUsPage = () => {
 
         <h1 className="text-3xl font-black text-white text-center mb-2 uppercase tracking-[1px]">Admin Login</h1>
         <p className="text-brand-muted text-[13px] uppercase tracking-[1px] text-center mb-8">Access the administrator dashboard</p>
+
+        {error && (
+          <div className="mb-6 p-3 bg-red-500/10 border border-red-500/30 text-red-500 rounded-lg text-xs font-bold text-center uppercase tracking-[0.5px]">
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>

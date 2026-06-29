@@ -211,23 +211,6 @@ export function Hero() {
             </p>
           </motion.div>
 
-          <motion.div
-              custom={3}
-              variants={fadeUpVariants}
-              initial="hidden"
-              animate="visible"
-              className="mt-10 md:mt-12"
-          >
-            <div className="relative inline-block w-full sm:w-auto">
-              <div className="absolute inset-0 backdrop-blur-sm bg-brand-bg/30 pointer-events-none rounded-sm -inset-[3px]" />
-              <button
-                onClick={() => setIsTransitioning(true)}
-                className="relative block sm:inline-block text-center px-[40px] py-[16px] border-2 border-brand-accent text-brand-accent text-[13px] uppercase tracking-[3px] hover:bg-brand-accent hover:text-brand-bg transition-colors duration-300 font-sans font-black shadow-[0_0_20px_rgba(164,5,5,0.15)] hover:shadow-[0_0_30px_rgba(164,5,5,0.3)]"
-              >
-                EXPLORE ABOUT US
-              </button>
-            </div>
-          </motion.div>
         </div>
       </motion.div>
       
