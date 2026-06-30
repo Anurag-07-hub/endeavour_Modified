@@ -106,6 +106,74 @@ function DomainSection({ domain }: { domain: typeof domains[0] }) {
   return (
     <div ref={ref} className={`relative min-h-screen w-full flex flex-col justify-between overflow-hidden ${domain.bgClass} transition-colors duration-500 py-8`}>
       
+      {/* Cloudy smoke at all corners for UAV page */}
+      {domain.id === 'uav' && (
+        <>
+          <style>{`
+            @keyframes smoke-pulse {
+              0%, 100% { transform: scale(1) translate(0, 0); opacity: 0.35; }
+              50% { transform: scale(1.15) translate(3%, 2%); opacity: 0.55; }
+            }
+            @keyframes smoke-pulse-reverse {
+              0%, 100% { transform: scale(1) translate(0, 0); opacity: 0.35; }
+              50% { transform: scale(1.1) translate(-2%, -3%); opacity: 0.5; }
+            }
+            .uav-smoke-tl {
+              position: absolute;
+              top: -10%;
+              left: -10%;
+              width: 45%;
+              height: 45%;
+              background: radial-gradient(circle at center, rgba(255,255,255,0.7) 0%, rgba(240,244,248,0.3) 40%, transparent 70%);
+              filter: blur(40px);
+              animation: smoke-pulse 14s ease-in-out infinite;
+              pointer-events: none;
+              z-index: 5;
+            }
+            .uav-smoke-tr {
+              position: absolute;
+              top: -10%;
+              right: -10%;
+              width: 45%;
+              height: 45%;
+              background: radial-gradient(circle at center, rgba(255,255,255,0.65) 0%, rgba(240,244,248,0.3) 40%, transparent 70%);
+              filter: blur(40px);
+              animation: smoke-pulse-reverse 16s ease-in-out infinite;
+              pointer-events: none;
+              z-index: 5;
+            }
+            .uav-smoke-bl {
+              position: absolute;
+              bottom: -10%;
+              left: -10%;
+              width: 50%;
+              height: 50%;
+              background: radial-gradient(circle at center, rgba(255,255,255,0.8) 0%, rgba(240,244,248,0.3) 40%, transparent 70%);
+              filter: blur(40px);
+              animation: smoke-pulse-reverse 15s ease-in-out infinite;
+              pointer-events: none;
+              z-index: 5;
+            }
+            .uav-smoke-br {
+              position: absolute;
+              bottom: -10%;
+              right: -10%;
+              width: 50%;
+              height: 50%;
+              background: radial-gradient(circle at center, rgba(255,255,255,0.8) 0%, rgba(240,244,248,0.3) 40%, transparent 70%);
+              filter: blur(40px);
+              animation: smoke-pulse 18s ease-in-out infinite;
+              pointer-events: none;
+              z-index: 5;
+            }
+          `}</style>
+          <div className="uav-smoke-tl" />
+          <div className="uav-smoke-tr" />
+          <div className="uav-smoke-bl" />
+          <div className="uav-smoke-br" />
+        </>
+      )}
+
       {/* Massive Background Typography Canvas (Always visible!) */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0 overflow-hidden">
         <motion.h1 
