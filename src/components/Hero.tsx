@@ -172,7 +172,7 @@ export function Hero() {
           >
               <div className="flex items-center gap-6 md:gap-8 mb-5">
                   <img 
-                    src="/refined_logo.png" 
+                    src="/refined_logo_transparent.png" 
                     className="h-28 w-28 md:h-36 md:w-36 object-contain drop-shadow-[0_0_15px_rgba(200,16,46,0.35)] hover:scale-105 transition-transform duration-300 pointer-events-auto"
                     alt="Endeavour Logo"
                   />
