@@ -170,11 +170,18 @@ export function Hero() {
               animate="visible"
               className="flex flex-col items-center select-none"
           >
-              <img 
-                src="/sliet_logo_red.png" 
-                className="h-28 w-28 md:h-36 md:w-36 object-contain mb-4 drop-shadow-[0_0_15px_rgba(200,16,46,0.35)] hover:scale-105 transition-transform duration-300 pointer-events-auto"
-                alt="SLIET Logo"
-              />
+              <div className="flex items-center gap-6 md:gap-8 mb-5">
+                  <img 
+                    src="/refined_logo.png" 
+                    className="h-28 w-28 md:h-36 md:w-36 object-contain drop-shadow-[0_0_15px_rgba(200,16,46,0.35)] hover:scale-105 transition-transform duration-300 pointer-events-auto"
+                    alt="Endeavour Logo"
+                  />
+                  <img 
+                    src="/sliet_logo_red.png" 
+                    className="h-28 w-28 md:h-36 md:w-36 object-contain drop-shadow-[0_0_15px_rgba(200,16,46,0.35)] hover:scale-105 transition-transform duration-300 pointer-events-auto"
+                    alt="SLIET Logo"
+                  />
+              </div>
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-accent/5 border border-brand-accent/20 mb-8 md:mb-10">
                   <Circle className="h-2 w-2 fill-brand-accent/80 text-brand-accent" />
                   <span className="text-[11px] md:text-[12px] text-brand-accent font-semibold tracking-[2px] uppercase">
