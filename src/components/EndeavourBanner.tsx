@@ -1,10 +1,11 @@
-import React, { useRef, Suspense, useEffect } from 'react';
+import React, { useRef, Suspense, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { useGLTF, Environment, OrbitControls } from '@react-three/drei';
 import { useCMS } from '../context/CMSContext';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
+import { LetsBeginTransition } from './LetsBeginTransition';
 
 class ModelErrorBoundary extends React.Component<{children: React.ReactNode}, {hasError: boolean, error: Error | null}> {
   constructor(props: {children: React.ReactNode}) {
@@ -172,6 +173,7 @@ export function EndeavourBanner() {
   const { model3D } = useCMS();
   const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement>(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -253,8 +255,13 @@ export function EndeavourBanner() {
 
         {/* Explore About Us — liquid button pinned to bottom-right corner of the banner, below 3D car */}
         <div className="absolute bottom-8 right-8 md:bottom-10 md:right-12 z-20">
-          <LiquidExploreButton onClick={() => navigate('/about')} />
+          <LiquidExploreButton onClick={() => setIsTransitioning(true)} />
         </div>
+
+        {/* Let's Begin Transition Animation */}
+        {isTransitioning && (
+          <LetsBeginTransition onComplete={() => navigate('/about', { state: { fromLetsBegin: true } })} />
+        )}
       </section>
     </>
   );
