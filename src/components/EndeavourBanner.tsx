@@ -1,11 +1,10 @@
-import React, { useRef, Suspense, useEffect, useState } from 'react';
+import React, { useRef, Suspense, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { useGLTF, Environment, OrbitControls } from '@react-three/drei';
 import { useCMS } from '../context/CMSContext';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
-import { LetsBeginTransition } from './LetsBeginTransition';
 
 class ModelErrorBoundary extends React.Component<{children: React.ReactNode}, {hasError: boolean, error: Error | null}> {
   constructor(props: {children: React.ReactNode}) {
@@ -114,52 +113,42 @@ function LiquidExploreButton({ onClick }: { onClick: () => void }) {
         .leb-bg {
           position: absolute;
           inset: 0;
-          z-index: 0;
+          z-index: -1;
           filter: url(#${filterId});
           pointer-events: none;
-          border-radius: 999px;
-          overflow: hidden;
         }
         .leb-blob {
           position: absolute;
-          width: 60px;
-          height: 60px;
+          width: 28px;
+          height: 28px;
           border-radius: 999px;
-          bottom: -60px;
+          bottom: -36px;
           background: #c8102e;
-          transition: transform 600ms cubic-bezier(0.23, 1, 0.32, 1);
+          transition: transform 700ms cubic-bezier(0.23, 1, 0.32, 1);
           will-change: transform;
         }
-        .leb-blob:nth-child(1) { left: 5%;  transition-delay: 0ms;   transform: translateX(-50%) scale(0); }
-        .leb-blob:nth-child(2) { left: 25%; transition-delay: 40ms;  transform: translateX(-50%) scale(0); }
-        .leb-blob:nth-child(3) { left: 50%; transition-delay: 80ms;  transform: translateX(-50%) scale(0); }
-        .leb-blob:nth-child(4) { left: 75%; transition-delay: 120ms; transform: translateX(-50%) scale(0); }
-        .leb-blob:nth-child(5) { left: 95%; transition-delay: 160ms; transform: translateX(-50%) scale(0); }
+        .leb-blob:nth-child(1) { left: calc(50% - 64px); transition-delay: 0ms;   transform: translateX(-50%) translateY(0) scale(0); }
+        .leb-blob:nth-child(2) { left: 50%;               transition-delay: 60ms;  transform: translateX(-50%) translateY(0) scale(0); }
+        .leb-blob:nth-child(3) { left: calc(50% + 64px);  transition-delay: 120ms; transform: translateX(-50%) translateY(0) scale(0); }
         .leb-wrapper:hover .leb-blob {
-          transform: translateX(-50%) translateY(-80%) scale(4.5);
+          transform: translateX(-50%) translateY(-200%) scale(4);
         }
-        .leb-text, .leb-arrow-icon {
-          position: relative;
-          z-index: 10;
-        }
-        .leb-arrow-icon {
+        .leb-arrow {
           transition: transform 300ms ease;
         }
-        .leb-wrapper:hover .leb-arrow-icon {
+        .leb-wrapper:hover .leb-arrow {
           transform: translateX(5px);
         }
       `}</style>
 
       <button
         onClick={onClick}
-        className="leb-wrapper group flex items-center gap-3 px-7 py-3 rounded-full border-2 uppercase tracking-[2.5px] font-sans font-black whitespace-nowrap"
-        style={{ color: '#ffffff', borderColor: '#ffffff', backgroundColor: 'transparent' }}
+        className="leb-wrapper group flex items-center gap-3 px-7 py-3 rounded-full border-2 uppercase tracking-[2.5px] transition-colors duration-500 font-sans font-black whitespace-nowrap backdrop-blur-sm"
+        style={{ color: '#ffffff', borderColor: '#ffffff', backgroundColor: 'rgba(255,255,255,0.05)' }}
       >
-        <span className="leb-text text-[12px]">Explore About Us</span>
-        <ArrowRight className="leb-arrow-icon w-4 h-4 shrink-0" />
+        <span className="relative z-20">Explore About Us</span>
+        <ArrowRight className="leb-arrow w-4 h-4 relative z-20 shrink-0" />
         <span className="leb-bg" aria-hidden="true">
-          <span className="leb-blob"></span>
-          <span className="leb-blob"></span>
           <span className="leb-blob"></span>
           <span className="leb-blob"></span>
           <span className="leb-blob"></span>
@@ -168,9 +157,9 @@ function LiquidExploreButton({ onClick }: { onClick: () => void }) {
 
       <svg width="0" height="0" aria-hidden="true" focusable="false" style={{ position: 'absolute', width: 0, height: 0, overflow: 'hidden' }}>
         <defs>
-          <filter id={filterId} x="-20%" y="-20%" width="140%" height="140%" colorInterpolationFilters="sRGB">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur" />
-            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -10" result="goo" />
+          <filter id={filterId}>
+            <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8" result="goo" />
             <feComposite in="SourceGraphic" in2="goo" operator="atop" />
           </filter>
         </defs>
@@ -183,7 +172,6 @@ export function EndeavourBanner() {
   const { model3D } = useCMS();
   const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement>(null);
-  const [isTransitioning, setIsTransitioning] = useState(false);
   
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -265,13 +253,8 @@ export function EndeavourBanner() {
 
         {/* Explore About Us — liquid button pinned to bottom-right corner of the banner, below 3D car */}
         <div className="absolute bottom-8 right-8 md:bottom-10 md:right-12 z-20">
-          <LiquidExploreButton onClick={() => setIsTransitioning(true)} />
+          <LiquidExploreButton onClick={() => navigate('/about')} />
         </div>
-
-        {/* Glitch block transition fires on button click, then navigates */}
-        {isTransitioning && (
-          <LetsBeginTransition onComplete={() => navigate('/about', { state: { fromLetsBegin: true } })} />
-        )}
       </section>
     </>
   );

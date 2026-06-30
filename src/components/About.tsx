@@ -8,12 +8,9 @@ export function About() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
           
           <div>
-            <FadeIn direction="right" delay={0.1}>
-              <RevealText 
-                text="Empowering the innovators of tomorrow" 
-                className="font-sans text-[36px] md:text-[48px] lg:text-[64px] font-black uppercase tracking-[-2px] mb-5 md:mb-6 leading-[0.9]"
-              />
-            </FadeIn>
+            <h2 className="font-sans text-[36px] md:text-[48px] lg:text-[64px] font-black uppercase tracking-[-2px] mb-5 md:mb-6 leading-[0.9] text-white">
+              Empowering the innovators of tomorrow
+            </h2>
             <FadeIn direction="right" delay={0.2}>
               <p className="text-brand-muted text-[15px] md:text-[16px] leading-[1.6] mb-6 md:mb-8 font-sans">
                 Team Endeavour is the official robotics club of Sant Longowal Institute of Engineering and Technology (SLIET), Longowal. We are a passionate community of engineers, designers, and visionaries dedicated to pushing the boundaries of technology.
