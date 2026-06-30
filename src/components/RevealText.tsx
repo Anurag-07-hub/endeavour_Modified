@@ -13,6 +13,7 @@ interface RevealTextProps {
   letterImages?: string[];
   accentWords?: string[];
   showImages?: boolean;
+  disableRiseAnimation?: boolean;
 }
 
 export function RevealText({
@@ -31,7 +32,8 @@ export function RevealText({
     "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
     "https://images.unsplash.com/photo-1504384764586-bb4cdc1707b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
   ],
-  showImages = true
+  showImages = true,
+  disableRiseAnimation = false
 }: RevealTextProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [showRedText, setShowRedText] = useState(false);
@@ -40,6 +42,13 @@ export function RevealText({
   
   useEffect(() => {
     if (!isInView) return;
+
+    if (disableRiseAnimation) {
+      const timer = setTimeout(() => {
+        setShowRedText(true);
+      }, 150);
+      return () => clearTimeout(timer);
+    }
     
     // Calculate when the last letter animation completes
     const totalLetters = text.replace(/\s/g, '').length;
@@ -51,7 +60,7 @@ export function RevealText({
     }, totalDelay);
     
     return () => clearTimeout(timer);
-  }, [isInView, text, letterDelay, springDuration]);
+  }, [isInView, text, letterDelay, springDuration, disableRiseAnimation]);
 
   const words = text.split(" ");
   let globalLetterIndex = 0;
@@ -73,18 +82,24 @@ export function RevealText({
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(null)}
                   className="relative overflow-hidden cursor-pointer"
-                  initial={{ 
+                  initial={disableRiseAnimation ? {
+                    y: 0,
+                    opacity: 1,
+                  } : { 
                     y: 20,
                     opacity: 0,
                   }}
-                  animate={isInView ? { 
+                  animate={disableRiseAnimation ? {
+                    y: 0,
+                    opacity: 1,
+                  } : (isInView ? { 
                     y: 0,
                     opacity: 1,
                   } : {
                     y: 20,
                     opacity: 0,
-                  }}
-                  transition={{
+                  })}
+                  transition={disableRiseAnimation ? undefined : {
                     delay: index * letterDelay,
                     type: "spring",
                     damping: 20,     // Increased damping to reduce bobble significantly

@@ -195,6 +195,7 @@ export function Hero() {
                   letterDelay={0.05}
                   overlayDelay={0.03}
                   overlayDuration={0.5}
+                  disableRiseAnimation={true}
                 />
               }
             />

@@ -1,5 +1,4 @@
 import { FadeIn } from './FadeIn';
-import { RevealText } from './RevealText';
 
 export function About() {
   return (
