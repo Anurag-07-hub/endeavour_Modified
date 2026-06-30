@@ -168,12 +168,19 @@ export function Hero() {
               variants={fadeUpVariants}
               initial="hidden"
               animate="visible"
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-accent/5 border border-brand-accent/20 mb-8 md:mb-10"
+              className="flex flex-col items-center select-none"
           >
-              <Circle className="h-2 w-2 fill-brand-accent/80 text-brand-accent" />
-              <span className="text-[11px] md:text-[12px] text-brand-accent font-semibold tracking-[2px] uppercase">
-                  EST. 2009 — SLIET LONGOWAL
-              </span>
+              <img 
+                src="/sliet_logo_red.png" 
+                className="h-16 w-16 md:h-20 md:w-20 object-contain mb-4 drop-shadow-[0_0_15px_rgba(200,16,46,0.35)] hover:scale-105 transition-transform duration-300 pointer-events-auto"
+                alt="SLIET Logo"
+              />
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-accent/5 border border-brand-accent/20 mb-8 md:mb-10">
+                  <Circle className="h-2 w-2 fill-brand-accent/80 text-brand-accent" />
+                  <span className="text-[11px] md:text-[12px] text-brand-accent font-semibold tracking-[2px] uppercase">
+                      EST. 2009 — SLIET LONGOWAL
+                  </span>
+              </div>
           </motion.div>
 
           <motion.div
