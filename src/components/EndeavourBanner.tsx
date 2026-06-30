@@ -6,6 +6,7 @@ import { useCMS } from '../context/CMSContext';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { LetsBeginTransition } from './LetsBeginTransition';
+import * as THREE from 'three';
 
 class ModelErrorBoundary extends React.Component<{children: React.ReactNode}, {hasError: boolean, error: Error | null}> {
   constructor(props: {children: React.ReactNode}) {
@@ -36,16 +37,29 @@ interface CarModelProps {
 
 function CarModel({ scale, position, rotation }: CarModelProps) {
   const { scene } = useGLTF('/textured_mesh.glb');
+  const groupRef = useRef<THREE.Group>(null);
+  const timeRef  = useRef(0);
+
+  useFrame((_, delta) => {
+    timeRef.current  += delta;
+
+    // Suspension wobble
+    if (groupRef.current) {
+      groupRef.current.position.y =
+        position[1] + Math.sin(timeRef.current * 2.5) * 0.12;
+      groupRef.current.rotation.z =
+        rotation[2] + Math.sin(timeRef.current * 2.5 + 0.5) * 0.018;
+    }
+  });
 
   return (
-    <primitive 
-      object={scene} 
-      scale={scale}
-      position={position}
-      rotation={rotation}
-    />
+    <group ref={groupRef} position={position} rotation={rotation}>
+      <primitive object={scene} scale={scale} />
+    </group>
   );
 }
+
+
 
 // Custom OrbitControls wrapper that smoothly snaps back to default camera angle when released
 function InteractiveControls() {
@@ -95,9 +109,28 @@ function InteractiveControls() {
   );
 }
 
-// Liquid Explore Button — same blob-morph mechanic as the Join Us navbar button
+// Liquid Explore Button — fixed gap by adding more blobs + full-width coverage + magnetic mouse wobble
 function LiquidExploreButton({ onClick }: { onClick: () => void }) {
   const filterId = React.useId().replace(/:/g, '');
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!buttonRef.current) return;
+    const { left, top, width, height } = buttonRef.current.getBoundingClientRect();
+    const centerX = left + width / 2;
+    const centerY = top + height / 2;
+    
+    // Calculate distance from center (constrained to -1 to 1)
+    const x = ((e.clientX - centerX) / width) * 2;
+    const y = ((e.clientY - centerY) / height) * 2;
+    
+    setPosition({ x, y });
+  };
+
+  const handleMouseLeave = () => {
+    setPosition({ x: 0, y: 0 });
+  };
 
   return (
     <>
@@ -120,19 +153,24 @@ function LiquidExploreButton({ onClick }: { onClick: () => void }) {
         }
         .leb-blob {
           position: absolute;
-          width: 28px;
-          height: 28px;
+          width: 32px;
+          height: 32px;
           border-radius: 999px;
-          bottom: -36px;
+          bottom: -40px;
           background: #c8102e;
-          transition: transform 700ms cubic-bezier(0.23, 1, 0.32, 1);
+          transition: transform 600ms cubic-bezier(0.23, 1, 0.32, 1);
           will-change: transform;
         }
-        .leb-blob:nth-child(1) { left: calc(50% - 64px); transition-delay: 0ms;   transform: translateX(-50%) translateY(0) scale(0); }
-        .leb-blob:nth-child(2) { left: 50%;               transition-delay: 60ms;  transform: translateX(-50%) translateY(0) scale(0); }
-        .leb-blob:nth-child(3) { left: calc(50% + 64px);  transition-delay: 120ms; transform: translateX(-50%) translateY(0) scale(0); }
+        /* 7 blobs evenly spread so there are no gaps across the full button width */
+        .leb-blob:nth-child(1) { left: 5%;   transition-delay: 0ms;   transform: translateX(-50%) translateY(0) scale(0); }
+        .leb-blob:nth-child(2) { left: 20%;  transition-delay: 40ms;  transform: translateX(-50%) translateY(0) scale(0); }
+        .leb-blob:nth-child(3) { left: 35%;  transition-delay: 80ms;  transform: translateX(-50%) translateY(0) scale(0); }
+        .leb-blob:nth-child(4) { left: 50%;  transition-delay: 120ms; transform: translateX(-50%) translateY(0) scale(0); }
+        .leb-blob:nth-child(5) { left: 65%;  transition-delay: 80ms;  transform: translateX(-50%) translateY(0) scale(0); }
+        .leb-blob:nth-child(6) { left: 80%;  transition-delay: 40ms;  transform: translateX(-50%) translateY(0) scale(0); }
+        .leb-blob:nth-child(7) { left: 95%;  transition-delay: 0ms;   transform: translateX(-50%) translateY(0) scale(0); }
         .leb-wrapper:hover .leb-blob {
-          transform: translateX(-50%) translateY(-200%) scale(4);
+          transform: translateX(-50%) translateY(-190%) scale(5.5);
         }
         .leb-arrow {
           transition: transform 300ms ease;
@@ -142,25 +180,39 @@ function LiquidExploreButton({ onClick }: { onClick: () => void }) {
         }
       `}</style>
 
-      <button
+      <motion.button
+        ref={buttonRef}
         onClick={onClick}
-        className="leb-wrapper group flex items-center gap-3 px-7 py-3 rounded-full border-2 uppercase tracking-[2.5px] transition-colors duration-500 font-sans font-black whitespace-nowrap backdrop-blur-sm"
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        animate={{
+          x: position.x * 12,
+          y: position.y * 12,
+          rotateX: position.y * -10,
+          rotateY: position.x * 10,
+        }}
+        transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.5 }}
+        className="leb-wrapper group flex items-center gap-3 px-7 py-3 rounded-full border-2 uppercase tracking-[2.5px] transition-colors duration-500 font-sans font-black whitespace-nowrap backdrop-blur-sm text-[13px] perspective-1000"
         style={{ color: '#ffffff', borderColor: '#ffffff', backgroundColor: 'rgba(255,255,255,0.05)' }}
       >
         <span className="relative z-20">Explore About Us</span>
         <ArrowRight className="leb-arrow w-4 h-4 relative z-20 shrink-0" />
         <span className="leb-bg" aria-hidden="true">
-          <span className="leb-blob"></span>
-          <span className="leb-blob"></span>
-          <span className="leb-blob"></span>
+          <span className="leb-blob" />
+          <span className="leb-blob" />
+          <span className="leb-blob" />
+          <span className="leb-blob" />
+          <span className="leb-blob" />
+          <span className="leb-blob" />
+          <span className="leb-blob" />
         </span>
-      </button>
+      </motion.button>
 
       <svg width="0" height="0" aria-hidden="true" focusable="false" style={{ position: 'absolute', width: 0, height: 0, overflow: 'hidden' }}>
         <defs>
           <filter id={filterId}>
-            <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
-            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8" result="goo" />
+            <feGaussianBlur in="SourceGraphic" stdDeviation="9" result="blur" />
+            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -9" result="goo" />
             <feComposite in="SourceGraphic" in2="goo" operator="atop" />
           </filter>
         </defs>
@@ -180,8 +232,9 @@ export function EndeavourBanner() {
     offset: ["start end", "end start"]
   });
 
-  const yText = useTransform(scrollYProgress, [0, 1], [0, 80]);
-  const yImage = useTransform(scrollYProgress, [0, 1], [0, -60]);
+  const yBg = useTransform(scrollYProgress, [0, 1], ["-15%", "15%"]);
+  const yText = useTransform(scrollYProgress, [0, 1], ["20%", "-20%"]);
+  const yImage = useTransform(scrollYProgress, [0, 1], ["20%", "-20%"]);
 
   return (
     <>
@@ -201,13 +254,19 @@ export function EndeavourBanner() {
       <section 
         ref={containerRef}
         className="relative w-full min-h-[100svh] py-24 overflow-hidden flex items-center"
-        style={{
-          background: 'linear-gradient(to right, #c8102e 0%, #c8102e 40%, #27151b 40%, #27151b 100%)'
-        }}
       >
+        {/* Parallax Background */}
+        <motion.div
+          style={{ 
+            y: yBg,
+            background: 'linear-gradient(to right, #c8102e 0%, #c8102e 40%, #27151b 40%, #27151b 100%)'
+          }}
+          className="absolute top-[-20%] left-0 w-full h-[140%] z-0"
+        />
+
         <div className="absolute inset-0 max-w-[1500px] mx-auto w-full flex items-center px-5 md:px-[60px]">
           
-          {/* Right Side: 3D Car Model */}
+          {/* Right Side: 3D Car Model with wobble, wheel spin & smoke */}
           <motion.div 
             style={{ y: yImage }}
             className="absolute right-[-10%] md:right-[0%] top-1/2 -translate-y-1/2 w-[65%] md:w-[50%] h-[100%] z-10"
@@ -253,7 +312,7 @@ export function EndeavourBanner() {
 
         </div>
 
-        {/* Explore About Us — liquid button pinned to bottom-right corner of the banner, below 3D car */}
+        {/* Explore About Us — liquid button pinned to bottom-right corner of the banner */}
         <div className="absolute bottom-8 right-8 md:bottom-10 md:right-12 z-20">
           <LiquidExploreButton onClick={() => setIsTransitioning(true)} />
         </div>
