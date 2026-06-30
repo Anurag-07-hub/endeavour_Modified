@@ -172,7 +172,7 @@ export function Hero() {
           >
               <img 
                 src="/sliet_logo_red.png" 
-                className="h-16 w-16 md:h-20 md:w-20 object-contain mb-4 drop-shadow-[0_0_15px_rgba(200,16,46,0.35)] hover:scale-105 transition-transform duration-300 pointer-events-auto"
+                className="h-28 w-28 md:h-36 md:w-36 object-contain mb-4 drop-shadow-[0_0_15px_rgba(200,16,46,0.35)] hover:scale-105 transition-transform duration-300 pointer-events-auto"
                 alt="SLIET Logo"
               />
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-accent/5 border border-brand-accent/20 mb-8 md:mb-10">
