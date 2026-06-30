@@ -1,6 +1,7 @@
 import { Mail, MapPin, Phone, Linkedin, Instagram, Facebook } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useCMS } from '../context/CMSContext';
+import { TiltCard } from './TiltCard';
 
 export function Footer() {
   const { contactInfo } = useCMS();
@@ -110,11 +111,11 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Right Column: Clean glassmorphic contact list with white flaky blur shadow - Spans 4 columns */}
+          {/* Right Column: Clean glassmorphic contact list with 3D TiltCard and white glare/blur shadow - Spans 4 columns */}
           <div className="md:col-span-4 flex flex-col gap-4">
             
             {/* Address */}
-            <div className="p-5 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.12)] hover:bg-white/15 hover:border-white/40 hover:shadow-[0_0_35px_rgba(255,255,255,0.22)] transition-all duration-300 flex items-start gap-4">
+            <TiltCard className="p-5 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.12)] hover:bg-white/15 hover:border-white/40 hover:shadow-[0_0_35px_rgba(255,255,255,0.22)] transition-all duration-300 flex items-start gap-4 cursor-pointer">
               <div className="w-9 h-9 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
                 <MapPin className="w-5 h-5 text-[#ffffff]" />
               </div>
@@ -124,10 +125,10 @@ export function Footer() {
                   {contactInfo.address}
                 </p>
               </div>
-            </div>
+            </TiltCard>
 
             {/* Email */}
-            <div className="p-5 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.12)] hover:bg-white/15 hover:border-white/40 hover:shadow-[0_0_35px_rgba(255,255,255,0.22)] transition-all duration-300 flex items-center gap-4">
+            <TiltCard className="p-5 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.12)] hover:bg-white/15 hover:border-white/40 hover:shadow-[0_0_35px_rgba(255,255,255,0.22)] transition-all duration-300 flex items-center gap-4 cursor-pointer">
               <div className="w-9 h-9 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
                 <Mail className="w-5 h-5 text-[#ffffff]" />
               </div>
@@ -137,12 +138,12 @@ export function Footer() {
                   {contactInfo.email}
                 </a>
               </div>
-            </div>
+            </TiltCard>
 
             {/* Phone & Secondary Contacts */}
             <div className="flex flex-col gap-3">
               {contactInfo.phone && (
-                <div className="p-5 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.12)] hover:bg-white/15 hover:border-white/40 hover:shadow-[0_0_35px_rgba(255,255,255,0.22)] transition-all duration-300 flex items-center gap-4">
+                <TiltCard className="p-5 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.12)] hover:bg-white/15 hover:border-white/40 hover:shadow-[0_0_35px_rgba(255,255,255,0.22)] transition-all duration-300 flex items-center gap-4 cursor-pointer">
                   <div className="w-9 h-9 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
                     <Phone className="w-5 h-5 text-[#ffffff]" />
                   </div>
@@ -152,12 +153,12 @@ export function Footer() {
                       {contactInfo.phone}
                     </a>
                   </div>
-                </div>
+                </TiltCard>
               )}
 
               {contactInfo.contacts?.map((contact, idx) => (
                 contact.name && contact.phone ? (
-                  <div key={idx} className="p-5 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.12)] hover:bg-white/15 hover:border-white/40 hover:shadow-[0_0_35px_rgba(255,255,255,0.22)] transition-all duration-300 flex items-center gap-4">
+                  <TiltCard key={idx} className="p-5 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.12)] hover:bg-white/15 hover:border-white/40 hover:shadow-[0_0_35px_rgba(255,255,255,0.22)] transition-all duration-300 flex items-center gap-4 cursor-pointer">
                     <div className="w-9 h-9 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
                       <Phone className="w-5 h-5 text-[#ffffff]" />
                     </div>
@@ -169,7 +170,7 @@ export function Footer() {
                         {contact.phone}
                       </a>
                     </div>
-                  </div>
+                  </TiltCard>
                 ) : null
               ))}
             </div>
