@@ -2,39 +2,39 @@ import { FadeIn } from './FadeIn';
 
 export function About() {
   return (
-    <section id="about" className="py-[60px] md:py-[100px] bg-black/30 border-t border-white/10 relative z-10">
+    <section id="about" className="py-8 md:py-[100px] bg-black/30 border-t border-white/10 relative z-10">
       <div className="max-w-[1024px] mx-auto px-5 md:px-[60px]">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
           
           <div>
-            <h2 className="font-sans text-[36px] md:text-[48px] lg:text-[64px] font-black uppercase tracking-[-2px] mb-5 md:mb-6 leading-[0.9] text-white">
+            <h2 className="font-sans text-[22px] min-[390px]:text-[24px] md:text-[48px] lg:text-[64px] font-black uppercase tracking-[-1px] md:tracking-[-2px] mb-4 md:mb-6 leading-[0.9] text-white">
               Empowering the innovators of tomorrow
             </h2>
             <FadeIn direction="right" delay={0.2}>
-              <p className="text-brand-muted text-[15px] md:text-[16px] leading-[1.6] mb-6 md:mb-8 font-sans">
+              <p className="text-brand-muted text-[12px] sm:text-[15px] md:text-[16px] leading-[1.6] mb-4 md:mb-8 font-sans">
                 Team Endeavour is the official robotics club of Sant Longowal Institute of Engineering and Technology (SLIET), Longowal. We are a passionate community of engineers, designers, and visionaries dedicated to pushing the boundaries of technology.
               </p>
-              <p className="text-brand-muted text-[15px] md:text-[16px] leading-[1.6] font-sans">
+              <p className="text-brand-muted text-[12px] sm:text-[15px] md:text-[16px] leading-[1.6] font-sans">
                 From organizing the grand Techfest to participating at IIT Bombay, IIT Delhi, and other CFTIs, we foster a culture of hands-on learning, teamwork, and technical excellence.
               </p>
             </FadeIn>
             
-            <FadeIn direction="up" delay={0.3} className="mt-10 md:mt-12 grid grid-cols-2 gap-6 md:gap-8 border-t border-white/10 bg-brand-accent/20 backdrop-blur-md p-5 md:p-[30px]">
-              <div className="flex flex-col gap-2">
-                <h3 className="font-mono text-[28px] md:text-[32px] font-bold text-brand-accent">15+</h3>
-                <p className="font-sans text-brand-muted text-[10px] uppercase tracking-[2px] font-bold">Years of Legacy</p>
+            <FadeIn direction="up" delay={0.3} className="mt-6 sm:mt-10 md:mt-12 grid grid-cols-2 gap-4 sm:gap-6 md:gap-8 border-t border-white/10 bg-brand-accent/20 backdrop-blur-md p-3.5 sm:p-5 md:p-[30px]">
+              <div className="flex flex-col gap-1 sm:gap-2">
+                <h3 className="font-mono text-[20px] sm:text-[28px] md:text-[32px] font-bold text-brand-accent">15+</h3>
+                <p className="font-sans text-brand-muted text-[8px] sm:text-[10px] uppercase tracking-[1.5px] sm:tracking-[2px] font-bold">Years of Legacy</p>
               </div>
-              <div className="flex flex-col gap-2">
-                <h3 className="font-mono text-[28px] md:text-[32px] font-bold text-brand-accent">50+</h3>
-                <p className="font-sans text-brand-muted text-[10px] uppercase tracking-[2px] font-bold">Active Members</p>
+              <div className="flex flex-col gap-1 sm:gap-2">
+                <h3 className="font-mono text-[20px] sm:text-[28px] md:text-[32px] font-bold text-brand-accent">50+</h3>
+                <p className="font-sans text-brand-muted text-[8px] sm:text-[10px] uppercase tracking-[1.5px] sm:tracking-[2px] font-bold">Active Members</p>
               </div>
-              <div className="flex flex-col gap-2">
-                <h3 className="font-mono text-[28px] md:text-[32px] font-bold text-brand-accent">12</h3>
-                <p className="font-sans text-brand-muted text-[10px] uppercase tracking-[2px] font-bold">National Trophies</p>
+              <div className="flex flex-col gap-1 sm:gap-2">
+                <h3 className="font-mono text-[20px] sm:text-[28px] md:text-[32px] font-bold text-brand-accent">12</h3>
+                <p className="font-sans text-brand-muted text-[8px] sm:text-[10px] uppercase tracking-[1.5px] sm:tracking-[2px] font-bold">National Trophies</p>
               </div>
-              <div className="flex flex-col gap-2">
-                <h3 className="font-mono text-[28px] md:text-[32px] font-bold text-brand-accent">120+</h3>
-                <p className="font-sans text-brand-muted text-[10px] uppercase tracking-[2px] font-bold">Projects Built</p>
+              <div className="flex flex-col gap-1 sm:gap-2">
+                <h3 className="font-mono text-[20px] sm:text-[28px] md:text-[32px] font-bold text-brand-accent">120+</h3>
+                <p className="font-sans text-brand-muted text-[8px] sm:text-[10px] uppercase tracking-[1.5px] sm:tracking-[2px] font-bold">Projects Built</p>
               </div>
             </FadeIn>
           </div>
