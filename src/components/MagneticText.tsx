@@ -37,7 +37,6 @@ export function MagneticText({
     }
     updateSize()
     
-    // Give it a small delay to ensure child components (like RevealText) have mounted and sized
     const timer = setTimeout(updateSize, 100)
     window.addEventListener("resize", updateSize)
     return () => {
@@ -47,7 +46,6 @@ export function MagneticText({
   }, [])
 
   useEffect(() => {
-    // Smoother lerp factor for fluid motion
     const lerp = (start: number, end: number, factor: number) => start + (end - start) * factor
 
     const animate = () => {
@@ -94,12 +92,44 @@ export function MagneticText({
     setIsHovered(false)
   }, [])
 
+  const handleTouchStart = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
+    if (!containerRef.current) return
+    const rect = containerRef.current.getBoundingClientRect()
+    const touch = e.touches[0]
+    const x = touch.clientX - rect.left
+    const y = touch.clientY - rect.top
+    mousePos.current = { x, y }
+    currentPos.current = { x, y }
+    setIsHovered(true)
+  }, [])
+
+  const handleTouchMove = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
+    if (!containerRef.current) return
+    const rect = containerRef.current.getBoundingClientRect()
+    const touch = e.touches[0]
+    mousePos.current = {
+      x: touch.clientX - rect.left,
+      y: touch.clientY - rect.top,
+    }
+  }, [])
+
+  const handleTouchEnd = useCallback(() => {
+    setIsHovered(false)
+  }, [])
+
+  const isMobileViewport = typeof window !== "undefined" && window.innerWidth < 640
+  const activeBubbleSize = isMobileViewport ? 120 : bubbleSize
+
   return (
     <div
       ref={containerRef}
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      onTouchCancel={handleTouchEnd}
       className={cn("relative inline-flex items-center justify-center cursor-default select-none w-full", className)}
     >
       {/* Base text layer - original content */}
@@ -111,8 +141,8 @@ export function MagneticText({
         ref={circleRef}
         className="absolute top-0 left-0 pointer-events-none rounded-full overflow-hidden z-20 shadow-[0_0_30px_rgba(164,5,5,0.8)] bg-maroon-fluid"
         style={{
-          width: isHovered ? bubbleSize : 0,
-          height: isHovered ? bubbleSize : 0,
+          width: isHovered ? activeBubbleSize : 0,
+          height: isHovered ? activeBubbleSize : 0,
           transition: "width 0.6s cubic-bezier(0.22, 1, 0.36, 1), height 0.6s cubic-bezier(0.22, 1, 0.36, 1)",
           willChange: "transform, width, height",
         }}
@@ -137,3 +167,4 @@ export function MagneticText({
     </div>
   )
 }
+

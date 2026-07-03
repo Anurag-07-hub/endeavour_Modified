@@ -25,7 +25,7 @@ export function PhaseLegacy() {
 
   const itemVariants = {
     hidden: { opacity: 0, y: 35, scale: 0.96 },
-    show: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 70, damping: 15 } }
+    show: { opacity: 1, y: 0, scale: 1, transition: { type: "spring" as const, stiffness: 70, damping: 15 } }
   };
 
   const projects = [

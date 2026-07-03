@@ -7,7 +7,7 @@ export function Footer() {
   const { contactInfo } = useCMS();
   
   return (
-    <footer id="contact" className="relative bg-[#a40505] pt-16 pb-8 overflow-hidden text-white">
+    <footer id="contact" className="relative bg-[#a40505] pt-12 md:pt-16 pb-6 md:pb-8 overflow-hidden text-[#ffffff]">
       
       {/* Giant Tech Watermark (Lion/Gear Hybrid Concept) - Darker maroon and more visible */}
       <div className="absolute right-0 bottom-0 top-0 w-full md:w-[50%] opacity-[0.35] pointer-events-none z-0 flex items-center justify-end overflow-hidden">
@@ -27,34 +27,34 @@ export function Footer() {
 
       <div className="relative z-10 max-w-[1024px] mx-auto px-5 md:px-[60px]">
         
-        {/* Main Grid split */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-12 mb-12">
+        {/* Main Grid split - Desktop only */}
+        <div className="hidden md:grid md:grid-cols-12 gap-8 md:gap-12 mb-10 md:mb-12">
 
           {/* Left Column: Massive Fontfabric Specimen Header - Spans 5 columns */}
-          <div className="md:col-span-5 flex flex-col justify-between space-y-8">
+          <div className="md:col-span-5 flex flex-col justify-between space-y-6 md:space-y-8">
             <div>
               {/* Brand label - Further enlarged logo and text */}
-              <div className="flex items-center gap-[18px] mb-6">
+              <div className="flex items-center gap-[18px] mb-4 md:mb-6">
                 <img
                   src="https://www.endeavoursliet.in/images/mainlogo.png"
                   alt="Endeavour Logo"
                   referrerPolicy="no-referrer"
-                  className="w-[64px] h-auto object-contain brightness-0 invert filter drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]"
+                  className="w-[54px] md:w-[64px] h-auto object-contain brightness-0 invert filter drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]"
                 />
-                <span className="font-sans font-black text-[22px] md:text-[24px] uppercase tracking-[5px] text-[#ffffff]">
+                <span className="font-sans font-black text-[18px] md:text-[24px] uppercase tracking-[4px] md:tracking-[5px] text-[#ffffff]">
                   ENDEAVOUR
                 </span>
               </div>
 
               {/* Massive Bebas Neue Typography */}
-              <h2 className="font-bebas text-[70px] sm:text-[95px] md:text-[110px] leading-[0.8] tracking-[-0.03em] font-bold text-[#ffffff] uppercase select-none">
+              <h2 className="font-bebas text-[56px] sm:text-[95px] md:text-[110px] leading-[0.8] tracking-[-0.03em] font-bold text-[#ffffff] uppercase select-none">
                 GET IN<br />
-                <span className="text-white/80">TOUCH.</span>
+                <span className="text-[#ffffff]/80">TOUCH.</span>
               </h2>
             </div>
 
             <div>
-              <p className="font-sans text-white/70 text-[13px] md:text-[14px] leading-[1.6] max-w-[360px] mb-6">
+              <p className="font-sans text-[#ffffff]/70 text-[13px] md:text-[14px] leading-[1.6] max-w-[360px] mb-4 md:mb-6">
                 The official robotics club of Sant Longowal Institute of Engineering and Technology. Building the future, one robot at a time.
               </p>
               
@@ -89,67 +89,67 @@ export function Footer() {
           </div>
 
           {/* Middle Column: Vertical links column with legal links directly below - Spans 3 columns */}
-          <div className="md:col-span-3 flex flex-col justify-between py-2 border-l md:border-l border-white/15 pl-6 md:pl-8">
-            <div className="space-y-8">
+          <div className="md:col-span-3 flex flex-col justify-between py-2 border-l border-white/15 pl-6 md:pl-8">
+            <div className="space-y-6 md:space-y-8">
               <div>
-                <h4 className="font-mono text-[13px] text-[#ffffff]/45 tracking-widest uppercase mb-4 font-extrabold">EXPLORE</h4>
-                <ul className="space-y-4 font-sans font-bold text-[16px] text-[#ffffff] uppercase tracking-wider">
-                  <li><Link to="/about" className="hover:text-white/80 transition-colors">About Us</Link></li>
-                  <li><a href="#events" className="hover:text-white/80 transition-colors">Techfest</a></li>
-                  <li><a href="#events" className="hover:text-white/80 transition-colors">Competitions</a></li>
-                  <li><a href="#gallery" className="hover:text-white/80 transition-colors">Our Gallery</a></li>
+                <h4 className="font-mono text-[12px] md:text-[13px] text-[#ffffff]/60 tracking-widest uppercase mb-3 md:mb-4 font-extrabold">EXPLORE</h4>
+                <ul className="space-y-3 md:space-y-4 font-sans font-bold text-[15px] md:text-[16px] text-[#ffffff] uppercase tracking-wider">
+                  <li><Link to="/about" className="hover:text-[#ffffff]/80 transition-colors">About Us</Link></li>
+                  <li><a href="#events" className="hover:text-[#ffffff]/80 transition-colors">Techfest</a></li>
+                  <li><a href="#events" className="hover:text-[#ffffff]/80 transition-colors">Competitions</a></li>
+                  <li><a href="#gallery" className="hover:text-[#ffffff]/80 transition-colors">Our Gallery</a></li>
                 </ul>
               </div>
 
               <div>
-                <h4 className="font-mono text-[13px] text-[#ffffff]/45 tracking-widest uppercase mb-4 font-extrabold">LEGAL</h4>
-                <div className="flex flex-col gap-3 text-[15px] text-[#ffffff]/90 uppercase tracking-wider font-bold">
-                  <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-                  <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
+                <h4 className="font-mono text-[12px] md:text-[13px] text-[#ffffff]/60 tracking-widest uppercase mb-3 md:mb-4 font-extrabold">LEGAL</h4>
+                <div className="flex flex-col gap-2.5 md:gap-3 text-[14px] md:text-[15px] text-[#ffffff]/90 uppercase tracking-wider font-bold">
+                  <a href="#" className="hover:text-[#ffffff] transition-colors">Privacy Policy</a>
+                  <a href="#" className="hover:text-[#ffffff] transition-colors">Terms of Service</a>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Right Column: Clean glassmorphic contact list with 3D TiltCard and white glare/blur shadow - Spans 4 columns */}
-          <div className="md:col-span-4 flex flex-col gap-4">
+          <div className="md:col-span-4 flex flex-col gap-1.5 md:gap-4">
             
             {/* Address */}
-            <TiltCard className="p-5 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.12)] hover:bg-white/15 hover:border-white/40 hover:shadow-[0_0_35px_rgba(255,255,255,0.22)] transition-all duration-300 flex items-start gap-4 cursor-pointer">
-              <div className="w-9 h-9 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
-                <MapPin className="w-5 h-5 text-[#ffffff]" />
+            <TiltCard className="p-2 sm:p-5 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.12)] hover:bg-white/15 hover:border-white/40 hover:shadow-[0_0_35px_rgba(255,255,255,0.22)] transition-all duration-300 flex items-start gap-2.5 sm:gap-4 cursor-pointer">
+              <div className="w-6 h-6 sm:w-9 sm:h-9 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
+                <MapPin className="w-3 h-3 sm:w-5 sm:h-5 text-[#ffffff]" />
               </div>
               <div>
-                <div className="text-[11px] font-extrabold uppercase tracking-widest text-white/70 mb-1">Location</div>
-                <p className="font-sans text-[15px] font-semibold leading-[1.5] text-[#ffffff]">
+                <div className="text-[8.5px] sm:text-[11px] font-extrabold uppercase tracking-widest text-[#ffffff]/70 mb-0 sm:mb-1">Location</div>
+                <p className="font-sans text-[10px] sm:text-[15px] font-semibold leading-[1.3] sm:leading-[1.5] text-[#ffffff]">
                   {contactInfo.address}
                 </p>
               </div>
             </TiltCard>
 
             {/* Email */}
-            <TiltCard className="p-5 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.12)] hover:bg-white/15 hover:border-white/40 hover:shadow-[0_0_35px_rgba(255,255,255,0.22)] transition-all duration-300 flex items-center gap-4 cursor-pointer">
-              <div className="w-9 h-9 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
-                <Mail className="w-5 h-5 text-[#ffffff]" />
+            <TiltCard className="p-2 sm:p-5 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.12)] hover:bg-white/15 hover:border-white/40 hover:shadow-[0_0_35px_rgba(255,255,255,0.22)] transition-all duration-300 flex items-center gap-2.5 sm:gap-4 cursor-pointer">
+              <div className="w-6 h-6 sm:w-9 sm:h-9 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
+                <Mail className="w-3 h-3 sm:w-5 sm:h-5 text-[#ffffff]" />
               </div>
               <div className="min-w-0">
-                <div className="text-[11px] font-extrabold uppercase tracking-widest text-white/70 mb-1">Email</div>
-                <a href={`mailto:${contactInfo.email}`} className="font-sans text-[15px] font-semibold text-[#ffffff] hover:underline truncate block">
+                <div className="text-[8.5px] sm:text-[11px] font-extrabold uppercase tracking-widest text-[#ffffff]/70 mb-0 sm:mb-1">Email</div>
+                <a href={`mailto:${contactInfo.email}`} className="font-sans text-[10px] sm:text-[15px] font-semibold text-[#ffffff] hover:underline truncate block">
                   {contactInfo.email}
                 </a>
               </div>
             </TiltCard>
 
-            {/* Phone & Secondary Contacts */}
-            <div className="flex flex-col gap-3">
+            {/* Phone & Secondary Contacts - Side-by-side grid on mobile to save 50% vertical height */}
+            <div className="grid grid-cols-2 gap-1.5 md:flex md:flex-col md:gap-3">
               {contactInfo.phone && (
-                <TiltCard className="p-5 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.12)] hover:bg-white/15 hover:border-white/40 hover:shadow-[0_0_35px_rgba(255,255,255,0.22)] transition-all duration-300 flex items-center gap-4 cursor-pointer">
-                  <div className="w-9 h-9 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
-                    <Phone className="w-5 h-5 text-[#ffffff]" />
+                <TiltCard className="p-2 sm:p-5 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.12)] hover:bg-white/15 hover:border-white/40 hover:shadow-[0_0_35px_rgba(255,255,255,0.22)] transition-all duration-300 flex items-center gap-2 sm:gap-4 cursor-pointer">
+                  <div className="w-6 h-6 sm:w-9 sm:h-9 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
+                    <Phone className="w-3 h-3 sm:w-5 sm:h-5 text-[#ffffff]" />
                   </div>
                   <div className="min-w-0">
-                    <div className="text-[11px] font-extrabold uppercase tracking-widest text-white/70 mb-1">Phone</div>
-                    <a href={`tel:${contactInfo.phone}`} className="font-sans text-[15px] font-semibold text-[#ffffff] hover:underline block">
+                    <div className="text-[8.5px] sm:text-[11px] font-extrabold uppercase tracking-widest text-[#ffffff]/70 mb-0 sm:mb-1 truncate">Phone</div>
+                    <a href={`tel:${contactInfo.phone}`} className="font-sans text-[10px] sm:text-[15px] font-semibold text-[#ffffff] hover:underline block truncate">
                       {contactInfo.phone}
                     </a>
                   </div>
@@ -158,15 +158,15 @@ export function Footer() {
 
               {contactInfo.contacts?.map((contact, idx) => (
                 contact.name && contact.phone ? (
-                  <TiltCard key={idx} className="p-5 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.12)] hover:bg-white/15 hover:border-white/40 hover:shadow-[0_0_35px_rgba(255,255,255,0.22)] transition-all duration-300 flex items-center gap-4 cursor-pointer">
-                    <div className="w-9 h-9 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
-                      <Phone className="w-5 h-5 text-[#ffffff]" />
+                  <TiltCard key={idx} className="p-2 sm:p-5 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.12)] hover:bg-white/15 hover:border-white/40 hover:shadow-[0_0_35px_rgba(255,255,255,0.22)] transition-all duration-300 flex items-center gap-2.5 sm:gap-4 cursor-pointer">
+                    <div className="w-6 h-6 sm:w-9 sm:h-9 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
+                      <Phone className="w-3 h-3 sm:w-5 sm:h-5 text-[#ffffff]" />
                     </div>
                     <div className="min-w-0">
-                      <div className="text-[11px] font-extrabold uppercase tracking-widest text-white/70 mb-1">
+                      <div className="text-[8.5px] sm:text-[11px] font-extrabold uppercase tracking-widest text-[#ffffff]/70 mb-0 sm:mb-1 truncate">
                         {contact.name}
                       </div>
-                      <a href={`tel:${contact.phone}`} className="font-sans text-[15px] font-semibold text-[#ffffff] hover:underline block">
+                      <a href={`tel:${contact.phone}`} className="font-sans text-[10px] sm:text-[15px] font-semibold text-[#ffffff] hover:underline block truncate">
                         {contact.phone}
                       </a>
                     </div>
@@ -179,9 +179,151 @@ export function Footer() {
 
         </div>
 
+        {/* Mobile-Only Layout */}
+        <div className="flex flex-col gap-5 md:hidden mb-10">
+          
+          {/* 1. Brand header & GET IN TOUCH */}
+          <div className="space-y-2">
+            <div className="flex items-center gap-[14px]">
+              <img
+                src="https://www.endeavoursliet.in/images/mainlogo.png"
+                alt="Endeavour Logo"
+                referrerPolicy="no-referrer"
+                className="w-[42px] h-auto object-contain brightness-0 invert filter drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]"
+              />
+              <span className="font-sans font-black text-[15px] uppercase tracking-[3px] text-[#ffffff]">
+                ENDEAVOUR
+              </span>
+            </div>
+            <h2 className="font-bebas text-[48px] leading-[0.8] tracking-[-0.03em] font-bold text-[#ffffff] uppercase select-none">
+              GET IN<br />
+              <span className="text-[#ffffff]/80">TOUCH.</span>
+            </h2>
+          </div>
+
+          {/* 2. Description Paragraph */}
+          <p className="font-sans text-[#ffffff]/70 text-[11px] leading-[1.5]">
+            The official robotics club of Sant Longowal Institute of Engineering and Technology. Building the future, one robot at a time.
+          </p>
+
+          {/* 3. Contact Cards (Location, Email, Phone contacts) - Moved Up! */}
+          <div className="flex flex-col gap-1.5">
+            {/* Location */}
+            <div className="p-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.08)] flex items-start gap-2.5">
+              <div className="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
+                <MapPin className="w-3 h-3 text-[#ffffff]" />
+              </div>
+              <div>
+                <div className="text-[8.5px] font-extrabold uppercase tracking-widest text-[#ffffff]/70">Location</div>
+                <p className="font-sans text-[10px] font-semibold leading-[1.3] text-[#ffffff]">
+                  {contactInfo.address}
+                </p>
+              </div>
+            </div>
+
+            {/* Email */}
+            <div className="p-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.08)] flex items-center gap-2.5">
+              <div className="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
+                <Mail className="w-3 h-3 text-[#ffffff]" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-[8.5px] font-extrabold uppercase tracking-widest text-[#ffffff]/70">Email</div>
+                <a href={`mailto:${contactInfo.email}`} className="font-sans text-[10px] font-semibold text-[#ffffff] hover:underline truncate block">
+                  {contactInfo.email}
+                </a>
+              </div>
+            </div>
+
+            {/* Phone Contacts Grid */}
+            <div className="grid grid-cols-2 gap-1.5">
+              {contactInfo.phone && (
+                <div className="p-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.08)] flex items-center gap-2">
+                  <div className="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
+                    <Phone className="w-3 h-3 text-[#ffffff]" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-[8.5px] font-extrabold uppercase tracking-widest text-[#ffffff]/70 truncate">Phone</div>
+                    <a href={`tel:${contactInfo.phone}`} className="font-sans text-[10px] font-semibold text-[#ffffff] hover:underline block truncate">
+                      {contactInfo.phone}
+                    </a>
+                  </div>
+                </div>
+              )}
+
+              {contactInfo.contacts?.map((contact, idx) => (
+                contact.name && contact.phone ? (
+                  <div key={idx} className="p-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.08)] flex items-center gap-2">
+                    <div className="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
+                      <Phone className="w-3 h-3 text-[#ffffff]" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-[8.5px] font-extrabold uppercase tracking-widest text-[#ffffff]/70 truncate">
+                        {contact.name}
+                      </div>
+                      <a href={`tel:${contact.phone}`} className="font-sans text-[10px] font-semibold text-[#ffffff] hover:underline block truncate">
+                        {contact.phone}
+                      </a>
+                    </div>
+                  </div>
+                ) : null
+              ))}
+            </div>
+          </div>
+
+          {/* 4. Explore & Legal Details section */}
+          <div className="flex justify-between py-2 border-t border-b border-white/10 my-1 px-1">
+            <div>
+              <h4 className="font-mono text-[9px] text-[#ffffff]/50 tracking-widest uppercase mb-1.5 font-extrabold">EXPLORE</h4>
+              <ul className="space-y-1.5 font-sans font-bold text-[11px] text-[#ffffff] uppercase tracking-wider">
+                <li><Link to="/about" className="hover:text-[#ffffff]/80 transition-colors">About Us</Link></li>
+                <li><a href="#events" className="hover:text-[#ffffff]/80 transition-colors">Techfest</a></li>
+                <li><a href="#events" className="hover:text-[#ffffff]/80 transition-colors">Competitions</a></li>
+                <li><a href="#gallery" className="hover:text-[#ffffff]/80 transition-colors">Our Gallery</a></li>
+              </ul>
+            </div>
+
+            <div className="text-right">
+              <h4 className="font-mono text-[9px] text-[#ffffff]/50 tracking-widest uppercase mb-1.5 font-extrabold">LEGAL</h4>
+              <div className="flex flex-col gap-1.5 text-[11px] text-[#ffffff]/90 uppercase tracking-wider font-bold">
+                <a href="#" className="hover:text-[#ffffff] transition-colors">Privacy Policy</a>
+                <a href="#" className="hover:text-[#ffffff] transition-colors">Terms of Service</a>
+              </div>
+            </div>
+          </div>
+
+          {/* 5. Social Account Logos */}
+          <div className="flex justify-center gap-[12px] pt-1">
+            <a 
+              href="https://www.instagram.com/endeavoursliet/" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="w-8 h-8 rounded-full bg-[#E1306C] border border-[#E1306C] text-[#ffffff] shadow-[0_0_10px_rgba(225,48,108,0.2)] hover:bg-[#ffffff] hover:border-[#ffffff] hover:text-[#a40505] transition-all duration-300 flex items-center justify-center shrink-0"
+            >
+              <Instagram className="w-3.5 h-3.5" />
+            </a>
+            <a 
+              href="https://www.facebook.com/endeavoursliet" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="w-8 h-8 rounded-full bg-[#1877F2] border border-[#1877F2] text-[#ffffff] shadow-[0_0_10px_rgba(24,119,242,0.2)] hover:bg-[#ffffff] hover:border-[#ffffff] hover:text-[#a40505] transition-all duration-300 flex items-center justify-center shrink-0"
+            >
+              <Facebook className="w-3.5 h-3.5" />
+            </a>
+            <a 
+              href="https://www.linkedin.com/company/endeavoursliet/" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="w-8 h-8 rounded-full bg-[#0077B5] border border-[#0077B5] text-[#ffffff] shadow-[0_0_10px_rgba(0,119,181,0.2)] hover:bg-[#ffffff] hover:border-[#ffffff] hover:text-[#a40505] transition-all duration-300 flex items-center justify-center shrink-0"
+            >
+              <Linkedin className="w-3.5 h-3.5" />
+            </a>
+          </div>
+
+        </div>
+
         {/* Footer Sub Bar with Copyright only */}
         <div className="border-t border-white/10 pt-6 mt-8 flex justify-center text-center">
-          <p className="text-[12px] text-white/60 uppercase tracking-widest font-medium">
+          <p className="text-[12px] text-[#ffffff]/60 uppercase tracking-widest font-medium">
             &copy; {new Date().getFullYear()} Endeavour SLIET. All rights reserved.
           </p>
         </div>

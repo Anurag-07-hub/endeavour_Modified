@@ -192,11 +192,11 @@ function LiquidExploreButton({ onClick }: { onClick: () => void }) {
           rotateY: position.x * 10,
         }}
         transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.5 }}
-        className="leb-wrapper group flex items-center gap-3 px-7 py-3 rounded-full border-2 uppercase tracking-[2.5px] transition-colors duration-500 font-sans font-black whitespace-nowrap backdrop-blur-sm text-[13px] perspective-1000"
+        className="leb-wrapper group flex items-center gap-1.5 sm:gap-3 px-3 py-1.5 sm:px-7 sm:py-3 rounded-full border-2 uppercase tracking-[1px] sm:tracking-[2.5px] transition-colors duration-500 font-sans font-black whitespace-nowrap backdrop-blur-sm text-[8.5px] sm:text-[13px] perspective-1000"
         style={{ color: '#ffffff', borderColor: '#ffffff', backgroundColor: 'rgba(255,255,255,0.05)' }}
       >
         <span className="relative z-20">Explore About Us</span>
-        <ArrowRight className="leb-arrow w-4 h-4 relative z-20 shrink-0" />
+        <ArrowRight className="leb-arrow w-3 h-3 sm:w-4 sm:h-4 relative z-20 shrink-0" />
         <span className="leb-bg" aria-hidden="true">
           <span className="leb-blob" />
           <span className="leb-blob" />
@@ -226,6 +226,16 @@ export function EndeavourBanner() {
   const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -235,6 +245,12 @@ export function EndeavourBanner() {
   const yBg = useTransform(scrollYProgress, [0, 1], ["-15%", "15%"]);
   const yText = useTransform(scrollYProgress, [0, 1], ["20%", "-20%"]);
   const yImage = useTransform(scrollYProgress, [0, 1], ["20%", "-20%"]);
+
+  // Shrink the 3D car model by 28% and adjust position on mobile to show the full car
+  const finalScale = isMobile ? model3D.scale * 0.72 : model3D.scale;
+  const finalPosition: [number, number, number] = isMobile
+    ? [model3D.position[0] - 0.3, model3D.position[1] - 0.2, model3D.position[2] - 0.8]
+    : model3D.position;
 
   return (
     <>
@@ -253,7 +269,7 @@ export function EndeavourBanner() {
       
       <section 
         ref={containerRef}
-        className="relative w-full min-h-[100svh] py-24 overflow-hidden flex items-center"
+        className="relative w-full h-[240px] sm:h-auto sm:min-h-[100svh] py-0 sm:py-24 overflow-hidden flex items-center"
       >
         {/* Parallax Background */}
         <motion.div
@@ -269,7 +285,7 @@ export function EndeavourBanner() {
           {/* Right Side: 3D Car Model with wobble, wheel spin & smoke */}
           <motion.div 
             style={{ y: yImage }}
-            className="absolute right-[-10%] md:right-[0%] top-1/2 -translate-y-1/2 w-[65%] md:w-[50%] h-[100%] z-10"
+            className="absolute right-[0%] sm:right-[0%] top-1/2 -translate-y-1/2 w-[55%] sm:w-[50%] h-[100%] z-10"
           >
             <Canvas camera={{ position: [0, 2, 10], fov: 45 }} style={{ width: '100%', height: '100%', background: 'transparent' }}>
               <Suspense fallback={null}>
@@ -279,8 +295,8 @@ export function EndeavourBanner() {
                 <Environment preset="city" />
                 <ModelErrorBoundary>
                   <CarModel 
-                    scale={model3D.scale}
-                    position={model3D.position}
+                    scale={finalScale}
+                    position={finalPosition}
                     rotation={model3D.rotation}
                   />
                 </ModelErrorBoundary>
@@ -292,18 +308,18 @@ export function EndeavourBanner() {
           {/* Left Side: Animated Typography */}
           <motion.div 
             style={{ y: yText }}
-            className="relative z-10 flex flex-col justify-center pt-10 w-full md:w-[85%] banner-text select-none pointer-events-none text-white"
+            className="relative z-10 flex flex-col justify-center pt-0 sm:pt-10 w-full md:w-[85%] banner-text select-none pointer-events-none text-white"
           >
-            <span className="text-[22vw] md:text-[18vw] lg:text-[16vw] whitespace-nowrap block">
+            <span className="text-[15px] min-[390px]:text-[15vw] sm:text-[18vw] lg:text-[16vw] whitespace-nowrap block">
               ENDE
-              <span className="bg-[#c8102e] text-[#27151b] px-2 py-0.5 mx-1 rounded-sm inline-block align-middle">
+              <span className="bg-[#c8102e] text-[#27151b] px-1 sm:px-2 py-0.5 mx-0.5 sm:mx-1 rounded-sm inline-block align-middle">
                 AV
               </span>
               <span className="mix-blend-difference inline-block">OUR</span>
             </span>
-            <span className="text-[22vw] md:text-[18vw] lg:text-[16vw] whitespace-nowrap block">
+            <span className="text-[15px] min-[390px]:text-[15vw] sm:text-[18vw] lg:text-[16vw] whitespace-nowrap block">
               RO
-              <span className="bg-[#27151b] text-[#c8102e] px-2 py-0.5 mx-1 rounded-sm inline-block align-middle">
+              <span className="bg-[#27151b] text-[#c8102e] px-1 sm:px-2 py-0.5 mx-0.5 sm:mx-1 rounded-sm inline-block align-middle">
                 BO
               </span>
               TICS
@@ -313,7 +329,7 @@ export function EndeavourBanner() {
         </div>
 
         {/* Explore About Us — liquid button pinned to bottom-right corner of the banner */}
-        <div className="absolute bottom-8 right-8 md:bottom-10 md:right-12 z-20">
+        <div className="absolute bottom-4 right-4 sm:bottom-10 sm:right-12 z-20">
           <LiquidExploreButton onClick={() => setIsTransitioning(true)} />
         </div>
 

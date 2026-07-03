@@ -1,14 +1,14 @@
 import { motion, AnimatePresence } from 'motion/react';
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Info, Users, Calendar, Image, Hand, Info as InfoIcon, UserPlus } from 'lucide-react';
+import { Home, Compass, Users, Calendar, Image, Hand, Info as InfoIcon, UserPlus } from 'lucide-react';
 import { useGesture } from '../context/GestureContext';
 import { GestureGuideModal } from './GestureGuideModal';
 import { LiquidMorphButton } from './LiquidMorphButton';
 
 const navItems = [
   { name: 'Home', url: '/', icon: Home, isRouterLink: true },
-  { name: 'About', url: '/about', icon: Info, isRouterLink: true },
+  { name: 'About', url: '/about', icon: Compass, isRouterLink: true },
   { name: 'Team', url: '/team', icon: Users, isRouterLink: true },
   { name: 'Domains', url: '/domains', icon: Calendar, isRouterLink: true },
   { name: 'Gallery', url: '/gallery', icon: Image, isRouterLink: true },
@@ -30,11 +30,11 @@ export function Navbar() {
   return (
     <>
       <div id="main-navbar" className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 z-50 w-max max-w-[calc(100%-16px)] sm:max-w-none flex justify-center transition-opacity duration-300">
-        <div className="flex items-center gap-1 sm:gap-3 lg:gap-5 bg-brand-bg/80 border border-white/10 backdrop-blur-xl py-2 px-2 sm:px-4 rounded-[40px] shadow-[0_8px_32px_0_rgba(164,5,5,0.15)] overflow-x-auto overflow-y-visible [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        <div className="flex items-center gap-0.5 sm:gap-3 lg:gap-5 bg-brand-bg/80 border border-white/10 backdrop-blur-xl py-1 px-1 sm:py-2 sm:px-4 rounded-[24px] sm:rounded-[40px] shadow-[0_8px_32px_0_rgba(164,5,5,0.15)] overflow-x-auto overflow-y-visible [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           
           {/* Logo */}
-          <Link to="/" onClick={() => { scrollToTop(); setActiveTab('Home'); }} className="flex items-center justify-center h-10 sm:h-auto sm:px-3 lg:px-4 shrink-0 rounded-full hover:bg-white/5 transition-colors group">
-             <img src="https://www.endeavoursliet.in/images/mainlogo.png" alt="Endeavour" className="w-[26px] sm:w-[34px] h-auto object-contain drop-shadow-[0_0_5px_rgba(164,5,5,0.5)] z-10" />
+          <Link to="/" onClick={() => { scrollToTop(); setActiveTab('Home'); }} className="flex items-center justify-center h-8 sm:h-auto px-2 sm:px-3 lg:px-4 shrink-0 rounded-full hover:bg-white/5 transition-colors group mr-1 sm:mr-2">
+             <img src="https://www.endeavoursliet.in/images/mainlogo.png" alt="Endeavour" className="w-7 sm:w-[34px] h-auto object-contain filter brightness-125 saturate-110 drop-shadow-[0_0_10px_rgba(200,16,46,0.9)] z-10" />
              <motion.div
                initial={{ width: 0, opacity: 0, marginLeft: 0 }}
                animate={{ width: "auto", opacity: 1, marginLeft: 12 }}
@@ -64,8 +64,8 @@ export function Navbar() {
               const content = (
                 <>
                   <span className="hidden md:inline text-[13px] lg:text-[14px] uppercase tracking-[1.5px] whitespace-nowrap">{item.name}</span>
-                  <span className="md:hidden flex items-center justify-center w-10 h-10 shrink-0">
-                    <Icon size={20} strokeWidth={isActive ? 2.5 : 2} />
+                  <span className="md:hidden flex items-center justify-center w-6 h-6 shrink-0">
+                    <Icon size={12} strokeWidth={isActive ? 2.5 : 2} />
                   </span>
                   {isActive && (
                     <motion.div
@@ -114,21 +114,21 @@ export function Navbar() {
             <div className="flex items-center gap-1 ml-1 shrink-0">
               <button
                   onClick={toggleGestures}
-                  className={`flex items-center justify-center w-10 h-10 shrink-0 rounded-full transition-all duration-300 ${
+                  className={`flex items-center justify-center w-6 h-6 shrink-0 rounded-full transition-all duration-300 ${
                     isGestureEnabled 
                       ? 'bg-brand-accent border-brand-accent text-brand-bg shadow-[0_0_15px_rgba(164,5,5,0.4)]' 
                       : 'bg-transparent border border-transparent text-brand-muted hover:border-brand-accent/30 hover:text-brand-accent'
                   }`}
                   title={isGestureEnabled ? "Disable Gestures" : "Enable Gestures"}
                 >
-                  <Hand className="w-[18px] h-[18px]" />
+                  <Hand className="w-3 h-3 sm:w-[18px] sm:h-[18px]" />
               </button>
               <button
                 onClick={() => setIsGuideOpen(true)}
-                className="flex items-center justify-center w-10 h-10 shrink-0 rounded-full border border-transparent text-brand-muted hover:border-brand-accent/30 hover:text-brand-accent transition-all duration-300"
+                className="flex items-center justify-center w-6 h-6 shrink-0 rounded-full border border-transparent text-brand-muted hover:border-brand-accent/30 hover:text-brand-accent transition-all duration-300"
                 title="Gesture Guide"
               >
-                <InfoIcon className="w-[18px] h-[18px]" />
+                <InfoIcon className="w-3 h-3 sm:w-[18px] sm:h-[18px]" />
               </button>
             </div>
           </div>

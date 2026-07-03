@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { EndeavourBanner } from './components/EndeavourBanner';
@@ -12,6 +12,7 @@ import { DomainsPage } from './pages/DomainsPage';
 import { ScrollToTop } from './components/ScrollToTop';
 import { JoinUsPage } from './pages/JoinUsPage';
 import { AdminDashboard } from './pages/AdminDashboard';
+import { SimulatorPage } from './pages/Simulator';
 import { AuthProvider } from './context/AuthContext';
 import { CMSProvider } from './context/CMSContext';
 import { GestureProvider } from './context/GestureContext';
@@ -28,6 +29,28 @@ function Home() {
   );
 }
 
+function AppContent() {
+  const location = useLocation();
+  const isSimulator = location.pathname === '/simulator';
+
+  return (
+    <div className="min-h-screen bg-brand-bg text-white selection:bg-brand-accent selection:text-white">
+      {!isSimulator && <Navbar />}
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/team" element={<TeamPage />} />
+        <Route path="/domains" element={<DomainsPage />} />
+        <Route path="/gallery" element={<GalleryPage />} />
+        <Route path="/join-us" element={<JoinUsPage />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route path="/simulator" element={<SimulatorPage />} />
+      </Routes>
+      {!isSimulator && <Footer />}
+    </div>
+  );
+}
+
 export default function App() {
   return (
     <AuthProvider>
@@ -36,22 +59,11 @@ export default function App() {
           <Router>
             <GestureController />
             <ScrollToTop />
-            <div className="min-h-screen text-white selection:bg-brand-accent selection:text-white">
-              <Navbar />
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/about" element={<AboutPage />} />
-                <Route path="/team" element={<TeamPage />} />
-                <Route path="/domains" element={<DomainsPage />} />
-                <Route path="/gallery" element={<GalleryPage />} />
-                <Route path="/join-us" element={<JoinUsPage />} />
-                <Route path="/admin-dashboard" element={<AdminDashboard />} />
-              </Routes>
-              <Footer />
-            </div>
+            <AppContent />
           </Router>
         </GestureProvider>
       </CMSProvider>
     </AuthProvider>
   );
 }
+

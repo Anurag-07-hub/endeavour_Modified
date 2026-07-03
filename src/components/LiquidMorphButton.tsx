@@ -48,11 +48,11 @@ export function LiquidMorphButton({ onClick }: { onClick: () => void }) {
       <Link
         to="/join-us"
         onClick={onClick}
-        className="lmb-wrapper group flex items-center justify-center w-10 h-10 md:w-auto md:h-auto md:px-[24px] md:py-[12px] rounded-full border border-brand-accent text-brand-accent text-[13px] uppercase tracking-[2px] hover:text-brand-bg transition-colors duration-500 font-sans font-black whitespace-nowrap shrink-0"
+        className="lmb-wrapper group flex items-center justify-center w-6 h-6 sm:w-10 sm:h-10 md:w-auto md:h-auto md:px-[24px] md:py-[12px] rounded-full border border-brand-accent text-brand-accent text-[13px] uppercase tracking-[2px] hover:text-brand-bg transition-colors duration-500 font-sans font-black whitespace-nowrap shrink-0"
         title="Join Us"
       >
         <span className="hidden md:inline relative z-20">Join Us</span>
-        <UserPlus className="w-[18px] h-[18px] md:hidden relative z-20" />
+        <UserPlus className="w-3 h-3 sm:w-[18px] sm:h-[18px] md:hidden relative z-20" />
         
         {/* Liquid Background */}
         <span className="lmb-bg" aria-hidden="true">
