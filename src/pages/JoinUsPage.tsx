@@ -345,7 +345,7 @@ export const JoinUsPage = () => {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md p-8 bg-brand-bg/90 backdrop-blur-md border border-brand-accent/25 shadow-[0_0_0_1px_rgba(164,5,5,0.08),0_4px_24px_rgba(164,5,5,0.10)] rounded-2xl relative z-10"
+        className="w-full max-w-[340px] sm:max-w-sm p-6 sm:p-8 bg-brand-bg/90 backdrop-blur-md border border-brand-accent/25 shadow-[0_0_0_1px_rgba(164,5,5,0.08),0_12px_40px_rgba(164,5,5,0.15)] rounded-[32px] relative z-10"
       >
         <div className="flex justify-center mb-6">
           <div className="w-16 h-16 rounded-full border border-brand-accent/40 bg-brand-accent/5 flex items-center justify-center">

@@ -109,14 +109,14 @@ function InteractiveControls() {
   );
 }
 
-// Liquid Explore Button — fixed gap by adding more blobs + full-width coverage + magnetic mouse wobble
 function LiquidExploreButton({ onClick }: { onClick: () => void }) {
   const filterId = React.useId().replace(/:/g, '');
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [clicked, setClicked] = useState(false);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (!buttonRef.current) return;
+    if (!buttonRef.current || clicked) return;
     const { left, top, width, height } = buttonRef.current.getBoundingClientRect();
     const centerX = left + width / 2;
     const centerY = top + height / 2;
@@ -129,7 +129,14 @@ function LiquidExploreButton({ onClick }: { onClick: () => void }) {
   };
 
   const handleMouseLeave = () => {
+    if (!clicked) setPosition({ x: 0, y: 0 });
+  };
+
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    setClicked(true);
     setPosition({ x: 0, y: 0 });
+    onClick?.();
+    setTimeout(() => setClicked(false), 800);
   };
 
   return (
@@ -140,8 +147,21 @@ function LiquidExploreButton({ onClick }: { onClick: () => void }) {
           overflow: hidden;
           isolation: isolate;
           outline: none;
-          cursor: pointer;
-          color: #ffffff !important;
+        }
+        .leb-wrapper::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          border-radius: 999px;
+          border: 2px solid transparent;
+          background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 100%);
+          -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+          -webkit-mask-composite: xor;
+          mask-composite: exclude;
+          pointer-events: none;
+        }
+        /* Default solid white border fallback */
+        .leb-wrapper {
           border-color: #ffffff !important;
         }
         .leb-bg {
@@ -169,20 +189,25 @@ function LiquidExploreButton({ onClick }: { onClick: () => void }) {
         .leb-blob:nth-child(5) { left: 65%;  transition-delay: 80ms;  transform: translateX(-50%) translateY(0) scale(0); }
         .leb-blob:nth-child(6) { left: 80%;  transition-delay: 40ms;  transform: translateX(-50%) translateY(0) scale(0); }
         .leb-blob:nth-child(7) { left: 95%;  transition-delay: 0ms;   transform: translateX(-50%) translateY(0) scale(0); }
-        .leb-wrapper:hover .leb-blob {
+        .leb-wrapper:not(.clicked):hover .leb-blob {
           transform: translateX(-50%) translateY(-190%) scale(5.5);
+        }
+        .leb-wrapper.clicked .leb-blob {
+          transform: translateX(-50%) translateY(-190%) scale(10) !important;
+          transition-duration: 300ms !important;
+          transition-delay: 0ms !important;
         }
         .leb-arrow {
           transition: transform 300ms ease;
         }
-        .leb-wrapper:hover .leb-arrow {
+        .leb-wrapper:not(.clicked):hover .leb-arrow {
           transform: translateX(5px);
         }
       `}</style>
 
       <motion.button
         ref={buttonRef}
-        onClick={onClick}
+        onClick={handleClick}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         animate={{
@@ -192,7 +217,7 @@ function LiquidExploreButton({ onClick }: { onClick: () => void }) {
           rotateY: position.x * 10,
         }}
         transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.5 }}
-        className="leb-wrapper group flex items-center gap-1 sm:gap-3 px-2 py-1 sm:px-7 sm:py-3 rounded-full border-2 uppercase tracking-[0.5px] sm:tracking-[2.5px] transition-colors duration-500 font-sans font-black whitespace-nowrap backdrop-blur-sm text-[7.5px] sm:text-[13px] perspective-1000"
+        className={`leb-wrapper group flex items-center gap-1 sm:gap-3 px-2 py-1 sm:px-7 sm:py-3 rounded-full border-2 uppercase tracking-[0.5px] sm:tracking-[2.5px] transition-colors duration-500 font-sans font-black whitespace-nowrap backdrop-blur-sm text-[7.5px] sm:text-[13px] perspective-1000 ${clicked ? 'clicked' : ''}`}
         style={{ color: '#ffffff', borderColor: '#ffffff', backgroundColor: 'rgba(255,255,255,0.05)' }}
       >
         <span className="relative z-20">Explore About Us</span>

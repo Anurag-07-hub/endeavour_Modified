@@ -1,9 +1,16 @@
 import { Link } from 'react-router-dom';
 import { UserPlus } from 'lucide-react';
-import React from 'react';
+import React, { useState } from 'react';
 
 export function LiquidMorphButton({ onClick }: { onClick: () => void }) {
   const filterId = React.useId().replace(/:/g, '');
+  const [clicked, setClicked] = useState(false);
+
+  const handleClick = (e: React.MouseEvent) => {
+    setClicked(true);
+    onClick?.();
+    setTimeout(() => setClicked(false), 800);
+  };
 
   return (
     <>
@@ -39,16 +46,22 @@ export function LiquidMorphButton({ onClick }: { onClick: () => void }) {
           .lmb-blob:nth-child(2) { left: 50%; transition-delay: 50ms; transform: translateX(-50%) translateY(0) scale(0); }
           .lmb-blob:nth-child(3) { left: calc(50% + 56px); transition-delay: 100ms; transform: translateX(-50%) translateY(0) scale(0); }
           
-          .lmb-wrapper:hover .lmb-blob {
+          .lmb-wrapper:not(.clicked):hover .lmb-blob {
             transform: translateX(-50%) translateY(-200%) scale(3.5);
+          }
+
+          .lmb-wrapper.clicked .lmb-blob {
+            transform: translateX(-50%) translateY(-200%) scale(10) !important;
+            transition-duration: 300ms !important;
+            transition-delay: 0ms !important;
           }
         `}
       </style>
       
       <Link
         to="/join-us"
-        onClick={onClick}
-        className="lmb-wrapper group flex items-center justify-center w-6 h-6 sm:w-10 sm:h-10 md:w-auto md:h-auto md:px-[24px] md:py-[12px] rounded-full border border-brand-accent text-brand-accent text-[13px] uppercase tracking-[2px] hover:text-brand-bg transition-colors duration-500 font-sans font-black whitespace-nowrap shrink-0"
+        onClick={handleClick}
+        className={`lmb-wrapper group flex items-center justify-center w-6 h-6 sm:w-10 sm:h-10 md:w-auto md:h-auto md:px-[24px] md:py-[12px] rounded-full border border-brand-accent text-brand-accent text-[13px] uppercase tracking-[2px] transition-colors duration-500 font-sans font-black whitespace-nowrap shrink-0 ${clicked ? 'clicked text-brand-bg' : 'hover:text-brand-bg'}`}
         title="Join Us"
       >
         <span className="hidden md:inline relative z-20">Join Us</span>

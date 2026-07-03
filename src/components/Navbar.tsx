@@ -109,12 +109,10 @@ export function Navbar() {
 
           {/* Actions */}
           <div className="flex items-center gap-1 sm:pl-1 sm:pr-2 shrink-0">
-             <LiquidMorphButton onClick={scrollToTop} />
-            
-            <div className="flex items-center gap-1 ml-1 shrink-0">
+            <div className="flex items-center gap-1 mr-1 shrink-0">
               <button
                   onClick={toggleGestures}
-                  className={`flex items-center justify-center w-6 h-6 shrink-0 rounded-full transition-all duration-300 ${
+                  className={`flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8 shrink-0 rounded-full transition-all duration-300 ${
                     isGestureEnabled 
                       ? 'bg-brand-accent border-brand-accent text-brand-bg shadow-[0_0_15px_rgba(164,5,5,0.4)]' 
                       : 'bg-transparent border border-transparent text-brand-muted hover:border-brand-accent/30 hover:text-brand-accent'
@@ -125,12 +123,14 @@ export function Navbar() {
               </button>
               <button
                 onClick={() => setIsGuideOpen(true)}
-                className="flex items-center justify-center w-6 h-6 shrink-0 rounded-full border border-transparent text-brand-muted hover:border-brand-accent/30 hover:text-brand-accent transition-all duration-300"
+                className="flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8 shrink-0 rounded-full border border-transparent text-brand-muted hover:border-brand-accent/30 hover:text-brand-accent transition-all duration-300"
                 title="Gesture Guide"
               >
                 <InfoIcon className="w-3 h-3 sm:w-[18px] sm:h-[18px]" />
               </button>
             </div>
+            
+            <LiquidMorphButton onClick={scrollToTop} />
           </div>
 
         </div>
