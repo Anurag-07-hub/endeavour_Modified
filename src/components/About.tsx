@@ -7,7 +7,7 @@ export function About() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
           
           <div>
-            <h2 className="font-sans text-[22px] min-[390px]:text-[24px] md:text-[48px] lg:text-[64px] font-black uppercase tracking-[-1px] md:tracking-[-2px] mb-4 md:mb-6 leading-[0.9] text-white">
+            <h2 className="font-bebas text-[36px] min-[390px]:text-[40px] sm:text-[48px] lg:text-[64px] uppercase tracking-[1px] md:tracking-[2px] mb-4 md:mb-6 leading-[0.9] text-white">
               Empowering the innovators of tomorrow
             </h2>
             <FadeIn direction="right" delay={0.2}>

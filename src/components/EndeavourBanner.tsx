@@ -310,14 +310,14 @@ export function EndeavourBanner() {
             style={{ y: yText }}
             className="relative z-10 flex flex-col justify-center pt-0 sm:pt-10 w-full md:w-[85%] banner-text select-none pointer-events-none text-white"
           >
-            <span className="text-[15px] min-[390px]:text-[15vw] sm:text-[18vw] lg:text-[16vw] whitespace-nowrap block">
+            <span className="text-[15vw] sm:text-[18vw] lg:text-[16vw] whitespace-nowrap block">
               ENDE
               <span className="bg-[#c8102e] text-[#27151b] px-1 sm:px-2 py-0.5 mx-0.5 sm:mx-1 rounded-sm inline-block align-middle">
                 AV
               </span>
               <span className="mix-blend-difference inline-block">OUR</span>
             </span>
-            <span className="text-[15px] min-[390px]:text-[15vw] sm:text-[18vw] lg:text-[16vw] whitespace-nowrap block">
+            <span className="text-[15vw] sm:text-[18vw] lg:text-[16vw] whitespace-nowrap block">
               RO
               <span className="bg-[#27151b] text-[#c8102e] px-1 sm:px-2 py-0.5 mx-0.5 sm:mx-1 rounded-sm inline-block align-middle">
                 BO

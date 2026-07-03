@@ -209,11 +209,11 @@ export function Hero() {
             <MagneticText
               hoverText="ENDEAVOUR"
               bubbleSize={280}
-              hoverTextClassName="text-[26px] min-[390px]:text-[28px] sm:text-[70px] lg:text-[100px] tracking-[0.12em] sm:tracking-[0.15em] font-bebas font-bold"
+              hoverTextClassName="text-[36px] min-[390px]:text-[40px] sm:text-[70px] lg:text-[100px] tracking-[0.12em] sm:tracking-[0.15em] font-bebas font-bold"
               baseContent={
                 <RevealText 
                   text="STRIVE TO CREATE DIFFERENCE" 
-                  className="justify-center uppercase text-[22px] min-[390px]:text-[24px] sm:text-[56px] lg:text-[80px] font-bebas tracking-[1px] sm:tracking-[2px] font-bold"
+                  className="justify-center uppercase text-[32px] min-[390px]:text-[36px] sm:text-[56px] lg:text-[80px] font-bebas tracking-[1px] sm:tracking-[2px] font-bold"
                   accentWords={["DIFFERENCE"]} 
                   showImages={false}
                   letterDelay={0.05}
