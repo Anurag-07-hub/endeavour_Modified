@@ -192,11 +192,11 @@ function LiquidExploreButton({ onClick }: { onClick: () => void }) {
           rotateY: position.x * 10,
         }}
         transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.5 }}
-        className="leb-wrapper group flex items-center gap-1.5 sm:gap-3 px-3 py-1.5 sm:px-7 sm:py-3 rounded-full border-2 uppercase tracking-[1px] sm:tracking-[2.5px] transition-colors duration-500 font-sans font-black whitespace-nowrap backdrop-blur-sm text-[8.5px] sm:text-[13px] perspective-1000"
+        className="leb-wrapper group flex items-center gap-1 sm:gap-3 px-2 py-1 sm:px-7 sm:py-3 rounded-full border-2 uppercase tracking-[0.5px] sm:tracking-[2.5px] transition-colors duration-500 font-sans font-black whitespace-nowrap backdrop-blur-sm text-[7.5px] sm:text-[13px] perspective-1000"
         style={{ color: '#ffffff', borderColor: '#ffffff', backgroundColor: 'rgba(255,255,255,0.05)' }}
       >
         <span className="relative z-20">Explore About Us</span>
-        <ArrowRight className="leb-arrow w-3 h-3 sm:w-4 sm:h-4 relative z-20 shrink-0" />
+        <ArrowRight className="leb-arrow w-2.5 h-2.5 sm:w-4 sm:h-4 relative z-20 shrink-0" />
         <span className="leb-bg" aria-hidden="true">
           <span className="leb-blob" />
           <span className="leb-blob" />
