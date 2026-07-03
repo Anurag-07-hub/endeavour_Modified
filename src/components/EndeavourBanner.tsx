@@ -287,6 +287,9 @@ export function EndeavourBanner() {
             style={{ y: yImage }}
             className="absolute right-[0%] sm:right-[0%] top-1/2 -translate-y-1/2 w-[55%] sm:w-[50%] h-[100%] z-10"
           >
+            {/* Scroll Zone Overlay: Prevents the right thumb edge from rotating the car, allowing normal page scrolling */}
+            <div className="absolute right-0 top-0 w-[40%] md:w-[20%] h-full z-20" style={{ touchAction: "pan-y" }} />
+            
             <Canvas camera={{ position: [0, 2, 10], fov: 45 }} style={{ width: '100%', height: '100%', background: 'transparent' }}>
               <Suspense fallback={null}>
                 <ambientLight intensity={0.6} />

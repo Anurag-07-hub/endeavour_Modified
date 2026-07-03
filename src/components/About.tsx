@@ -6,7 +6,7 @@ export function About() {
       <div className="max-w-[1024px] mx-auto px-5 md:px-[60px]">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
           
-          <div>
+          <div className="text-center md:text-left">
             <h2 className="font-bebas text-[36px] min-[390px]:text-[40px] sm:text-[48px] lg:text-[64px] uppercase tracking-[1px] md:tracking-[2px] mb-4 md:mb-6 leading-[0.9] text-white">
               Empowering the innovators of tomorrow
             </h2>
