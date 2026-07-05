@@ -115,34 +115,34 @@ export function PhaseScaling() {
           className="grid grid-cols-1 md:grid-cols-3 gap-6 gap-y-8 mt-8"
         >
           <motion.div variants={itemVariants} className="border-t-2 border-white/20 pt-4">
-            <h5 className="font-syncopate text-[#000000] text-sm font-bold mb-1">Avishkar'18 (MNNIT)</h5>
-            <p className="font-roboto text-brand-muted text-xs">1st in Aerial Vehicle Challenge, Any terrain vehicle & Pump it Up.</p>
+            <h5 className="font-syncopate text-white text-sm sm:text-base md:text-lg font-black mb-1.5 uppercase">Avishkar'18 (MNNIT)</h5>
+            <p className="font-roboto text-white font-extrabold text-sm sm:text-base leading-relaxed">1st in Aerial Vehicle Challenge, Any terrain vehicle & Pump it Up.</p>
           </motion.div>
           <motion.div variants={itemVariants} className="border-t-2 border-white/20 pt-4">
-            <h5 className="font-syncopate text-brand-accent text-sm font-bold mb-1">Technex'19</h5>
-            <p className="font-roboto text-brand-muted text-xs">4th position in Axelarate and Hydracs.</p>
+            <h5 className="font-syncopate text-brand-accent text-sm sm:text-base md:text-lg font-black mb-1.5 uppercase">Technex'19</h5>
+            <p className="font-roboto text-white font-extrabold text-sm sm:text-base leading-relaxed">4th position in Axelarate and Hydracs.</p>
           </motion.div>
           <motion.div variants={itemVariants} className="border-t-2 border-[#00a2ff]/50 pt-4">
-            <h5 className="font-syncopate text-[#00a2ff] text-sm font-bold mb-1">E-Yantra 2018</h5>
-            <p className="font-roboto text-brand-muted text-xs">Two teams advanced to the Semi-Final round.</p>
+            <h5 className="font-syncopate text-[#00a2ff] text-sm sm:text-base md:text-lg font-black mb-1.5 uppercase">E-Yantra 2018</h5>
+            <p className="font-roboto text-white font-extrabold text-sm sm:text-base leading-relaxed">Two teams advanced to the Semi-Final round.</p>
           </motion.div>
 
           <motion.div variants={itemVariants} className="border-t-2 border-white/20 pt-4">
-            <h5 className="font-syncopate text-[#000000] text-sm font-bold mb-1">Apogee'17 BITS</h5>
-            <p className="font-roboto text-brand-muted text-xs">Won in Robowar and Arduino challenge events.</p>
+            <h5 className="font-syncopate text-white text-sm sm:text-base md:text-lg font-black mb-1.5 uppercase">Apogee'17 BITS</h5>
+            <p className="font-roboto text-white font-extrabold text-sm sm:text-base leading-relaxed">Won in Robowar and Arduino challenge events.</p>
           </motion.div>
           <motion.div variants={itemVariants} className="border-t-2 border-white/20 pt-4">
-            <h5 className="font-syncopate text-brand-accent text-sm font-bold mb-1">Technex'18</h5>
-            <p className="font-roboto text-brand-muted text-xs">2nd in Hydracs, 3rd in Momentum and D'Aero-Glisseur.</p>
+            <h5 className="font-syncopate text-brand-accent text-sm sm:text-base md:text-lg font-black mb-1.5 uppercase">Technex'18</h5>
+            <p className="font-roboto text-white font-extrabold text-sm sm:text-base leading-relaxed">2nd in Hydracs, 3rd in Momentum and D'Aero-Glisseur.</p>
           </motion.div>
           <motion.div variants={itemVariants} className="border-t-2 border-[#00a2ff]/50 pt-4">
-            <h5 className="font-syncopate text-[#00a2ff] text-sm font-bold mb-1">Techinvent'19</h5>
-            <p className="font-roboto text-brand-muted text-xs">1st in Drone for Defense, 2nd Quadcopter race, 3rd Acrobatic flyer.</p>
+            <h5 className="font-syncopate text-[#00a2ff] text-sm sm:text-base md:text-lg font-black mb-1.5 uppercase">Techinvent'19</h5>
+            <p className="font-roboto text-white font-extrabold text-sm sm:text-base leading-relaxed">1st in Drone for Defense, 2nd Quadcopter race, 3rd Acrobatic flyer.</p>
           </motion.div>
 
           <motion.div variants={itemVariants} className="border-t-2 border-[#00ff66]/50 pt-4 md:col-span-3 mt-2 text-center">
-            <h5 className="font-syncopate text-[#00ff66] text-sm font-bold mb-2">More Historic Milestones</h5>
-            <p className="font-roboto text-brand-muted text-xs inline-flex gap-4 justify-center flex-wrap">
+            <h5 className="font-syncopate text-[#00ff66] text-sm sm:text-base md:text-lg font-black mb-2 uppercase">More Historic Milestones</h5>
+            <p className="font-roboto text-white font-extrabold inline-flex gap-4 justify-center flex-wrap text-sm sm:text-base">
               <span>[ Smart India Hackathon Qualified ]</span>
               <span>[ 6th in Indian Drone Racing League ]</span>
               <span>[ Qualified for Final round of Enginx ]</span>

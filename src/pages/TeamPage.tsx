@@ -1,7 +1,7 @@
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { useEffect, useState } from 'react';
 import { useCMS } from '../context/CMSContext';
-import { Linkedin, Mail } from 'lucide-react';
+import { Linkedin, Mail, ArrowUp } from 'lucide-react';
 
 function TeamMemberCard({ member, delay }: { member: any; delay: number; key?: string | number }) {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -10,11 +10,11 @@ function TeamMemberCard({ member, delay }: { member: any; delay: number; key?: s
     <motion.div
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: false, margin: "-50px" }}
+      viewport={{ once: true, margin: "-50px" }}
       transition={{ delay, type: "spring", stiffness: 50 }}
-      className="group bg-black/30 border border-white/10 overflow-hidden flex flex-col items-center transition-all duration-500 backdrop-blur-sm relative rounded-2xl cursor-pointer select-none hover:border-brand-accent hover:shadow-[0_0_25px_rgba(164,5,5,0.4)] hover:-translate-y-1"
+      className="group bg-black/30 border border-white/10 overflow-hidden flex flex-col items-center transition-all duration-500 backdrop-blur-sm relative rounded-2xl cursor-pointer select-none hover:border-brand-accent hover:shadow-[0_0_25px_rgba(164,5,5,0.4)] hover:-translate-y-1 h-full w-full"
     >
-      <div className="w-full relative pt-[80%] overflow-hidden bg-white/5">
+      <div className="w-full relative pt-[80%] overflow-hidden bg-white/5 shrink-0">
         {/* Skeleton Loader */}
         {!isLoaded && (
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full animate-[shimmer_1.5s_infinite] z-0" />
@@ -34,9 +34,11 @@ function TeamMemberCard({ member, delay }: { member: any; delay: number; key?: s
           }}
         />
       </div>
-      <div className="p-6 w-full text-center relative z-20 bg-gradient-to-t from-brand-bg to-brand-bg/80 border-t border-white/5 group-hover:border-brand-accent/50 transition-colors duration-500">
-        <h3 className="font-sans font-bold text-lg mb-1 tracking-wider uppercase text-white group-hover:text-brand-accent transition-colors">{member.name}</h3>
-        <p className="text-brand-muted font-sans text-xs uppercase tracking-[2px]">{member.position}</p>
+      <div className="p-6 w-full text-center relative z-20 bg-gradient-to-t from-brand-bg to-brand-bg/80 border-t border-white/5 group-hover:border-brand-accent/50 transition-colors duration-500 flex flex-col justify-between flex-grow">
+        <div>
+          <h3 className="font-sans font-bold text-base sm:text-lg mb-1.5 tracking-wider uppercase text-white group-hover:text-brand-accent transition-colors min-h-[52px] flex items-center justify-center line-clamp-2">{member.name}</h3>
+          <p className="text-brand-muted font-sans text-[10px] sm:text-xs uppercase tracking-[2px] min-h-[36px] flex items-center justify-center leading-normal">{member.position}</p>
+        </div>
 
         <div className="flex items-center justify-center gap-4 mt-5 relative z-30">
           {member.linkedin && (
@@ -72,6 +74,19 @@ export function TeamPage() {
 
   const [activeTab, setActiveTab] = useState('Executives');
   const { team } = useCMS();
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 400) {
+        setShowScrollTop(true);
+      } else {
+        setShowScrollTop(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const visibleMembers = team.find(t => t.category === activeTab)?.members || [];
 
@@ -126,13 +141,28 @@ export function TeamPage() {
           {visibleMembers.map((member: any, i: number) => (
             <div 
               key={member?.name ?? i} 
-              className="w-[calc(50%-8px)] md:w-[calc(33.333%-21.33px)] lg:w-[calc(25%-24px)]"
+              className="w-[calc(50%-8px)] md:w-[calc(33.333%-21.33px)] lg:w-[calc(25%-24px)] flex"
             >
               <TeamMemberCard member={member} delay={i * 0.05} />
             </div>
           ))}
         </motion.div>
       </div>
+
+      <AnimatePresence>
+        {showScrollTop && ['Executives', 'Alumni', 'Core Committee'].includes(activeTab) && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.5 }}
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="fixed bottom-6 right-6 md:bottom-10 md:right-10 z-50 p-3 sm:p-4 rounded-full border border-brand-accent bg-black/80 text-brand-accent hover:bg-brand-accent hover:text-white transition-all duration-300 shadow-[0_0_15px_rgba(164,5,5,0.5)] hover:scale-110 flex items-center justify-center cursor-pointer pointer-events-auto"
+            aria-label="Scroll to top"
+          >
+            <ArrowUp className="w-5 h-5 sm:w-6 sm:h-6" />
+          </motion.button>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

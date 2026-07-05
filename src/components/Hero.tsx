@@ -183,7 +183,7 @@ export function Hero() {
               <div className="flex items-center gap-3 sm:gap-6 md:gap-8 mb-2 sm:mb-4 md:mb-5">
                   <img 
                     src="/refined_logo_transparent.png" 
-                    className="h-14 w-14 sm:h-28 sm:w-28 md:h-36 md:w-36 object-contain drop-shadow-[0_0_15px_rgba(200,16,46,0.35)] hover:scale-105 transition-transform duration-300 pointer-events-auto"
+                    className="h-18 w-18 sm:h-36 sm:w-36 md:h-48 md:w-48 object-contain drop-shadow-[0_0_15px_rgba(200,16,46,0.35)] hover:scale-105 transition-transform duration-300 pointer-events-auto"
                     alt="Endeavour Logo"
                   />
                   <img 
@@ -231,7 +231,7 @@ export function Hero() {
               initial="hidden"
               animate="visible"
           >
-            <p className="text-[10px] sm:text-[16px] md:text-[20px] text-brand-muted/80 leading-[1.4] sm:leading-[1.6] max-w-[320px] sm:max-w-[480px] mt-2 sm:mt-4 md:mt-8 font-sans font-medium">
+            <p className="text-[10px] sm:text-[16px] md:text-[20px] text-white/95 leading-[1.4] sm:leading-[1.6] max-w-[320px] sm:max-w-[580px] mt-2 sm:mt-4 md:mt-8 font-sans font-bold">
               The premier robotics and innovation body of Sant Longowal Institute of Engineering and Technology. Engineering excellence through collaborative research and competitive building.
             </p>
           </motion.div>

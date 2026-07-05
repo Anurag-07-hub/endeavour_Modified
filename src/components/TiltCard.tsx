@@ -44,6 +44,7 @@ export interface TiltCardProps {
   max?: number;
   glare?: boolean;
   className?: string;
+  onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
 export function TiltCard({
@@ -51,6 +52,7 @@ export function TiltCard({
   max = 12,
   glare = true,
   className,
+  onClick,
 }: TiltCardProps) {
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
@@ -92,6 +94,7 @@ export function TiltCard({
   return (
     <motion.div
       ref={ref}
+      onClick={onClick}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
       style={{ transform, transformStyle: "preserve-3d" }}

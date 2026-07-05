@@ -348,6 +348,14 @@ export function GalleryPage() {
                     >
                         SCROLL TO EXPLORE
                     </motion.p>
+                    <motion.h2
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={introPhase === "circle" && morphValue < 0.5 ? { opacity: 1 - morphValue * 2, y: 0 } : { opacity: 0, y: 10 }}
+                        transition={{ duration: 1, delay: 0.4 }}
+                        className="mt-2 text-2xl md:text-3xl font-black tracking-[0.1em] text-brand-accent uppercase font-sans select-none"
+                    >
+                        OUR MEMORIES
+                    </motion.h2>
                 </div>
 
                 {/* Arc Active Content (Fades in) */}

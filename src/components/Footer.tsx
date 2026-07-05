@@ -49,7 +49,7 @@ export function Footer() {
               {/* Massive Bebas Neue Typography */}
               <h2 className="font-bebas text-[56px] sm:text-[95px] md:text-[110px] leading-[0.8] tracking-[-0.03em] font-bold text-[#ffffff] uppercase select-none">
                 GET IN<br />
-                <span className="text-[#ffffff]/80">TOUCH.</span>
+                <span className="text-[#7A0012]">TOUCH.</span>
               </h2>
             </div>
 
@@ -97,7 +97,7 @@ export function Footer() {
                   <li><Link to="/about" className="hover:text-[#ffffff]/80 transition-colors">About Us</Link></li>
                   <li><a href="#events" className="hover:text-[#ffffff]/80 transition-colors">Techfest</a></li>
                   <li><a href="#events" className="hover:text-[#ffffff]/80 transition-colors">Competitions</a></li>
-                  <li><a href="#gallery" className="hover:text-[#ffffff]/80 transition-colors">Our Gallery</a></li>
+                  <li><Link to="/gallery" className="hover:text-[#ffffff]/80 transition-colors">Our Gallery</Link></li>
                 </ul>
               </div>
 
@@ -115,7 +115,10 @@ export function Footer() {
           <div className="md:col-span-4 flex flex-col gap-1.5 md:gap-4">
             
             {/* Address */}
-            <TiltCard className="p-2 sm:p-5 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.12)] hover:bg-white/15 hover:border-white/40 hover:shadow-[0_0_35px_rgba(255,255,255,0.22)] transition-all duration-300 flex items-start gap-2.5 sm:gap-4 cursor-pointer">
+            <TiltCard 
+              onClick={() => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contactInfo.address)}`, '_blank')}
+              className="p-2 sm:p-5 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.12)] hover:bg-white/15 hover:border-white/40 hover:shadow-[0_0_35px_rgba(255,255,255,0.22)] transition-all duration-300 flex items-start gap-2.5 sm:gap-4 cursor-pointer"
+            >
               <div className="w-6 h-6 sm:w-9 sm:h-9 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
                 <MapPin className="w-3 h-3 sm:w-5 sm:h-5 text-[#ffffff]" />
               </div>
@@ -128,13 +131,22 @@ export function Footer() {
             </TiltCard>
 
             {/* Email */}
-            <TiltCard className="p-2 sm:p-5 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.12)] hover:bg-white/15 hover:border-white/40 hover:shadow-[0_0_35px_rgba(255,255,255,0.22)] transition-all duration-300 flex items-center gap-2.5 sm:gap-4 cursor-pointer">
+            <TiltCard 
+              onClick={() => window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${contactInfo.email}`, '_blank')}
+              className="p-2 sm:p-5 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.12)] hover:bg-white/15 hover:border-white/40 hover:shadow-[0_0_35px_rgba(255,255,255,0.22)] transition-all duration-300 flex items-center gap-2.5 sm:gap-4 cursor-pointer"
+            >
               <div className="w-6 h-6 sm:w-9 sm:h-9 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
                 <Mail className="w-3 h-3 sm:w-5 sm:h-5 text-[#ffffff]" />
               </div>
               <div className="min-w-0">
                 <div className="text-[8.5px] sm:text-[11px] font-extrabold uppercase tracking-widest text-[#ffffff]/70 mb-0 sm:mb-1">Email</div>
-                <a href={`mailto:${contactInfo.email}`} className="font-sans text-[10px] sm:text-[15px] font-semibold text-[#ffffff] hover:underline truncate block">
+                <a 
+                  href={`https://mail.google.com/mail/?view=cm&fs=1&to=${contactInfo.email}`} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  onClick={(e) => e.stopPropagation()}
+                  className="font-sans text-[10px] sm:text-[15px] font-semibold text-[#ffffff] hover:underline truncate block"
+                >
                   {contactInfo.email}
                 </a>
               </div>
@@ -197,7 +209,7 @@ export function Footer() {
             </div>
             <h2 className="font-bebas text-[48px] leading-[0.8] tracking-[-0.03em] font-bold text-[#ffffff] uppercase select-none">
               GET IN<br />
-              <span className="text-[#ffffff]/80">TOUCH.</span>
+              <span className="text-[#7A0012]">TOUCH.</span>
             </h2>
           </div>
 
@@ -209,7 +221,10 @@ export function Footer() {
           {/* 3. Contact Cards (Location, Email, Phone contacts) - Moved Up! */}
           <div className="flex flex-col gap-1.5">
             {/* Location */}
-            <div className="p-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.08)] flex items-start gap-2.5">
+            <div 
+              onClick={() => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contactInfo.address)}`, '_blank')}
+              className="p-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.08)] flex items-start gap-2.5 cursor-pointer hover:bg-white/15 hover:border-white/40 transition-all duration-300"
+            >
               <div className="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
                 <MapPin className="w-3 h-3 text-[#ffffff]" />
               </div>
@@ -222,13 +237,22 @@ export function Footer() {
             </div>
 
             {/* Email */}
-            <div className="p-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.08)] flex items-center gap-2.5">
+            <div 
+              onClick={() => window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${contactInfo.email}`, '_blank')}
+              className="p-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.08)] flex items-center gap-2.5 cursor-pointer hover:bg-white/15 hover:border-white/40 transition-all duration-300"
+            >
               <div className="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
                 <Mail className="w-3 h-3 text-[#ffffff]" />
               </div>
               <div className="min-w-0">
                 <div className="text-[8.5px] font-extrabold uppercase tracking-widest text-[#ffffff]/70">Email</div>
-                <a href={`mailto:${contactInfo.email}`} className="font-sans text-[10px] font-semibold text-[#ffffff] hover:underline truncate block">
+                <a 
+                  href={`https://mail.google.com/mail/?view=cm&fs=1&to=${contactInfo.email}`} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  onClick={(e) => e.stopPropagation()}
+                  className="font-sans text-[10px] font-semibold text-[#ffffff] hover:underline truncate block"
+                >
                   {contactInfo.email}
                 </a>
               </div>
@@ -278,7 +302,7 @@ export function Footer() {
                 <li><Link to="/about" className="hover:text-[#ffffff]/80 transition-colors">About Us</Link></li>
                 <li><a href="#events" className="hover:text-[#ffffff]/80 transition-colors">Techfest</a></li>
                 <li><a href="#events" className="hover:text-[#ffffff]/80 transition-colors">Competitions</a></li>
-                <li><a href="#gallery" className="hover:text-[#ffffff]/80 transition-colors">Our Gallery</a></li>
+                <li><Link to="/gallery" className="hover:text-[#ffffff]/80 transition-colors">Our Gallery</Link></li>
               </ul>
             </div>
 

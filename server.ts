@@ -29,6 +29,7 @@ const CONTACT_FILE = path.join(__dirname, 'src', 'data', 'contact.ts');
 const DOCUMENTS_FILE = path.join(__dirname, 'src', 'data', 'documents.ts');
 const GALLERY_FILE = path.join(__dirname, 'src', 'data', 'gallery.ts');
 const MODEL3D_FILE = path.join(__dirname, 'src', 'data', 'model3d.ts');
+const RECRUITMENT_FILE = path.join(__dirname, 'src', 'data', 'recruitment.ts');
 const REPO_ROOT = __dirname;
 
 /**
@@ -222,6 +223,41 @@ app.post('/api/commit-model3d', (req, res) => {
 
     const msg = commitMessage || 'admin: update 3d model parameters [auto]';
     const result = runGitCommands(REPO_ROOT, 'src/data/model3d.ts', msg);
+    
+    return res.json({ success: true, message: result.message });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+/**
+ * POST /api/commit-recruitment
+ * Body: { recruitment: RecruitmentSettings, commitMessage?: string }
+ */
+app.post('/api/commit-recruitment', (req, res) => {
+  const { recruitment, commitMessage } = req.body as {
+    recruitment: any;
+    commitMessage?: string;
+  };
+
+  if (!recruitment || typeof recruitment !== 'object') {
+    return res.status(400).json({ success: false, error: 'Invalid recruitment payload' });
+  }
+
+  try {
+    const fileContent =
+      `export interface RecruitmentSettings {\n` +
+      `  webhookUrl: string;\n` +
+      `  contactNumber: string;\n` +
+      `  bannerUrl: string;\n` +
+      `  endDate: string;\n` +
+      `  typography: { fontFamily: string; fontWeight: string; };\n` +
+      `}\n\n` +
+      `export const defaultRecruitment: RecruitmentSettings = ${JSON.stringify(recruitment, null, 2)};\n`;
+    writeFileSync(RECRUITMENT_FILE, fileContent, 'utf8');
+
+    const msg = commitMessage || 'admin: update recruitment settings [auto]';
+    const result = runGitCommands(REPO_ROOT, 'src/data/recruitment.ts', msg);
     
     return res.json({ success: true, message: result.message });
   } catch (err: any) {

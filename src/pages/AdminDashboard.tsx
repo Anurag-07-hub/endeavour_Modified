@@ -15,8 +15,8 @@ function AdminCarModel({ scale, position, rotation }: { scale: number; position:
 
 export const AdminDashboard = () => {
   const { user, isAdmin, logout } = useAuth();
-  const { team, documents, contactInfo, deletedMembers, gallery, model3D, saveTeam, saveDocuments, saveContactInfo, saveDeletedMembers, saveGallery, saveModel3D } = useCMS();
-  const [activeTab, setActiveTab] = useState<'team' | 'docs' | 'contact' | 'recycle' | 'gallery' | 'model3d'>('team');
+  const { team, documents, contactInfo, deletedMembers, gallery, model3D, recruitment, saveTeam, saveDocuments, saveContactInfo, saveDeletedMembers, saveGallery, saveModel3D, saveRecruitment } = useCMS();
+  const [activeTab, setActiveTab] = useState<'team' | 'docs' | 'contact' | 'recycle' | 'gallery' | 'model3d' | 'recruitment'>('team');
 
   const apiBase = `http://${window.location.hostname}:3001`;
 
@@ -32,6 +32,8 @@ export const AdminDashboard = () => {
   const [docCommitMessage, setDocCommitMessage] = useState('');
   const [galleryCommitStatus, setGalleryCommitStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [galleryCommitMessage, setGalleryCommitMessage] = useState('');
+  const [recruitmentCommitStatus, setRecruitmentCommitStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [recruitmentCommitMessage, setRecruitmentCommitMessage] = useState('');
 
   // 3D Model Local Editing States
   const [modelScale, setModelScale] = useState<number>(model3D ? model3D.scale : 3.4);
@@ -126,6 +128,16 @@ export const AdminDashboard = () => {
   // Gallery State
   const [newGalleryItem, setNewGalleryItem] = useState<{ url: string; type: 'image' | 'video' }>({ url: '', type: 'image' });
 
+  // Recruitment State
+  const [recruitmentEdit, setRecruitmentEdit] = useState(recruitment);
+
+  // Sync state if CMS recruitment updates
+  useEffect(() => {
+    if (recruitment) {
+      setRecruitmentEdit(recruitment);
+    }
+  }, [recruitment]);
+
   if (!user || !isAdmin) {
     return <Navigate to="/join-us" />;
   }
@@ -133,6 +145,37 @@ export const AdminDashboard = () => {
   const handleContactSave = () => {
     saveContactInfo(contactEdit);
     alert('Contact info updated successfully!');
+  };
+
+  const handleRecruitmentSave = () => {
+    saveRecruitment(recruitmentEdit);
+    alert('Recruitment settings updated successfully locally. Click Commit to save to server.');
+  };
+
+  const handleCommitRecruitmentToGit = async () => {
+    setRecruitmentCommitStatus('loading');
+    try {
+      const res = await fetch(`${apiBase}/api/commit-recruitment`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          recruitment: recruitmentEdit,
+          commitMessage: recruitmentCommitMessage.trim() || undefined,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setRecruitmentCommitStatus('success');
+        setRecruitmentCommitMessage('');
+        setTimeout(() => setRecruitmentCommitStatus('idle'), 4000);
+      } else {
+        throw new Error(data.error || 'Unknown error');
+      }
+    } catch (err: any) {
+      console.error('Git commit failed:', err);
+      setRecruitmentCommitStatus('error');
+      setTimeout(() => setRecruitmentCommitStatus('idle'), 5000);
+    }
   };
 
   const handleAddDoc = () => {
@@ -384,7 +427,7 @@ export const AdminDashboard = () => {
 
   /**
    * Calls the local CMS API server (port 3001) to write team.ts
-   * and create a git commit. Contact info is intentionally excluded —
+   * and create a git commit. Contact info is intentionally excluded â€”
    * it stays in localStorage only and is never committed to Git.
    */
   const handleCommitToGit = async () => {
@@ -492,7 +535,7 @@ export const AdminDashboard = () => {
   };
 
   return (
-    <div className="pt-24 pb-16 min-h-screen bg-brand-bg text-white relative">
+    <div className="pt-24 pb-16 min-h-screen bg-brand-bg text-[#ffffff] relative">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
@@ -501,11 +544,11 @@ export const AdminDashboard = () => {
             <h1 className="text-3xl font-black uppercase tracking-[1px] text-brand-accent">
               Admin Portal
             </h1>
-            <p className="text-brand-muted text-[13px] uppercase tracking-[1px]">Manage site content and settings</p>
+            <p className="text-[#aaaaaa] text-[13px] uppercase tracking-[1px]">Manage site content and settings</p>
           </div>
           <button 
             onClick={logout}
-            className="flex items-center gap-2 px-4 py-2 bg-red-500/10 border border-red-500/20 text-red-500 rounded-lg hover:bg-red-500 hover:text-white transition"
+            className="flex items-center gap-2 px-4 py-2 bg-red-500/10 border border-red-500/20 text-red-500 rounded-lg hover:bg-red-500 hover:text-[#ffffff] transition"
           >
             <LogOut className="w-4 h-4" />
             <span className="font-bold text-[12px] uppercase tracking-[1px]">Logout</span>
@@ -519,7 +562,7 @@ export const AdminDashboard = () => {
             <button
               onClick={() => setActiveTab('team')}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all border font-bold text-[12px] uppercase tracking-[1px] ${
-                activeTab === 'team' ? 'bg-brand-accent border-brand-accent text-white shadow-[0_0_15px_rgba(164,5,5,0.4)]' : 'bg-transparent border-brand-accent/25 text-brand-muted hover:border-brand-accent/60'
+                activeTab === 'team' ? 'bg-brand-accent border-brand-accent text-[#ffffff] shadow-[0_0_15px_rgba(164,5,5,0.4)]' : 'bg-transparent border-brand-accent/25 text-[#aaaaaa] hover:border-brand-accent/60'
               }`}
             >
               <Users className="w-5 h-5" /> Team
@@ -527,7 +570,7 @@ export const AdminDashboard = () => {
             <button
               onClick={() => setActiveTab('recycle')}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all border font-bold text-[12px] uppercase tracking-[1px] ${
-                activeTab === 'recycle' ? 'bg-brand-accent border-brand-accent text-white shadow-[0_0_15px_rgba(164,5,5,0.4)]' : 'bg-transparent border-brand-accent/25 text-brand-muted hover:border-brand-accent/60'
+                activeTab === 'recycle' ? 'bg-brand-accent border-brand-accent text-[#ffffff] shadow-[0_0_15px_rgba(164,5,5,0.4)]' : 'bg-transparent border-brand-accent/25 text-[#aaaaaa] hover:border-brand-accent/60'
               }`}
             >
               <Trash2 className="w-5 h-5" /> Recycle Bin
@@ -535,7 +578,7 @@ export const AdminDashboard = () => {
             <button
               onClick={() => setActiveTab('gallery')}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all border font-bold text-[12px] uppercase tracking-[1px] ${
-                activeTab === 'gallery' ? 'bg-brand-accent border-brand-accent text-white shadow-[0_0_15px_rgba(164,5,5,0.4)]' : 'bg-transparent border-brand-accent/25 text-brand-muted hover:border-brand-accent/60'
+                activeTab === 'gallery' ? 'bg-brand-accent border-brand-accent text-[#ffffff] shadow-[0_0_15px_rgba(164,5,5,0.4)]' : 'bg-transparent border-brand-accent/25 text-[#aaaaaa] hover:border-brand-accent/60'
               }`}
             >
               <ImageIcon className="w-5 h-5" /> Gallery
@@ -543,7 +586,7 @@ export const AdminDashboard = () => {
             <button
               onClick={() => setActiveTab('docs')}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all border font-bold text-[12px] uppercase tracking-[1px] ${
-                activeTab === 'docs' ? 'bg-brand-accent border-brand-accent text-white shadow-[0_0_15px_rgba(164,5,5,0.4)]' : 'bg-transparent border-brand-accent/25 text-brand-muted hover:border-brand-accent/60'
+                activeTab === 'docs' ? 'bg-brand-accent border-brand-accent text-[#ffffff] shadow-[0_0_15px_rgba(164,5,5,0.4)]' : 'bg-transparent border-brand-accent/25 text-[#aaaaaa] hover:border-brand-accent/60'
               }`}
             >
               <FileText className="w-5 h-5" /> Documentation
@@ -551,7 +594,7 @@ export const AdminDashboard = () => {
             <button
               onClick={() => setActiveTab('contact')}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all border font-bold text-[12px] uppercase tracking-[1px] ${
-                activeTab === 'contact' ? 'bg-brand-accent border-brand-accent text-white shadow-[0_0_15px_rgba(164,5,5,0.4)]' : 'bg-transparent border-brand-accent/25 text-brand-muted hover:border-brand-accent/60'
+                activeTab === 'contact' ? 'bg-brand-accent border-brand-accent text-[#ffffff] shadow-[0_0_15px_rgba(164,5,5,0.4)]' : 'bg-transparent border-brand-accent/25 text-[#aaaaaa] hover:border-brand-accent/60'
               }`}
             >
               <Phone className="w-5 h-5" /> Contact Info
@@ -559,10 +602,18 @@ export const AdminDashboard = () => {
             <button
               onClick={() => setActiveTab('model3d')}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all border font-bold text-[12px] uppercase tracking-[1px] ${
-                activeTab === 'model3d' ? 'bg-brand-accent border-brand-accent text-white shadow-[0_0_15px_rgba(164,5,5,0.4)]' : 'bg-transparent border-brand-accent/25 text-brand-muted hover:border-brand-accent/60'
+                activeTab === 'model3d' ? 'bg-brand-accent border-brand-accent text-[#ffffff] shadow-[0_0_15px_rgba(164,5,5,0.4)]' : 'bg-transparent border-brand-accent/25 text-[#aaaaaa] hover:border-brand-accent/60'
               }`}
             >
-              <Sliders className="w-5 h-5" /> 3D Model Settings
+              <Sliders className="w-5 h-5" /> 3D Model
+            </button>
+            <button
+              onClick={() => setActiveTab('recruitment')}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all border font-bold text-[12px] uppercase tracking-[1px] ${
+                activeTab === 'recruitment' ? 'bg-brand-accent border-brand-accent text-[#ffffff] shadow-[0_0_15px_rgba(164,5,5,0.4)]' : 'bg-transparent border-brand-accent/25 text-[#aaaaaa] hover:border-brand-accent/60'
+              }`}
+            >
+              <Sliders className="w-5 h-5" /> Recruitment Page
             </button>
           </div>
 
@@ -572,7 +623,7 @@ export const AdminDashboard = () => {
             {/* Team Tab */}
             {activeTab === 'team' && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                <h2 className="text-2xl font-black uppercase tracking-[1px] text-white mb-6">Team Management</h2>
+                <h2 className="text-2xl font-black uppercase tracking-[1px] text-[#ffffff] mb-6">Team Management</h2>
                 
                 {/* Add Member Form */}
                 <div className="bg-brand-accent/5 p-4 rounded-xl mb-8 border border-brand-accent/25">
@@ -581,35 +632,35 @@ export const AdminDashboard = () => {
                     <input 
                       type="text" placeholder="Full Name" 
                       value={newMember.name || ''} onChange={e => setNewMember({...newMember, name: e.target.value})}
-                      className="bg-brand-bg border border-brand-accent/25 rounded-lg px-4 py-2 text-white focus:border-brand-accent focus:outline-none" 
+                      className="bg-brand-bg border border-brand-accent/25 rounded-lg px-4 py-2 text-[#ffffff] focus:border-brand-accent focus:outline-none" 
                     />
                     <input 
                       type="text" placeholder="Position (e.g. Coordinator)" 
                       value={newMember.position || ''} onChange={e => setNewMember({...newMember, position: e.target.value})}
-                      className="bg-brand-bg border border-brand-accent/25 rounded-lg px-4 py-2 text-white focus:border-brand-accent focus:outline-none" 
+                      className="bg-brand-bg border border-brand-accent/25 rounded-lg px-4 py-2 text-[#ffffff] focus:border-brand-accent focus:outline-none" 
                     />
                     <div className="flex gap-2">
                       <input 
                         type="text" placeholder="Image URL" 
                         value={newMember.image || ''} onChange={e => setNewMember({...newMember, image: e.target.value})}
-                        className="flex-1 bg-brand-bg border border-brand-accent/25 rounded-lg px-4 py-2 text-white focus:border-brand-accent focus:outline-none min-w-0" 
+                        className="flex-1 bg-brand-bg border border-brand-accent/25 rounded-lg px-4 py-2 text-[#ffffff] focus:border-brand-accent focus:outline-none min-w-0" 
                       />
-                      <label className="bg-brand-bg border border-brand-accent/25 rounded-lg px-3 py-2 text-white flex items-center gap-2 cursor-pointer hover:border-brand-accent transition shrink-0 group" title="Upload from Device">
+                      <label className="bg-brand-bg border border-brand-accent/25 rounded-lg px-3 py-2 text-[#ffffff] flex items-center gap-2 cursor-pointer hover:border-brand-accent transition shrink-0 group" title="Upload from Device">
                         <Upload className="w-4 h-4 text-brand-accent group-hover:scale-110 transition-transform" />
-                        <span className="hidden sm:inline text-[10px] font-bold uppercase tracking-[1px] text-brand-muted group-hover:text-white transition-colors">Upload</span>
+                        <span className="hidden sm:inline text-[10px] font-bold uppercase tracking-[1px] text-[#aaaaaa] group-hover:text-[#ffffff] transition-colors">Upload</span>
                         <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
                       </label>
                     </div>
                     <select 
                       value={targetCategory} onChange={e => setTargetCategory(e.target.value)}
-                      className="bg-brand-bg border border-brand-accent/25 rounded-lg px-4 py-2 text-white focus:border-brand-accent focus:outline-none"
+                      className="bg-brand-bg border border-brand-accent/25 rounded-lg px-4 py-2 text-[#ffffff] focus:border-brand-accent focus:outline-none"
                     >
                       {team.filter(c => c.category).map(c => (
                         <option key={c.category} value={c.category}>{c.category}</option>
                       ))}
                     </select>
                   </div>
-                  <button onClick={handleAddMember} className="bg-brand-accent text-white font-bold text-[12px] uppercase tracking-[1px] px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-brand-accent/90 transition">
+                  <button onClick={handleAddMember} className="bg-brand-accent text-[#ffffff] font-bold text-[12px] uppercase tracking-[1px] px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-brand-accent/90 transition">
                     <Plus className="w-4 h-4" /> Add Member
                   </button>
                 </div>
@@ -620,7 +671,7 @@ export const AdminDashboard = () => {
                     <GitBranch className="w-4 h-4 text-brand-accent" />
                     <span className="font-bold text-[12px] uppercase tracking-[1px] text-brand-accent">Commit Team to Git</span>
                   </div>
-                  <p className="text-[11px] text-brand-muted mb-3 leading-[1.5]">
+                  <p className="text-[11px] text-[#aaaaaa] mb-3 leading-[1.5]">
                     This writes <code className="text-brand-accent bg-brand-accent/10 px-1 rounded">src/data/team.ts</code> and creates a git commit. Make sure the <code className="text-brand-accent bg-brand-accent/10 px-1 rounded">npm run server</code> CMS API is running on port 3001.
                   </p>
                   <div className="flex gap-2">
@@ -629,17 +680,17 @@ export const AdminDashboard = () => {
                       placeholder="Commit message (optional)"
                       value={commitMessage}
                       onChange={e => setCommitMessage(e.target.value)}
-                      className="flex-1 bg-brand-bg border border-brand-accent/25 rounded-lg px-3 py-2 text-white text-[12px] focus:border-brand-accent focus:outline-none"
+                      className="flex-1 bg-brand-bg border border-brand-accent/25 rounded-lg px-3 py-2 text-[#ffffff] text-[12px] focus:border-brand-accent focus:outline-none"
                     />
                     <button
                       onClick={handleCommitToGit}
                       disabled={commitStatus === 'loading'}
                       className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-[12px] uppercase tracking-[1px] transition ${
                         commitStatus === 'success'
-                          ? 'bg-green-600 text-white'
+                          ? 'bg-green-600 text-[#ffffff]'
                           : commitStatus === 'error'
-                          ? 'bg-red-600 text-white'
-                          : 'bg-brand-accent text-white hover:bg-brand-accent/90'
+                          ? 'bg-red-600 text-[#ffffff]'
+                          : 'bg-brand-accent text-[#ffffff] hover:bg-brand-accent/90'
                       } disabled:opacity-60`}
                     >
                       {commitStatus === 'loading' ? (
@@ -647,7 +698,7 @@ export const AdminDashboard = () => {
                       ) : commitStatus === 'success' ? (
                         <><Check className="w-4 h-4" /> Committed!</>
                       ) : commitStatus === 'error' ? (
-                        <><X className="w-4 h-4" /> Failed — check server</>  
+                        <><X className="w-4 h-4" /> Failed â€” check server</>  
                       ) : (
                         <><GitBranch className="w-4 h-4" /> Commit to Git</>
                       )}
@@ -665,7 +716,7 @@ export const AdminDashboard = () => {
                         <button onClick={handleUndoOrder} className="flex items-center gap-1 px-3 py-1.5 border border-brand-accent/50 rounded hover:bg-brand-accent/20 transition">
                           <Undo className="w-3 h-3" /> <span className="text-[10px] font-bold uppercase tracking-[1px]">Undo</span>
                         </button>
-                        <button onClick={handleSaveOrder} className="flex items-center gap-1 px-3 py-1.5 bg-brand-accent text-white rounded hover:bg-brand-accent/90 transition">
+                        <button onClick={handleSaveOrder} className="flex items-center gap-1 px-3 py-1.5 bg-brand-accent text-[#ffffff] rounded hover:bg-brand-accent/90 transition">
                           <Save className="w-3 h-3" /> <span className="text-[10px] font-bold uppercase tracking-[1px]">Save Order</span>
                         </button>
                       </div>
@@ -674,7 +725,7 @@ export const AdminDashboard = () => {
 
                   {draftTeam.filter(c => c.category).map(category => (
                     <div key={category.category}>
-                      <h3 className="text-[14px] font-bold uppercase tracking-[2px] text-brand-muted mb-3 border-b border-brand-accent/25 pb-2">{category.category}</h3>
+                      <h3 className="text-[14px] font-bold uppercase tracking-[2px] text-[#aaaaaa] mb-3 border-b border-brand-accent/25 pb-2">{category.category}</h3>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {category.members?.map((member, index) => (
                           <div 
@@ -691,48 +742,48 @@ export const AdminDashboard = () => {
                                 <input 
                                   type="text" value={editFormState.name || ''} 
                                   onChange={e => setEditFormState({...editFormState, name: e.target.value})}
-                                  className="w-full bg-brand-bg border border-brand-accent/25 rounded px-2 py-1 text-white focus:border-brand-accent text-[12px] focus:outline-none" 
+                                  className="w-full bg-brand-bg border border-brand-accent/25 rounded px-2 py-1 text-[#ffffff] focus:border-brand-accent text-[12px] focus:outline-none" 
                                   placeholder="Name"
                                 />
                                 <input 
                                   type="text" value={editFormState.position || ''} 
                                   onChange={e => setEditFormState({...editFormState, position: e.target.value})}
-                                  className="w-full bg-brand-bg border border-brand-accent/25 rounded px-2 py-1 text-white focus:border-brand-accent text-[12px] focus:outline-none" 
+                                  className="w-full bg-brand-bg border border-brand-accent/25 rounded px-2 py-1 text-[#ffffff] focus:border-brand-accent text-[12px] focus:outline-none" 
                                   placeholder="Position"
                                 />
                                 {editFormState.image && (
                                   <div className="flex items-center gap-3 bg-brand-accent/5 border border-brand-accent/15 rounded p-2 mb-1">
                                     <img src={editFormState.image} alt="Preview" className="w-12 h-12 rounded-full object-cover border border-brand-accent/30 shrink-0" onError={e => { (e.target as HTMLImageElement).src = 'https://via.placeholder.com/48?text=?'; }} />
-                                    <span className="text-[10px] text-brand-muted uppercase tracking-[1px]">Image preview</span>
+                                    <span className="text-[10px] text-[#aaaaaa] uppercase tracking-[1px]">Image preview</span>
                                   </div>
                                 )}
                                 <div className="flex gap-2">
                                   <input 
                                     type="text" value={editFormState.image || ''} 
                                     onChange={e => setEditFormState({...editFormState, image: e.target.value})}
-                                    className="flex-1 bg-brand-bg border border-brand-accent/25 rounded px-2 py-1 text-white focus:border-brand-accent text-[12px] min-w-0 focus:outline-none" 
+                                    className="flex-1 bg-brand-bg border border-brand-accent/25 rounded px-2 py-1 text-[#ffffff] focus:border-brand-accent text-[12px] min-w-0 focus:outline-none" 
                                     placeholder="Image URL"
                                   />
-                                  <label className="bg-brand-accent/10 text-brand-accent px-2 py-1 rounded cursor-pointer hover:bg-brand-accent hover:text-white transition flex items-center justify-center shrink-0" title="Upload Image">
+                                  <label className="bg-brand-accent/10 text-brand-accent px-2 py-1 rounded cursor-pointer hover:bg-brand-accent hover:text-[#ffffff] transition flex items-center justify-center shrink-0" title="Upload Image">
                                     <Upload className="w-3 h-3" />
                                     <input type="file" accept="image/*" className="hidden" onChange={handleEditImageUpload} />
                                   </label>
                                 </div>
                                 <div className="flex justify-end gap-2 mt-2">
-                                  <button onClick={handleCancelEdit} className="text-[10px] font-bold uppercase tracking-[1px] text-brand-muted hover:text-white transition">Cancel</button>
-                                  <button onClick={() => handleSaveEdit(category.category!)} className="text-[10px] font-bold uppercase tracking-[1px] bg-brand-accent text-white px-3 py-1 rounded hover:bg-brand-accent/90 transition">Save</button>
+                                  <button onClick={handleCancelEdit} className="text-[10px] font-bold uppercase tracking-[1px] text-[#aaaaaa] hover:text-[#ffffff] transition">Cancel</button>
+                                  <button onClick={() => handleSaveEdit(category.category!)} className="text-[10px] font-bold uppercase tracking-[1px] bg-brand-accent text-[#ffffff] px-3 py-1 rounded hover:bg-brand-accent/90 transition">Save</button>
                                 </div>
                               </div>
                             ) : (
                               <>
                                 <div className="flex items-center gap-3">
-                                  <div className="text-brand-muted/50 hover:text-brand-accent transition cursor-grab active:cursor-grabbing px-1">
+                                  <div className="text-[#aaaaaa]/50 hover:text-brand-accent transition cursor-grab active:cursor-grabbing px-1">
                                     <GripVertical className="w-5 h-5" />
                                   </div>
                                   <img src={member.image} alt={member.name} className="w-10 h-10 rounded-full object-cover border border-brand-accent/20" style={{ pointerEvents: "none" }} />
                                   <div>
                                     <p className="font-bold text-[13px] uppercase tracking-[1px]">{member.name}</p>
-                                    <p className="text-[11px] uppercase tracking-[1px] text-brand-muted">{member.position}</p>
+                                    <p className="text-[11px] uppercase tracking-[1px] text-[#aaaaaa]">{member.position}</p>
                                   </div>
                                 </div>
                                 <div className="flex items-center gap-1">
@@ -757,7 +808,7 @@ export const AdminDashboard = () => {
             {/* Recycle Bin Tab */}
             {activeTab === 'recycle' && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                <h2 className="text-2xl font-black uppercase tracking-[1px] text-white mb-6">Recycle Bin</h2>
+                <h2 className="text-2xl font-black uppercase tracking-[1px] text-[#ffffff] mb-6">Recycle Bin</h2>
                 
                 <div className="space-y-4">
                   {deletedMembers.length > 0 ? deletedMembers.map(deleted => (
@@ -765,15 +816,15 @@ export const AdminDashboard = () => {
                       <div className="flex items-center gap-4">
                         <img src={deleted.member.image} alt={deleted.member.name} className="w-12 h-12 rounded-full object-cover border border-brand-accent/20 grayscale opacity-70" />
                         <div>
-                          <p className="font-bold text-[14px] uppercase tracking-[1px] text-brand-muted">{deleted.member.name}</p>
-                          <p className="text-[11px] uppercase tracking-[1px] text-brand-muted/70">
-                            {deleted.member.position} • Removed from <span className="text-brand-accent">{deleted.category}</span>
+                          <p className="font-bold text-[14px] uppercase tracking-[1px] text-[#aaaaaa]">{deleted.member.name}</p>
+                          <p className="text-[11px] uppercase tracking-[1px] text-[#aaaaaa]/70">
+                            {deleted.member.position} â€¢ Removed from <span className="text-brand-accent">{deleted.category}</span>
                           </p>
                         </div>
                       </div>
                       <button 
                         onClick={() => handleRestoreMember(deleted)} 
-                        className="flex items-center gap-2 bg-brand-accent/10 text-brand-accent border border-brand-accent/30 hover:bg-brand-accent hover:text-white transition px-4 py-2 rounded-lg"
+                        className="flex items-center gap-2 bg-brand-accent/10 text-brand-accent border border-brand-accent/30 hover:bg-brand-accent hover:text-[#ffffff] transition px-4 py-2 rounded-lg"
                         title="Restore Member"
                       >
                         <RefreshCcw className="w-4 h-4" />
@@ -782,8 +833,8 @@ export const AdminDashboard = () => {
                     </div>
                   )) : (
                     <div className="text-center py-12">
-                      <Trash2 className="w-12 h-12 text-brand-muted/30 mx-auto mb-4" />
-                      <p className="text-[12px] font-bold uppercase tracking-[1px] text-brand-muted">Recycle bin is empty</p>
+                      <Trash2 className="w-12 h-12 text-[#aaaaaa]/30 mx-auto mb-4" />
+                      <p className="text-[12px] font-bold uppercase tracking-[1px] text-[#aaaaaa]">Recycle bin is empty</p>
                     </div>
                   )}
                 </div>
@@ -793,7 +844,7 @@ export const AdminDashboard = () => {
             {/* Documentation Tab */}
             {activeTab === 'docs' && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                <h2 className="text-2xl font-black uppercase tracking-[1px] text-white mb-6">Documentation Management</h2>
+                <h2 className="text-2xl font-black uppercase tracking-[1px] text-[#ffffff] mb-6">Documentation Management</h2>
                 
                 {/* Git Commit Panel for Documents */}
                 <div className="bg-[#0a0a0a] border border-brand-accent/30 rounded-xl p-4 mb-6">
@@ -801,7 +852,7 @@ export const AdminDashboard = () => {
                     <GitBranch className="w-4 h-4 text-brand-accent" />
                     <span className="font-bold text-[12px] uppercase tracking-[1px] text-brand-accent">Commit Documents to Git</span>
                   </div>
-                  <p className="text-[11px] text-brand-muted mb-3 leading-[1.5]">
+                  <p className="text-[11px] text-[#aaaaaa] mb-3 leading-[1.5]">
                     This writes <code className="text-brand-accent bg-brand-accent/10 px-1 rounded">src/data/documents.ts</code> and creates a git commit. Make sure the <code className="text-brand-accent bg-brand-accent/10 px-1 rounded">npm run server</code> CMS API is running on port 3001.
                   </p>
                   <div className="flex gap-2">
@@ -810,17 +861,17 @@ export const AdminDashboard = () => {
                       placeholder="Commit message (optional)"
                       value={docCommitMessage}
                       onChange={e => setDocCommitMessage(e.target.value)}
-                      className="flex-1 bg-brand-bg border border-brand-accent/25 rounded-lg px-3 py-2 text-white text-[12px] focus:border-brand-accent focus:outline-none"
+                      className="flex-1 bg-brand-bg border border-brand-accent/25 rounded-lg px-3 py-2 text-[#ffffff] text-[12px] focus:border-brand-accent focus:outline-none"
                     />
                     <button
                       onClick={handleCommitDocsToGit}
                       disabled={docCommitStatus === 'loading'}
                       className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-[12px] uppercase tracking-[1px] transition ${
                         docCommitStatus === 'success'
-                          ? 'bg-green-600 text-white'
+                          ? 'bg-green-600 text-[#ffffff]'
                           : docCommitStatus === 'error'
-                          ? 'bg-red-600 text-white'
-                          : 'bg-brand-accent text-white hover:bg-brand-accent/90'
+                          ? 'bg-red-600 text-[#ffffff]'
+                          : 'bg-brand-accent text-[#ffffff] hover:bg-brand-accent/90'
                       } disabled:opacity-60`}
                     >
                       {docCommitStatus === 'loading' ? (
@@ -828,7 +879,7 @@ export const AdminDashboard = () => {
                       ) : docCommitStatus === 'success' ? (
                         <><Check className="w-4 h-4" /> Committed!</>
                       ) : docCommitStatus === 'error' ? (
-                        <><X className="w-4 h-4" /> Failed — check server</>
+                        <><X className="w-4 h-4" /> Failed â€” check server</>
                       ) : (
                         <><GitBranch className="w-4 h-4" /> Commit to Git</>
                       )}
@@ -843,17 +894,17 @@ export const AdminDashboard = () => {
                     <input 
                       type="text" placeholder="Document Title" 
                       value={newDoc.title || ''} onChange={e => setNewDoc({...newDoc, title: e.target.value})}
-                      className="w-full bg-brand-bg border border-brand-accent/25 rounded-lg px-4 py-2 text-white focus:border-brand-accent focus:outline-none" 
+                      className="w-full bg-brand-bg border border-brand-accent/25 rounded-lg px-4 py-2 text-[#ffffff] focus:border-brand-accent focus:outline-none" 
                     />
                     <textarea 
                       placeholder="Project Description" 
                       value={newDoc.description || ''} onChange={e => setNewDoc({...newDoc, description: e.target.value})}
-                      className="w-full bg-brand-bg border border-brand-accent/25 rounded-lg px-4 py-2 h-24 text-white focus:border-brand-accent focus:outline-none" 
+                      className="w-full bg-brand-bg border border-brand-accent/25 rounded-lg px-4 py-2 h-24 text-[#ffffff] focus:border-brand-accent focus:outline-none" 
                     />
                     <input 
                       type="text" placeholder="Google Drive / Cloud Link" 
                       value={newDoc.driveLink || ''} onChange={e => setNewDoc({...newDoc, driveLink: e.target.value})}
-                      className="w-full bg-brand-bg border border-brand-accent/25 rounded-lg px-4 py-2 text-white focus:border-brand-accent focus:outline-none" 
+                      className="w-full bg-brand-bg border border-brand-accent/25 rounded-lg px-4 py-2 text-[#ffffff] focus:border-brand-accent focus:outline-none" 
                     />
                     <label className="flex items-center gap-2 cursor-pointer">
                       <input 
@@ -862,10 +913,10 @@ export const AdminDashboard = () => {
                         onChange={e => setNewDoc({...newDoc, isPublic: e.target.checked})}
                         className="rounded border-brand-accent/40 bg-brand-bg text-brand-accent focus:ring-brand-accent"
                       />
-                      <span className="text-[12px] font-bold text-brand-muted uppercase tracking-[1px]">Showcase on web (Visible to everyone)</span>
+                      <span className="text-[12px] font-bold text-[#aaaaaa] uppercase tracking-[1px]">Showcase on web (Visible to everyone)</span>
                     </label>
                   </div>
-                  <button onClick={handleAddDoc} className="bg-brand-accent text-white font-bold text-[12px] uppercase tracking-[1px] px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-brand-accent/90 transition">
+                  <button onClick={handleAddDoc} className="bg-brand-accent text-[#ffffff] font-bold text-[12px] uppercase tracking-[1px] px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-brand-accent/90 transition">
                     <Plus className="w-4 h-4" /> Add Document
                   </button>
                 </div>
@@ -878,11 +929,11 @@ export const AdminDashboard = () => {
                         <h4 className="font-bold text-[14px] uppercase tracking-[1px] flex items-center gap-2">
                           {doc.title}
                           {doc.isPublic ? 
-                            <span className="text-[9px] bg-brand-accent text-white px-2 py-0.5 rounded-full flex items-center gap-1 uppercase tracking-[1px]"><Check className="w-3 h-3"/> Web</span> : 
-                            <span className="text-[9px] bg-brand-muted/20 text-brand-muted px-2 py-0.5 rounded-full flex items-center gap-1 uppercase tracking-[1px]"><X className="w-3 h-3"/> Hidden</span>
+                            <span className="text-[9px] bg-brand-accent text-[#ffffff] px-2 py-0.5 rounded-full flex items-center gap-1 uppercase tracking-[1px]"><Check className="w-3 h-3"/> Web</span> : 
+                            <span className="text-[9px] bg-brand-muted/20 text-[#aaaaaa] px-2 py-0.5 rounded-full flex items-center gap-1 uppercase tracking-[1px]"><X className="w-3 h-3"/> Hidden</span>
                           }
                         </h4>
-                        <p className="text-[12px] text-brand-muted mt-1 leading-[1.6]">{doc.description}</p>
+                        <p className="text-[12px] text-[#aaaaaa] mt-1 leading-[1.6]">{doc.description}</p>
                         <a href={doc.driveLink} target="_blank" rel="noopener noreferrer" className="text-brand-accent text-[11px] font-bold uppercase tracking-[1px] hover:underline mt-2 inline-block">
                           View Link Attachment
                         </a>
@@ -890,17 +941,17 @@ export const AdminDashboard = () => {
                       <div className="flex items-start gap-2">
                         <button 
                           onClick={() => toggleDocPublic(doc.id)}
-                          className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-[1px] transition-colors border ${doc.isPublic ? 'border-brand-muted/40 text-brand-muted hover:bg-brand-muted/10' : 'bg-brand-accent text-white border-brand-accent hover:bg-brand-accent/90'}`}
+                          className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-[1px] transition-colors border ${doc.isPublic ? 'border-brand-muted/40 text-[#aaaaaa] hover:bg-brand-muted/10' : 'bg-brand-accent text-[#ffffff] border-brand-accent hover:bg-brand-accent/90'}`}
                         >
                           {doc.isPublic ? 'Hide' : 'Showcase'}
                         </button>
-                        <button onClick={() => removeDoc(doc.id)} className="p-1.5 border border-transparent text-red-500 rounded-lg hover:border-red-500 hover:bg-red-500 hover:text-white transition">
+                        <button onClick={() => removeDoc(doc.id)} className="p-1.5 border border-transparent text-red-500 rounded-lg hover:border-red-500 hover:bg-red-500 hover:text-[#ffffff] transition">
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
                     </div>
                   ))}
-                  {documents.length === 0 && <p className="text-brand-muted text-[12px] uppercase tracking-[1px] text-center py-4">No documents uploaded yet.</p>}
+                  {documents.length === 0 && <p className="text-[#aaaaaa] text-[12px] uppercase tracking-[1px] text-center py-4">No documents uploaded yet.</p>}
                 </div>
               </motion.div>
             )}
@@ -908,7 +959,7 @@ export const AdminDashboard = () => {
             {/* Contact Info Tab */}
             {activeTab === 'contact' && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                <h2 className="text-2xl font-black uppercase tracking-[1px] text-white mb-4">Contact Details</h2>
+                <h2 className="text-2xl font-black uppercase tracking-[1px] text-[#ffffff] mb-4">Contact Details</h2>
 
                 {/* Git Commit Panel for Contact */}
                 <div className="bg-[#0a0a0a] border border-brand-accent/30 rounded-xl p-4 mb-6">
@@ -916,7 +967,7 @@ export const AdminDashboard = () => {
                     <GitBranch className="w-4 h-4 text-brand-accent" />
                     <span className="font-bold text-[12px] uppercase tracking-[1px] text-brand-accent">Commit Contact to Git</span>
                   </div>
-                  <p className="text-[11px] text-brand-muted mb-3 leading-[1.5]">
+                  <p className="text-[11px] text-[#aaaaaa] mb-3 leading-[1.5]">
                     First save your changes below, then click this to write <code className="text-brand-accent bg-brand-accent/10 px-1 rounded">src/data/contact.ts</code> and create a git commit.
                   </p>
                   <div className="flex gap-2">
@@ -925,17 +976,17 @@ export const AdminDashboard = () => {
                       placeholder="Commit message (optional)"
                       value={contactCommitMessage}
                       onChange={e => setContactCommitMessage(e.target.value)}
-                      className="flex-1 bg-brand-bg border border-brand-accent/25 rounded-lg px-3 py-2 text-white text-[12px] focus:border-brand-accent focus:outline-none"
+                      className="flex-1 bg-brand-bg border border-brand-accent/25 rounded-lg px-3 py-2 text-[#ffffff] text-[12px] focus:border-brand-accent focus:outline-none"
                     />
                     <button
                       onClick={handleCommitContactToGit}
                       disabled={contactCommitStatus === 'loading'}
                       className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-[12px] uppercase tracking-[1px] transition ${
                         contactCommitStatus === 'success'
-                          ? 'bg-green-600 text-white'
+                          ? 'bg-green-600 text-[#ffffff]'
                           : contactCommitStatus === 'error'
-                          ? 'bg-red-600 text-white'
-                          : 'bg-brand-accent text-white hover:bg-brand-accent/90'
+                          ? 'bg-red-600 text-[#ffffff]'
+                          : 'bg-brand-accent text-[#ffffff] hover:bg-brand-accent/90'
                       } disabled:opacity-60`}
                     >
                       {contactCommitStatus === 'loading' ? (
@@ -943,7 +994,7 @@ export const AdminDashboard = () => {
                       ) : contactCommitStatus === 'success' ? (
                         <><Check className="w-4 h-4" /> Committed!</>
                       ) : contactCommitStatus === 'error' ? (
-                        <><X className="w-4 h-4" /> Failed — check server</>
+                        <><X className="w-4 h-4" /> Failed â€” check server</>
                       ) : (
                         <><GitBranch className="w-4 h-4" /> Commit to Git</>
                       )}
@@ -952,59 +1003,59 @@ export const AdminDashboard = () => {
                 </div>
                 <div className="space-y-4 max-w-md">
                   <div>
-                    <label className="block text-[11px] font-bold text-brand-muted uppercase tracking-[1px] mb-1">Email Address</label>
+                    <label className="block text-[11px] font-bold text-[#aaaaaa] uppercase tracking-[1px] mb-1">Email Address</label>
                     <input 
                       type="text" value={contactEdit.email} onChange={e => setContactEdit({...contactEdit, email: e.target.value})}
-                      className="w-full bg-brand-bg border border-brand-accent/25 rounded-lg px-4 py-2 text-white focus:border-brand-accent focus:outline-none" 
+                      className="w-full bg-brand-bg border border-brand-accent/25 rounded-lg px-4 py-2 text-[#ffffff] focus:border-brand-accent focus:outline-none" 
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] font-bold text-brand-muted uppercase tracking-[1px] mb-1">Main Phone Number</label>
+                    <label className="block text-[11px] font-bold text-[#aaaaaa] uppercase tracking-[1px] mb-1">Main Phone Number</label>
                     <input 
                       type="text" value={contactEdit.phone} onChange={e => setContactEdit({...contactEdit, phone: e.target.value})}
-                      className="w-full bg-brand-bg border border-brand-accent/25 rounded-lg px-4 py-2 text-white focus:border-brand-accent focus:outline-none" 
+                      className="w-full bg-brand-bg border border-brand-accent/25 rounded-lg px-4 py-2 text-[#ffffff] focus:border-brand-accent focus:outline-none" 
                     />
                   </div>
                   
                   {/* Two contacts */}
                   <div className="pt-4 border-t border-white/10">
-                    <label className="block text-[11px] font-bold text-brand-muted uppercase tracking-[1px] mb-2">Member Contact 1</label>
+                    <label className="block text-[11px] font-bold text-[#aaaaaa] uppercase tracking-[1px] mb-2">Member Contact 1</label>
                     <div className="flex gap-2">
                       <input 
                         type="text" placeholder="Name" value={contactEdit.contacts?.[0]?.name || ''} 
                         onChange={e => setContactEdit({...contactEdit, contacts: [{...contactEdit.contacts?.[0] || {name:'', phone:''}, name: e.target.value}, contactEdit.contacts?.[1] || {name:'', phone:''}]})}
-                        className="flex-1 bg-brand-bg border border-brand-accent/25 rounded-lg px-4 py-2 text-white focus:border-brand-accent focus:outline-none text-[12px]" 
+                        className="flex-1 bg-brand-bg border border-brand-accent/25 rounded-lg px-4 py-2 text-[#ffffff] focus:border-brand-accent focus:outline-none text-[12px]" 
                       />
                       <input 
                         type="text" placeholder="Phone" value={contactEdit.contacts?.[0]?.phone || ''} 
                         onChange={e => setContactEdit({...contactEdit, contacts: [{...contactEdit.contacts?.[0] || {name:'', phone:''}, phone: e.target.value}, contactEdit.contacts?.[1] || {name:'', phone:''}]})}
-                        className="flex-1 bg-brand-bg border border-brand-accent/25 rounded-lg px-4 py-2 text-white focus:border-brand-accent focus:outline-none text-[12px]" 
+                        className="flex-1 bg-brand-bg border border-brand-accent/25 rounded-lg px-4 py-2 text-[#ffffff] focus:border-brand-accent focus:outline-none text-[12px]" 
                       />
                     </div>
                   </div>
                   <div className="pb-4 border-b border-white/10">
-                    <label className="block text-[11px] font-bold text-brand-muted uppercase tracking-[1px] mb-2">Member Contact 2</label>
+                    <label className="block text-[11px] font-bold text-[#aaaaaa] uppercase tracking-[1px] mb-2">Member Contact 2</label>
                     <div className="flex gap-2">
                       <input 
                         type="text" placeholder="Name" value={contactEdit.contacts?.[1]?.name || ''} 
                         onChange={e => setContactEdit({...contactEdit, contacts: [contactEdit.contacts?.[0] || {name:'', phone:''}, {...contactEdit.contacts?.[1] || {name:'', phone:''}, name: e.target.value}]})}
-                        className="flex-1 bg-brand-bg border border-brand-accent/25 rounded-lg px-4 py-2 text-white focus:border-brand-accent focus:outline-none text-[12px]" 
+                        className="flex-1 bg-brand-bg border border-brand-accent/25 rounded-lg px-4 py-2 text-[#ffffff] focus:border-brand-accent focus:outline-none text-[12px]" 
                       />
                       <input 
                         type="text" placeholder="Phone" value={contactEdit.contacts?.[1]?.phone || ''} 
                         onChange={e => setContactEdit({...contactEdit, contacts: [contactEdit.contacts?.[0] || {name:'', phone:''}, {...contactEdit.contacts?.[1] || {name:'', phone:''}, phone: e.target.value}]})}
-                        className="flex-1 bg-brand-bg border border-brand-accent/25 rounded-lg px-4 py-2 text-white focus:border-brand-accent focus:outline-none text-[12px]" 
+                        className="flex-1 bg-brand-bg border border-brand-accent/25 rounded-lg px-4 py-2 text-[#ffffff] focus:border-brand-accent focus:outline-none text-[12px]" 
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-[11px] font-bold text-brand-muted uppercase tracking-[1px] mb-1">Main Region / Address</label>
+                    <label className="block text-[11px] font-bold text-[#aaaaaa] uppercase tracking-[1px] mb-1">Main Region / Address</label>
                     <textarea 
                       value={contactEdit.address} onChange={e => setContactEdit({...contactEdit, address: e.target.value})}
-                      className="w-full bg-brand-bg border border-brand-accent/25 rounded-lg px-4 py-2 h-24 text-white focus:border-brand-accent focus:outline-none" 
+                      className="w-full bg-brand-bg border border-brand-accent/25 rounded-lg px-4 py-2 h-24 text-[#ffffff] focus:border-brand-accent focus:outline-none" 
                     />
                   </div>
-                  <button onClick={handleContactSave} className="bg-brand-accent text-white font-bold uppercase tracking-[1px] text-[12px] px-6 py-3 rounded-lg hover:bg-brand-accent/90 transition mt-4">
+                  <button onClick={handleContactSave} className="bg-brand-accent text-[#ffffff] font-bold uppercase tracking-[1px] text-[12px] px-6 py-3 rounded-lg hover:bg-brand-accent/90 transition mt-4">
                     Save Changes
                   </button>
                 </div>
@@ -1014,7 +1065,7 @@ export const AdminDashboard = () => {
             {/* Gallery Tab */}
             {activeTab === 'gallery' && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                <h2 className="text-2xl font-black uppercase tracking-[1px] text-white mb-6">Gallery Management</h2>
+                <h2 className="text-2xl font-black uppercase tracking-[1px] text-[#ffffff] mb-6">Gallery Management</h2>
                 
                 {/* Git Commit Panel for Gallery */}
                 <div className="bg-[#0a0a0a] border border-brand-accent/30 rounded-xl p-4 mb-6">
@@ -1022,7 +1073,7 @@ export const AdminDashboard = () => {
                     <GitBranch className="w-4 h-4 text-brand-accent" />
                     <span className="font-bold text-[12px] uppercase tracking-[1px] text-brand-accent">Commit Gallery to Git</span>
                   </div>
-                  <p className="text-[11px] text-brand-muted mb-3 leading-[1.5]">
+                  <p className="text-[11px] text-[#aaaaaa] mb-3 leading-[1.5]">
                     This writes <code className="text-brand-accent bg-brand-accent/10 px-1 rounded">src/data/gallery.ts</code> and creates a git commit. Make sure the <code className="text-brand-accent bg-brand-accent/10 px-1 rounded">npm run server</code> CMS API is running on port 3001.
                   </p>
                   <div className="flex gap-2">
@@ -1031,17 +1082,17 @@ export const AdminDashboard = () => {
                       placeholder="Commit message (optional)"
                       value={galleryCommitMessage}
                       onChange={e => setGalleryCommitMessage(e.target.value)}
-                      className="flex-1 bg-brand-bg border border-brand-accent/25 rounded-lg px-3 py-2 text-white text-[12px] focus:border-brand-accent focus:outline-none"
+                      className="flex-1 bg-brand-bg border border-brand-accent/25 rounded-lg px-3 py-2 text-[#ffffff] text-[12px] focus:border-brand-accent focus:outline-none"
                     />
                     <button
                       onClick={handleCommitGalleryToGit}
                       disabled={galleryCommitStatus === 'loading'}
                       className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-[12px] uppercase tracking-[1px] transition ${
                         galleryCommitStatus === 'success'
-                          ? 'bg-green-600 text-white'
+                          ? 'bg-green-600 text-[#ffffff]'
                           : galleryCommitStatus === 'error'
-                          ? 'bg-red-600 text-white'
-                          : 'bg-brand-accent text-white hover:bg-brand-accent/90'
+                          ? 'bg-red-600 text-[#ffffff]'
+                          : 'bg-brand-accent text-[#ffffff] hover:bg-brand-accent/90'
                       } disabled:opacity-60`}
                     >
                       {galleryCommitStatus === 'loading' ? (
@@ -1049,7 +1100,7 @@ export const AdminDashboard = () => {
                       ) : galleryCommitStatus === 'success' ? (
                         <><Check className="w-4 h-4" /> Committed!</>
                       ) : galleryCommitStatus === 'error' ? (
-                        <><X className="w-4 h-4" /> Failed — check server</>
+                        <><X className="w-4 h-4" /> Failed â€” check server</>
                       ) : (
                         <><GitBranch className="w-4 h-4" /> Commit to Git</>
                       )}
@@ -1068,7 +1119,7 @@ export const AdminDashboard = () => {
                         ) : item.type === 'image' && item.url ? (
                           <img src={item.url} alt={`Box ${index + 1}`} className="w-full h-full object-cover opacity-80" />
                         ) : (
-                          <div className="text-center text-brand-muted font-bold text-[10px] uppercase tracking-[1px] p-2 break-words">
+                          <div className="text-center text-[#aaaaaa] font-bold text-[10px] uppercase tracking-[1px] p-2 break-words">
                             Empty Box<br/>{index + 1}
                           </div>
                         )}
@@ -1077,7 +1128,7 @@ export const AdminDashboard = () => {
                            <input 
                              type="text" 
                              placeholder="Paste URL + Enter"
-                             className="w-full bg-black/50 border border-brand-accent/30 rounded p-1 text-[9px] text-white outline-none focus:border-brand-accent"
+                             className="w-full bg-black/50 border border-brand-accent/30 rounded p-1 text-[9px] text-[#ffffff] outline-none focus:border-brand-accent"
                              onKeyDown={(e) => {
                                if (e.key === 'Enter') {
                                  const val = e.currentTarget.value;
@@ -1091,7 +1142,7 @@ export const AdminDashboard = () => {
                                }
                              }}
                            />
-                           <label className="text-[10px] bg-brand-accent/20 text-brand-accent px-2 py-1 rounded cursor-pointer hover:bg-brand-accent hover:text-white transition w-full text-center">
+                           <label className="text-[10px] bg-brand-accent/20 text-brand-accent px-2 py-1 rounded cursor-pointer hover:bg-brand-accent hover:text-[#ffffff] transition w-full text-center">
                              Upload File
                              <input type="file" accept="image/*,video/*" className="hidden" onChange={(e) => {
                                const file = e.target.files?.[0];
@@ -1115,7 +1166,7 @@ export const AdminDashboard = () => {
                                  newGallery[index] = { id: `empty-${index}`, type: 'empty', url: '' };
                                  saveGallery(newGallery);
                                }}
-                               className="text-[10px] text-red-500 hover:text-white hover:bg-red-500 px-2 py-1 rounded transition w-full text-center"
+                               className="text-[10px] text-red-500 hover:text-[#ffffff] hover:bg-red-500 px-2 py-1 rounded transition w-full text-center"
                              >
                                Clear Box
                              </button>
@@ -1131,7 +1182,7 @@ export const AdminDashboard = () => {
             {/* 3D Model Tab */}
             {activeTab === 'model3d' && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                <h2 className="text-2xl font-black uppercase tracking-[1px] text-white mb-6">3D Model Configuration</h2>
+                <h2 className="text-2xl font-black uppercase tracking-[1px] text-[#ffffff] mb-6">3D Model Configuration</h2>
 
                 {/* Git Commit Panel for 3D Model */}
                 <div className="bg-[#0a0a0a] border border-brand-accent/30 rounded-xl p-4 mb-8">
@@ -1139,7 +1190,7 @@ export const AdminDashboard = () => {
                     <GitBranch className="w-4 h-4 text-brand-accent" />
                     <span className="font-bold text-[12px] uppercase tracking-[1px] text-brand-accent">Commit 3D Model to Git</span>
                   </div>
-                  <p className="text-[11px] text-brand-muted mb-3 leading-[1.5]">
+                  <p className="text-[11px] text-[#aaaaaa] mb-3 leading-[1.5]">
                     This writes <code className="text-brand-accent bg-brand-accent/10 px-1 rounded">src/data/model3d.ts</code> and commits + pushes to GitHub. Make sure the backend server is running on port 3001.
                   </p>
                   <div className="flex gap-2">
@@ -1148,17 +1199,17 @@ export const AdminDashboard = () => {
                       placeholder="Commit message (optional)"
                       value={modelCommitMessage}
                       onChange={e => setModelCommitMessage(e.target.value)}
-                      className="flex-1 bg-brand-bg border border-brand-accent/25 rounded-lg px-3 py-2 text-white text-[12px] focus:border-brand-accent focus:outline-none"
+                      className="flex-1 bg-brand-bg border border-brand-accent/25 rounded-lg px-3 py-2 text-[#ffffff] text-[12px] focus:border-brand-accent focus:outline-none"
                     />
                     <button
                       onClick={handleCommitModel3DToGit}
                       disabled={modelCommitStatus === 'loading'}
                       className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-[12px] uppercase tracking-[1px] transition ${
                         modelCommitStatus === 'success'
-                          ? 'bg-green-600 text-white'
+                          ? 'bg-green-600 text-[#ffffff]'
                           : modelCommitStatus === 'error'
-                          ? 'bg-red-600 text-white'
-                          : 'bg-brand-accent text-white hover:bg-brand-accent/90'
+                          ? 'bg-red-600 text-[#ffffff]'
+                          : 'bg-brand-accent text-[#ffffff] hover:bg-brand-accent/90'
                       } disabled:opacity-60`}
                     >
                       {modelCommitStatus === 'loading' ? (
@@ -1166,7 +1217,7 @@ export const AdminDashboard = () => {
                       ) : modelCommitStatus === 'success' ? (
                         <><Check className="w-4 h-4" /> Committed!</>
                       ) : modelCommitStatus === 'error' ? (
-                        <><X className="w-4 h-4" /> Failed — check server</>
+                        <><X className="w-4 h-4" /> Failed â€” check server</>
                       ) : (
                         <><GitBranch className="w-4 h-4" /> Commit to Git</>
                       )}
@@ -1177,7 +1228,7 @@ export const AdminDashboard = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                   {/* Sliders Column */}
                   <div className="space-y-4">
-                    <h3 className="text-[13px] font-bold uppercase tracking-[2px] text-brand-muted mb-4 border-b border-brand-accent/25 pb-2">Adjust Parameters</h3>
+                    <h3 className="text-[13px] font-bold uppercase tracking-[2px] text-[#aaaaaa] mb-4 border-b border-brand-accent/25 pb-2">Adjust Parameters</h3>
                     
                     {/* Scale */}
                     <div className="space-y-1">
@@ -1280,7 +1331,7 @@ export const AdminDashboard = () => {
 
                   {/* Real-time 3D Viewport Column */}
                   <div className="flex flex-col">
-                    <h3 className="text-[13px] font-bold uppercase tracking-[2px] text-brand-muted mb-4 border-b border-brand-accent/25 pb-2">Live Viewport</h3>
+                    <h3 className="text-[13px] font-bold uppercase tracking-[2px] text-[#aaaaaa] mb-4 border-b border-brand-accent/25 pb-2">Live Viewport</h3>
                     <div className="flex-1 min-h-[300px] bg-[#050505] rounded-xl border border-brand-accent/20 overflow-hidden relative">
                       <Canvas camera={{ position: [0, 2, 10], fov: 45 }} style={{ background: 'transparent' }}>
                         <Suspense fallback={null}>
@@ -1295,11 +1346,127 @@ export const AdminDashboard = () => {
                           />
                         </Suspense>
                       </Canvas>
-                      <div className="absolute bottom-3 left-3 bg-[#0a0a0a]/90 px-2 py-1 rounded text-[10px] font-mono border border-white/5 text-brand-muted">
+                      <div className="absolute bottom-3 left-3 bg-[#0a0a0a]/90 px-2 py-1 rounded text-[10px] font-mono border border-white/5 text-[#aaaaaa]">
                         CAM: [0, 2, 10] | FOV: 45
                       </div>
                     </div>
                   </div>
+                </div>
+              </motion.div>
+            )}
+
+            {activeTab === 'recruitment' && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-[#0a0a0a] border border-brand-accent/20 rounded-xl p-8"
+              >
+                <div className="flex justify-between items-center mb-8 pb-4 border-b border-brand-accent/20">
+                  <div>
+                    <h2 className="text-xl font-bold uppercase tracking-[1px] text-brand-accent">Style Recruitment Page</h2>
+                    <p className="text-[#aaaaaa] text-sm mt-1">Manage the enrollment page content and settings.</p>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <button
+                      onClick={handleRecruitmentSave}
+                      className="px-6 py-2 bg-[#1a1a1a] hover:bg-[#2a2a2a] text-[#aaaaaa] hover:text-[#ffffff] rounded-lg transition-colors border border-brand-accent/20 text-sm font-bold uppercase tracking-[1px] flex items-center gap-2"
+                    >
+                      <Save className="w-4 h-4" /> Save Local
+                    </button>
+                    <button
+                      onClick={handleCommitRecruitmentToGit}
+                      disabled={recruitmentCommitStatus === 'loading' || recruitmentCommitStatus === 'success'}
+                      className={`px-6 py-2 rounded-lg transition-all text-sm font-bold uppercase tracking-[1px] flex items-center gap-2 ${
+                        recruitmentCommitStatus === 'success' ? 'bg-green-500/20 text-green-500 border border-green-500/50' :
+                        recruitmentCommitStatus === 'error' ? 'bg-red-500/20 text-red-500 border border-red-500/50' :
+                        'bg-brand-accent text-[#ffffff] hover:bg-brand-accent/80 hover:shadow-[0_0_15px_rgba(164,5,5,0.4)]'
+                      }`}
+                    >
+                      {recruitmentCommitStatus === 'loading' ? <Loader className="w-4 h-4 animate-spin" /> : 
+                       recruitmentCommitStatus === 'success' ? <Check className="w-4 h-4" /> : 
+                       <GitBranch className="w-4 h-4" />}
+                      {recruitmentCommitStatus === 'loading' ? 'Committing...' : 
+                       recruitmentCommitStatus === 'success' ? 'Committed!' : 
+                       'Commit to Server'}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="space-y-6 max-w-2xl">
+                  <div>
+                    <label className="block text-xs font-bold text-[#aaaaaa] uppercase tracking-[1px] mb-2">Google Forms Webhook URL</label>
+                    <input
+                      type="text"
+                      className="w-full bg-[#111] border border-brand-accent/20 rounded p-3 text-[#ffffff] focus:outline-none focus:border-brand-accent"
+                      value={recruitmentEdit.webhookUrl}
+                      onChange={(e) => setRecruitmentEdit({ ...recruitmentEdit, webhookUrl: e.target.value })}
+                      placeholder="https://script.google.com/macros/s/..."
+                    />
+                    <p className="text-[11px] text-[#aaaaaa] mt-1">URL to submit form data to (Google Apps Script).</p>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-[#aaaaaa] uppercase tracking-[1px] mb-2">Contact Number</label>
+                    <input
+                      type="text"
+                      className="w-full bg-[#111] border border-brand-accent/20 rounded p-3 text-[#ffffff] focus:outline-none focus:border-brand-accent"
+                      value={recruitmentEdit.contactNumber}
+                      onChange={(e) => setRecruitmentEdit({ ...recruitmentEdit, contactNumber: e.target.value })}
+                      placeholder="+91 98765 43210"
+                    />
+                    <p className="text-[11px] text-[#aaaaaa] mt-1">Number to contact for registration issues.</p>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-[#aaaaaa] uppercase tracking-[1px] mb-2">Banner Image URL</label>
+                    <input
+                      type="text"
+                      className="w-full bg-[#111] border border-brand-accent/20 rounded p-3 text-[#ffffff] focus:outline-none focus:border-brand-accent"
+                      value={recruitmentEdit.bannerUrl}
+                      onChange={(e) => setRecruitmentEdit({ ...recruitmentEdit, bannerUrl: e.target.value })}
+                      placeholder="/images/banner.png or https://..."
+                    />
+                    <p className="text-[11px] text-[#aaaaaa] mt-1">Image to show on the Home Page below the 3D car.</p>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-[#aaaaaa] uppercase tracking-[1px] mb-2">Registration End Date</label>
+                    <input
+                      type="datetime-local"
+                      className="w-full bg-[#111] border border-brand-accent/20 rounded p-3 text-[#ffffff] focus:outline-none focus:border-brand-accent"
+                      value={recruitmentEdit.endDate}
+                      onChange={(e) => setRecruitmentEdit({ ...recruitmentEdit, endDate: e.target.value })}
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-[#aaaaaa] uppercase tracking-[1px] mb-2">Font Family</label>
+                      <select 
+                        className="w-full bg-[#111] border border-brand-accent/20 rounded p-3 text-[#ffffff] focus:outline-none focus:border-brand-accent"
+                        value={recruitmentEdit.typography.fontFamily}
+                        onChange={(e) => setRecruitmentEdit({ ...recruitmentEdit, typography: { ...recruitmentEdit.typography, fontFamily: e.target.value } })}
+                      >
+                        <option value="Inter">Inter</option>
+                        <option value="Space Grotesk">Space Grotesk</option>
+                        <option value="Roboto">Roboto</option>
+                        <option value="JetBrains Mono">JetBrains Mono</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-[#aaaaaa] uppercase tracking-[1px] mb-2">Font Weight</label>
+                      <select 
+                        className="w-full bg-[#111] border border-brand-accent/20 rounded p-3 text-[#ffffff] focus:outline-none focus:border-brand-accent"
+                        value={recruitmentEdit.typography.fontWeight}
+                        onChange={(e) => setRecruitmentEdit({ ...recruitmentEdit, typography: { ...recruitmentEdit.typography, fontWeight: e.target.value } })}
+                      >
+                        <option value="normal">Normal</option>
+                        <option value="bold">Bold</option>
+                        <option value="900">Black (900)</option>
+                      </select>
+                    </div>
+                  </div>
+
                 </div>
               </motion.div>
             )}
@@ -1310,3 +1477,5 @@ export const AdminDashboard = () => {
     </div>
   );
 };
+
+

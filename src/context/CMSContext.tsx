@@ -4,8 +4,9 @@ import { defaultContact } from '../data/contact';
 import { defaultDocuments } from '../data/documents';
 import { defaultGallery, GalleryItem } from '../data/gallery';
 import { defaultModel3D, Model3DConfig } from '../data/model3d';
+import { defaultRecruitment, RecruitmentSettings } from '../data/recruitment';
 
-export type { Model3DConfig };
+export type { Model3DConfig, RecruitmentSettings };
 
 export interface Member {
   id: string;
@@ -72,6 +73,8 @@ interface CMSContextType {
   saveGallery: (newGallery: GalleryItem[]) => void;
   model3D: Model3DConfig;
   saveModel3D: (newConfig: Model3DConfig) => void;
+  recruitment: RecruitmentSettings;
+  saveRecruitment: (newConfig: RecruitmentSettings) => void;
 }
 
 const CMSContext = createContext<CMSContextType | undefined>(undefined);
@@ -98,6 +101,7 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [deletedMembers, setDeletedMembersState] = useState<DeletedMember[]>([]);
   const [gallery, setGalleryState] = useState<GalleryItem[]>(defaultGallery);
   const [model3D, setModel3DState] = useState<Model3DConfig>(defaultModel3D);
+  const [recruitment, setRecruitmentState] = useState<RecruitmentSettings>(defaultRecruitment);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -152,6 +156,13 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       } catch (e) {}
     }
 
+    const storedRecruitment = localStorage.getItem('endeavour_recruitment');
+    if (storedRecruitment) {
+      try {
+        setRecruitmentState(JSON.parse(storedRecruitment));
+      } catch (e) {}
+    }
+
     setIsLoaded(true);
   }, []);
 
@@ -185,6 +196,11 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     localStorage.setItem('endeavour_model3d', JSON.stringify(newConfig));
   };
 
+  const saveRecruitment = (newConfig: RecruitmentSettings) => {
+    setRecruitmentState(newConfig);
+    localStorage.setItem('endeavour_recruitment', JSON.stringify(newConfig));
+  };
+
   if (!isLoaded) return null;
 
   return (
@@ -207,6 +223,8 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         saveGallery,
         model3D,
         saveModel3D,
+        recruitment,
+        saveRecruitment,
       }}
     >
       {children}

@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { EndeavourBanner } from './components/EndeavourBanner';
+import { RecruitmentBanner } from './components/RecruitmentBanner';
 import { About } from './components/About';
 import { Events } from './components/Events';
 import { Footer } from './components/Footer';
@@ -13,6 +14,7 @@ import { ScrollToTop } from './components/ScrollToTop';
 import { JoinUsPage } from './pages/JoinUsPage';
 import { AdminDashboard } from './pages/AdminDashboard';
 import { SimulatorPage } from './pages/Simulator';
+import { RecruitmentPage } from './pages/RecruitmentPage';
 import { AuthProvider } from './context/AuthContext';
 import { CMSProvider } from './context/CMSContext';
 import { GestureProvider } from './context/GestureContext';
@@ -23,6 +25,7 @@ function Home() {
     <main>
       <Hero />
       <EndeavourBanner />
+      <RecruitmentBanner />
       <About />
       <Events />
     </main>
@@ -45,6 +48,7 @@ function AppContent() {
         <Route path="/join-us" element={<JoinUsPage />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
         <Route path="/simulator" element={<SimulatorPage />} />
+        <Route path="/recruit" element={<RecruitmentPage />} />
       </Routes>
       {!isSimulator && <Footer />}
     </div>

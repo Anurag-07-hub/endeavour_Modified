@@ -81,16 +81,33 @@ const TextReveal = React.memo(function TextReveal({
           <span
             key={i}
             className="inline-block relative will-change-transform"
-            style={{
-              textShadow: `0 ${sign}em currentColor`,
-              transition: `transform ${duration}ms ${easing}`,
-              transitionDelay: `${i * staggerDelay}ms`,
-              transform: hovered
-                ? `translateY(${-sign}em)`
-                : "translateY(0)",
-            }}
           >
-            {char === " " ? "\u00A0" : char}
+            {/* Original character */}
+            <span
+              className="inline-block transition-transform"
+              style={{
+                transition: `transform ${duration}ms ${easing}`,
+                transitionDelay: `${i * staggerDelay}ms`,
+                transform: hovered
+                  ? `translateY(${-sign * 100}%)`
+                  : "translateY(0%)",
+              }}
+            >
+              {char === " " ? "\u00A0" : char}
+            </span>
+            {/* Hover character */}
+            <span
+              className="absolute left-0 top-0 inline-block transition-transform"
+              style={{
+                transition: `transform ${duration}ms ${easing}`,
+                transitionDelay: `${i * staggerDelay}ms`,
+                transform: hovered
+                  ? "translateY(0%)"
+                  : `translateY(${sign * 100}%)`,
+              }}
+            >
+              {char === " " ? "\u00A0" : char}
+            </span>
           </span>
         ))}
       </span>
