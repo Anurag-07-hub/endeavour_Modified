@@ -1,10 +1,11 @@
 import { motion, AnimatePresence } from 'motion/react';
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Home, Compass, Users, Calendar, Image, Hand, Info as InfoIcon, UserPlus, Sun, Moon } from 'lucide-react';
 import { useGesture } from '../context/GestureContext';
 import { GestureGuideModal } from './GestureGuideModal';
 import { LiquidMorphButton } from './LiquidMorphButton';
+import { LetsBeginTransition } from './LetsBeginTransition';
 
 const navItems = [
   { name: 'Home', url: '/', icon: Home, isRouterLink: true },
@@ -17,9 +18,11 @@ const navItems = [
 export function Navbar() {
   const [activeTab, setActiveTab] = useState(navItems[0].name);
   const location = useLocation();
+  const navigate = useNavigate();
   const { isGestureEnabled, toggleGestures } = useGesture();
   const [isGuideOpen, setIsGuideOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
     const isLight = document.documentElement.getAttribute('data-theme') === 'light';
@@ -109,9 +112,23 @@ export function Navbar() {
                   }`;
 
               return item.isRouterLink ? (
+                item.name === 'About' ? (
+                  <button
+                    key={item.name}
+                    onClick={() => {
+                      setActiveTab(item.name);
+                      scrollToTop();
+                      setIsTransitioning(true);
+                    }}
+                    className={className}
+                  >
+                    {content}
+                  </button>
+                ) : (
                 <Link key={item.name} to={item.url} onClick={() => { setActiveTab(item.name); scrollToTop(); }} className={className}>
                   {content}
                 </Link>
+                )
               ) : (
                 <a key={item.name} href={item.url} onClick={() => { setActiveTab(item.name); scrollToTop(); }} className={className}>
                   {content}
@@ -162,6 +179,14 @@ export function Navbar() {
         isOpen={isGuideOpen} 
         onClose={() => setIsGuideOpen(false)} 
       />
+      {isTransitioning && (
+        <LetsBeginTransition
+          onComplete={() => {
+            setIsTransitioning(false);
+            navigate('/about', { state: { fromLetsBegin: true } });
+          }}
+        />
+      )}
     </>
   );
 }
