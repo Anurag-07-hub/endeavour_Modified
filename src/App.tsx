@@ -15,6 +15,8 @@ import { JoinUsPage } from './pages/JoinUsPage';
 import { AdminDashboard } from './pages/AdminDashboard';
 import { SimulatorPage } from './pages/Simulator';
 import { RecruitmentPage } from './pages/RecruitmentPage';
+import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
+import { TermsOfServicePage } from './pages/TermsOfServicePage';
 import { AuthProvider } from './context/AuthContext';
 import { CMSProvider } from './context/CMSContext';
 import { GestureProvider } from './context/GestureContext';
@@ -49,6 +51,8 @@ function AppContent() {
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
         <Route path="/simulator" element={<SimulatorPage />} />
         <Route path="/recruit" element={<RecruitmentPage />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+        <Route path="/terms-of-service" element={<TermsOfServicePage />} />
       </Routes>
       {!isSimulator && <Footer />}
     </div>

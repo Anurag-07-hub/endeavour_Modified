@@ -104,8 +104,8 @@ export function Footer() {
               <div>
                 <h4 className="font-mono text-[12px] md:text-[13px] text-[#ffffff]/60 tracking-widest uppercase mb-3 md:mb-4 font-extrabold">LEGAL</h4>
                 <div className="flex flex-col gap-2.5 md:gap-3 text-[14px] md:text-[15px] text-[#ffffff]/90 uppercase tracking-wider font-bold">
-                  <a href="#" className="hover:text-[#ffffff] transition-colors">Privacy Policy</a>
-                  <a href="#" className="hover:text-[#ffffff] transition-colors">Terms of Service</a>
+                  <Link to="/privacy-policy" className="hover:text-[#ffffff] transition-colors">Privacy Policy</Link>
+                  <Link to="/terms-of-service" className="hover:text-[#ffffff] transition-colors">Terms of Service</Link>
                 </div>
               </div>
             </div>
@@ -309,8 +309,8 @@ export function Footer() {
             <div className="text-right">
               <h4 className="font-mono text-[9px] text-[#ffffff]/50 tracking-widest uppercase mb-1.5 font-extrabold">LEGAL</h4>
               <div className="flex flex-col gap-1.5 text-[11px] text-[#ffffff]/90 uppercase tracking-wider font-bold">
-                <a href="#" className="hover:text-[#ffffff] transition-colors">Privacy Policy</a>
-                <a href="#" className="hover:text-[#ffffff] transition-colors">Terms of Service</a>
+                <Link to="/privacy-policy" className="hover:text-[#ffffff] transition-colors">Privacy Policy</Link>
+                <Link to="/terms-of-service" className="hover:text-[#ffffff] transition-colors">Terms of Service</Link>
               </div>
             </div>
           </div>

@@ -22,24 +22,28 @@ export function About() {
         
         {/* Centered Text Content */}
         <div className="w-full text-center flex flex-col items-center">
-          <h2 className="font-bebas text-[36px] min-[390px]:text-[40px] sm:text-[48px] lg:text-[64px] uppercase tracking-[1px] md:tracking-[2px] mb-6 md:mb-8 leading-[1.1] text-white flex flex-col sm:flex-row sm:items-center sm:flex-wrap justify-center gap-x-2.5 select-none">
+
+          <h2 
+            className="font-boska uppercase tracking-[1px] md:tracking-[2px] mb-6 md:mb-8 leading-[1.1] text-white flex flex-col sm:flex-row sm:items-center sm:flex-wrap justify-center gap-x-2.5 select-none -translate-y-[10px]"
+            style={{ fontSize: 'clamp(38px, 6vw, 61px)' }}
+          >
             <span>Empowering the innovators of tomorrow in</span>
-            <span className="relative flex overflow-hidden text-brand-accent h-[1.1em] justify-center min-w-[240px] sm:min-w-[280px] md:min-w-[340px]">
+            <span className="relative flex overflow-hidden text-brand-accent h-[1.1em] justify-center min-w-[9.5em]">
               &nbsp;
               {titles.map((title, index) => (
                 <motion.span
                   key={index}
-                  className="absolute font-black tracking-[1px] uppercase whitespace-nowrap"
-                  initial={{ opacity: 0, y: 150 }}
+                  className="absolute inset-0 flex items-center justify-center font-black tracking-[1px] uppercase whitespace-nowrap"
+                  initial={{ opacity: 0, y: '100%' }}
                   transition={{ type: "spring", stiffness: 50, damping: 10 }}
                   animate={
                     titleNumber === index
                       ? {
-                          y: 0,
+                          y: '0%',
                           opacity: 1,
                         }
                       : {
-                          y: titleNumber > index ? -150 : 150,
+                          y: titleNumber > index ? '-100%' : '100%',
                           opacity: 0,
                         }
                   }
