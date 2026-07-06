@@ -13,13 +13,13 @@
 /* Smooth scrolling behavior for html */
 html {
   scroll-behavior: smooth;
-  overflow-x: hidden;
+  overflow-x: clip;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none;  /* Internet Explorer 10+ */
 }
 
 body {
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 @keyframes shimmer {
@@ -53,25 +53,7 @@ body {
   animation: fluid-gradient 10s ease-in-out infinite;
 }
 
-/* Set 80% opacity on all bold text elements */
-b,
-strong,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-.font-bold,
-.font-semibold,
-.font-black,
-.font-extrabold,
-[class*="font-bold"],
-[class*="font-semibold"],
-[class*="font-black"],
-[class*="font-extrabold"] {
-  opacity: 0.8;
-}
+
 
 @keyframes text-shimmer {
   0% {

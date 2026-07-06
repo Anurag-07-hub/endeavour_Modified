@@ -2,6 +2,7 @@ import { FadeIn } from './FadeIn';
 import { AnimatedText } from './AnimatedText';
 import { Calendar, Trophy, Zap, Cpu } from 'lucide-react';
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 
 function EventCard({ event }: { event: any; key?: React.Key }): any {
   const [isActive, setIsActive] = useState(false);
@@ -61,8 +62,16 @@ export function Events() {
   ];
 
   return (
-    <section id="events" className="py-[60px] md:py-[100px] bg-white/[0.02] relative border-t border-white/10">
-      <div className="max-w-[1024px] mx-auto px-4 min-[390px]:px-5 md:px-[60px]">
+    <div className="relative overflow-hidden w-full">
+      <motion.section 
+        id="events" 
+        initial={{ x: "100%" }}
+        whileInView={{ x: 0 }}
+        viewport={{ once: false, margin: "0px 2000px 0px 0px", amount: 0 }}
+        transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+        className="py-[60px] md:py-[100px] bg-white/[0.02] relative border-t border-white/10 w-full"
+      >
+        <div className="max-w-[1024px] mx-auto px-4 min-[390px]:px-5 md:px-[60px]">
         <div className="mb-12 md:mb-20">
           <FadeIn direction="up">
             <span className="font-sans font-bold text-brand-muted text-[10px] uppercase tracking-[2px] mb-4 block">
@@ -80,7 +89,8 @@ export function Events() {
             <EventCard key={event.title} event={event} />
           ))}
         </div>
-      </div>
-    </section>
+        </div>
+      </motion.section>
+    </div>
   );
 }

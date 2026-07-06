@@ -27,16 +27,16 @@ export function EndeavourScene() {
   // Global scale that pops up as it enters, then settles
   const groupScale = useTransform(scrollYProgress, [0, 0.4, 0.6], [0.8, 1.2, 1]);
 
-  // Final centered text fades in strongly as the background fades out (synced with 0.6 to 0.8)
-  const finalOpacity = useTransform(scrollYProgress, [0.6, 0.8], [0, 1]);
-  const finalScale = useTransform(scrollYProgress, [0.6, 0.8], [0.9, 1]);
-  const finalY = useTransform(scrollYProgress, [0.6, 0.8], [40, 0]);
-  const finalBlur = useTransform(scrollYProgress, [0.6, 0.8], ["blur(10px)", "blur(0px)"]);
+  // Final centered text fades in strongly, stays a bit, then zooms out/fades out
+  const finalOpacity = useTransform(scrollYProgress, [0.5, 0.65, 0.85, 1], [0, 1, 1, 0]);
+  const finalScale = useTransform(scrollYProgress, [0.5, 0.65, 0.85, 1], [0.8, 1, 1, 0.5]);
+  const finalY = useTransform(scrollYProgress, [0.5, 0.65], [40, 0]);
+  const finalBlur = useTransform(scrollYProgress, [0.5, 0.65], ["blur(10px)", "blur(0px)"]);
 
   return (
-    <div ref={containerRef} className="relative w-full h-[120vh] bg-black z-20 cursor-none">
+    <div ref={containerRef} className="relative w-full h-[200vh] bg-black z-20 cursor-none">
       
-      {/* Sticky container holds the animation in the viewport while scrolling the 150vh */}
+      {/* Sticky container holds the animation in the viewport while scrolling the 200vh */}
       <div className="sticky top-0 h-screen w-full flex flex-col justify-center items-center overflow-hidden">
         
         {/* Background Moving Rows */}
@@ -94,7 +94,7 @@ export function EndeavourScene() {
           }}
           className="absolute inset-0 flex items-center justify-center pointer-events-none z-30"
         >
-          <h1 className="text-[12vw] sm:text-[14vw] font-black uppercase text-transparent bg-clip-text bg-gradient-to-br from-white via-gray-300 to-brand-accent tracking-[-0.02em] leading-none select-none text-center">
+          <h1 className="text-[12vw] sm:text-[14vw] font-black uppercase text-white tracking-[-0.02em] leading-none select-none text-center">
             Endeavour
           </h1>
         </motion.div>

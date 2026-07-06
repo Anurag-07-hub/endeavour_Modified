@@ -8,6 +8,18 @@ import { defaultRecruitment, RecruitmentSettings } from '../data/recruitment';
 
 export type { Model3DConfig, RecruitmentSettings };
 
+export interface DomainWatermarkConfig {
+  uav: { opacity: number; part1X: number; part1Y: number; part2X: number; part2Y: number };
+  ugv: { opacity: number; part1X: number; part1Y: number; part2X: number; part2Y: number };
+  research: { opacity: number; part1X: number; part1Y: number; part2X: number; part2Y: number };
+}
+
+export const defaultDomainsConfig: DomainWatermarkConfig = {
+  uav:      { opacity: 0.10, part1X: -288, part1Y: 283,  part2X: 655,  part2Y: -343 },
+  ugv:      { opacity: 0.10, part1X: -288, part1Y: 283,  part2X: 655,  part2Y: -343 },
+  research: { opacity: 0.10, part1X: -288, part1Y: 283,  part2X: 398,  part2Y: -344 }
+};
+
 export interface Member {
   id: string;
   name: string;
@@ -75,6 +87,8 @@ interface CMSContextType {
   saveModel3D: (newConfig: Model3DConfig) => void;
   recruitment: RecruitmentSettings;
   saveRecruitment: (newConfig: RecruitmentSettings) => void;
+  domainsConfig: DomainWatermarkConfig;
+  saveDomainsConfig: (newConfig: DomainWatermarkConfig) => void;
 }
 
 const CMSContext = createContext<CMSContextType | undefined>(undefined);
@@ -102,6 +116,7 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [gallery, setGalleryState] = useState<GalleryItem[]>(defaultGallery);
   const [model3D, setModel3DState] = useState<Model3DConfig>(defaultModel3D);
   const [recruitment, setRecruitmentState] = useState<RecruitmentSettings>(defaultRecruitment);
+  const [domainsConfig, setDomainsConfigState] = useState<DomainWatermarkConfig>(defaultDomainsConfig);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -163,6 +178,28 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       } catch (e) {}
     }
 
+    const storedDomains = localStorage.getItem('endeavour_domains_config_v2');
+    if (storedDomains) {
+      try {
+        const parsed = JSON.parse(storedDomains);
+        const validated = { ...defaultDomainsConfig };
+        for (const key of ['uav', 'ugv', 'research'] as const) {
+          if (parsed[key]) {
+            if (typeof parsed[key].opacity === 'number') validated[key].opacity = parsed[key].opacity;
+            if (typeof parsed[key].part1X === 'number') validated[key].part1X = parsed[key].part1X;
+            if (typeof parsed[key].part1Y === 'number') validated[key].part1Y = parsed[key].part1Y;
+            if (typeof parsed[key].part2X === 'number') validated[key].part2X = parsed[key].part2X;
+            if (typeof parsed[key].part2Y === 'number') validated[key].part2Y = parsed[key].part2Y;
+          }
+        }
+        setDomainsConfigState(validated);
+      } catch (e) {
+        setDomainsConfigState(defaultDomainsConfig);
+      }
+    } else {
+      setDomainsConfigState(defaultDomainsConfig);
+    }
+
     setIsLoaded(true);
   }, []);
 
@@ -201,6 +238,11 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     localStorage.setItem('endeavour_recruitment', JSON.stringify(newConfig));
   };
 
+  const saveDomainsConfig = (newConfig: DomainWatermarkConfig) => {
+    setDomainsConfigState(newConfig);
+    localStorage.setItem('endeavour_domains_config_v2', JSON.stringify(newConfig));
+  };
+
   if (!isLoaded) return null;
 
   return (
@@ -225,6 +267,8 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         saveModel3D,
         recruitment,
         saveRecruitment,
+        domainsConfig,
+        saveDomainsConfig,
       }}
     >
       {children}

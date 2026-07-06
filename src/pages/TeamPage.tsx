@@ -91,7 +91,7 @@ export function TeamPage() {
   const visibleMembers = team.find(t => t.category === activeTab)?.members || [];
 
   return (
-    <div className="pt-[80px] min-[390px]:pt-[90px] md:pt-[150px] pb-[60px] md:pb-[100px] bg-brand-bg min-h-screen">
+    <div data-cursor-system="true" className="pt-[80px] min-[390px]:pt-[90px] md:pt-[150px] pb-[60px] md:pb-[100px] bg-brand-bg min-h-screen">
       <div className="max-w-[1280px] mx-auto px-4 sm:px-[30px] md:px-[60px]">
         <div className="mb-20 text-center flex flex-col items-center">
           <motion.div

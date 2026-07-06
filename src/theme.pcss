@@ -30,12 +30,38 @@
   --font-playfair: "Playfair Display", serif;
   --font-montserrat: "Montserrat", sans-serif;
 
-  /* Original Website Colors mapping - Light Theme Restored */
+  /* Original Website Colors mapping - Dark Theme Restored */
+  --color-brand-accent: #c41515;
+  --color-brand-bg: #07080a;
+  --color-brand-muted: #d1d5db;
+
+  /* Standard Tailwind definitions for dark theme */
+  --color-white: #ffffff;
+  --color-black: #000000;
+}
+
+:root[data-theme="light"] {
   --color-brand-accent: #a40505;
   --color-brand-bg: #ffffff;
   --color-brand-muted: rgba(0, 0, 0, 0.85);
-
-  /* Invert Tailwind definitions to map light theme over the dark components */
   --color-white: #080808;
   --color-black: #ffffff;
+}
+
+/* Utility to lock specific regions to dark mode */
+.force-dark {
+  --color-brand-accent: #c41515 !important;
+  --color-brand-bg: #07080a !important;
+  --color-brand-muted: #d1d5db !important;
+  --color-white: #ffffff !important;
+  --color-black: #000000 !important;
+}
+
+/* Utility to lock specific regions to light mode */
+.force-light {
+  --color-brand-accent: #a40505 !important;
+  --color-brand-bg: #ffffff !important;
+  --color-brand-muted: rgba(0, 0, 0, 0.85) !important;
+  --color-white: #080808 !important;
+  --color-black: #ffffff !important;
 }

@@ -17,6 +17,7 @@ export interface TextRevealProps {
   hoverColor?: string;
   direction?: "up" | "down";
   onClick?: (e: React.MouseEvent) => void;
+  autoPlay?: boolean;
 }
 
 const TextReveal = React.memo(function TextReveal({
@@ -34,6 +35,7 @@ const TextReveal = React.memo(function TextReveal({
   hoverColor = "#ef4444",
   direction = "up",
   onClick,
+  autoPlay = false,
 }: TextRevealProps) {
   const [hovered, setHovered] = useState(false);
 
@@ -44,6 +46,21 @@ const TextReveal = React.memo(function TextReveal({
     }
     return [...text];
   }, [text]);
+
+  React.useEffect(() => {
+    if (autoPlay) {
+      // Small delay to ensure component is mounted and visible
+      const startTimer = setTimeout(() => {
+        setHovered(true);
+        const totalDuration = duration + chars.length * staggerDelay;
+        const endTimer = setTimeout(() => {
+          setHovered(false);
+        }, totalDuration + 200);
+        return () => clearTimeout(endTimer);
+      }, 500);
+      return () => clearTimeout(startTimer);
+    }
+  }, [autoPlay, duration, chars.length, staggerDelay]);
 
   const sign = direction === "up" ? 1 : -1;
 

@@ -195,7 +195,7 @@ export function Hero() {
               <div className="inline-flex items-center gap-2 px-2.5 py-0.5 sm:px-4 sm:py-1.5 rounded-full bg-brand-accent/5 border border-brand-accent/20 mb-2 sm:mb-5 md:mb-10">
                   <Circle className="h-1 w-1 sm:h-1.5 sm:w-1.5 md:h-2 md:w-2 fill-brand-accent/80 text-brand-accent" />
                   <span className="text-[8px] sm:text-[10px] md:text-[12px] text-brand-accent font-semibold tracking-[1.2px] sm:tracking-[2px] uppercase">
-                      EST. 2009 — SLIET LONGOWAL
+                      EST. 2014 — SLIET LONGOWAL
                   </span>
               </div>
           </motion.div>

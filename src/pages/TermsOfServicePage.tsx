@@ -1,6 +1,25 @@
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 
+function TypewriterHeading({ text, className = "" }: { text: string; className?: string }) {
+  const characters = text.split("");
+  return (
+    <span className={`inline-block ${className}`}>
+      {characters.map((char, index) => (
+        <motion.span
+          key={index}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.05, delay: index * 0.03 }}
+        >
+          {char}
+        </motion.span>
+      ))}
+    </span>
+  );
+}
+
 export function TermsOfServicePage() {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -15,7 +34,7 @@ export function TermsOfServicePage() {
     >
       <div className="max-w-[800px] mx-auto">
         <h1 className="font-bebas text-5xl md:text-7xl text-brand-accent tracking-wide mb-8">
-          Terms of Service
+          <TypewriterHeading text="Terms of Service" />
         </h1>
         
         <div className="font-sans text-brand-muted leading-relaxed space-y-6">

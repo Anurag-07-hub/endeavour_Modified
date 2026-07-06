@@ -317,16 +317,16 @@ export const JoinUsPage = () => {
     e.preventDefault();
     setError('');
     
-    if (email === 'anurag852007@gmail.com' && password === 'a') {
+    if (email && password) {
       login('admin');
       navigate('/admin-dashboard');
     } else {
-      setError('Invalid admin credentials. Please try again.');
+      setError('Please enter both email and password.');
     }
   };
 
   return (
-    <div className="pt-24 pb-16 min-h-screen bg-[#ffffff] relative overflow-hidden flex items-center justify-center">
+    <div data-cursor-system="true" className="force-light pt-24 pb-16 min-h-screen bg-[#ffffff] relative overflow-hidden flex items-center justify-center">
       <div className="absolute inset-0 z-0">
          <CanvasRevealEffect
             animationSpeed={3}
@@ -354,7 +354,8 @@ export const JoinUsPage = () => {
         </div>
 
         <h1 className="text-3xl font-black text-white text-center mb-2 uppercase tracking-[1px]">Admin Login</h1>
-        <p className="text-brand-muted text-[13px] uppercase tracking-[1px] text-center mb-8">Access the administrator dashboard</p>
+        <p className="text-brand-muted text-[13px] uppercase tracking-[1px] text-center mb-1">Access the administrator dashboard</p>
+        <p className="text-white/60 text-[10px] lowercase tracking-[0.5px] text-center mb-8">this is for trial show case</p>
 
         {error && (
           <div className="mb-6 p-3 bg-red-500/10 border border-red-500/30 text-red-500 rounded-lg text-xs font-bold text-center uppercase tracking-[0.5px]">

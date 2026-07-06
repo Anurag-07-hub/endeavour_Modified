@@ -17,7 +17,7 @@ export function About() {
   }, [titleNumber, titles]);
 
   return (
-    <section id="about" className="py-8 md:py-[100px] bg-black/30 border-t border-white/10 relative z-10">
+    <section id="about" data-cursor-hidden="true" className="py-8 md:py-[100px] bg-black/30 border-t border-white/10 relative z-10">
       <div className="max-w-[1024px] mx-auto px-5 md:px-[60px] flex flex-col items-center">
         
         {/* Centered Text Content */}

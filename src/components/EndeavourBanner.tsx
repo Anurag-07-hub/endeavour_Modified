@@ -293,6 +293,7 @@ export function EndeavourBanner() {
       </style>
       
       <section 
+        id="endeavour-banner"
         ref={containerRef}
         className="relative w-full h-[240px] sm:h-auto sm:min-h-[100svh] py-0 sm:py-24 overflow-hidden flex items-center"
       >

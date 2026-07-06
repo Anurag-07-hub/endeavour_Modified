@@ -3,6 +3,7 @@ import { motion, useTransform, useSpring, useMotionValue, AnimatePresence } from
 import { X } from 'lucide-react';
 import { useParticlesBackground } from '../hooks/useParticlesBackground';
 import { useCMS } from '../context/CMSContext';
+import ScrollExpandMedia from '../components/ui/scroll-expansion-hero';
 
 export type AnimationPhase = "scatter" | "line" | "circle" | "bottom-strip";
 
@@ -253,7 +254,7 @@ export function GalleryPage() {
     const contentY = useTransform(smoothMorph, [0.8, 1], [20, 0]);
 
     return (
-        <div ref={containerRef} className="relative w-full h-[100svh] bg-white overflow-hidden pt-[80px]">
+        <div data-cursor-system="true" ref={containerRef} className="force-dark relative w-full h-[100svh] bg-brand-bg overflow-hidden pt-[80px]">
             <style>{`
                 @keyframes load {  
                     0% { opacity: 0;}    
@@ -454,38 +455,28 @@ export function GalleryPage() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[100] flex items-center justify-center bg-transparent p-4 md:p-12 cursor-pointer"
-                        onClick={() => setSelectedItem(null)}
+                        className="fixed inset-0 z-[100]"
                     >
-                        <motion.button 
-                            className="absolute top-6 right-6 text-[#a40505] hover:text-red-700 z-[101] transition-colors bg-white/50 backdrop-blur rounded-full p-2"
-                            onClick={() => setSelectedItem(null)}
+                        <ScrollExpandMedia
+                            mediaType={selectedItem.type === 'video' ? 'video' : 'image'}
+                            mediaSrc={selectedItem.url}
+                            bgImageSrc={selectedItem.type === 'image' ? selectedItem.url : 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1920&auto=format&fit=crop'}
+                            title="ENDEAVOUR GALLERY"
+                            date="Memories"
+                            scrollToExpand="Scroll to Expand"
+                            onClose={() => setSelectedItem(null)}
                         >
-                            <X className="w-8 h-8" />
-                        </motion.button>
-                        
-                        {/* Bobble effect container */}
-                        <motion.div
-                            initial={{ scale: 0.5, y: 100, rotate: 5, opacity: 0 }}
-                            animate={{ scale: 1, y: 0, rotate: 0, opacity: 1 }}
-                            exit={{ scale: 0.8, y: -50, opacity: 0 }}
-                            transition={{ 
-                                type: "spring", 
-                                damping: 12,
-                                stiffness: 200,
-                                mass: 0.8 
-                            }}
-                            className="relative max-w-[95vw] max-h-[90vh] md:max-w-[85vw] md:max-h-[85vh] cursor-default"
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            <div className="relative w-full h-full flex items-center justify-center rounded-xl shadow-2xl">
-                                {selectedItem.type === 'video' ? (
-                                    <video src={selectedItem.url} controls autoPlay className="max-w-full max-h-[90vh] md:max-h-[85vh] object-contain rounded-xl border border-white/10" />
-                                ) : (
-                                    <img src={selectedItem.url} alt="Gallery view" className="max-w-full max-h-[90vh] md:max-h-[85vh] object-contain rounded-xl border border-white/10" />
-                                )}
+                            <div className="max-w-4xl mx-auto text-center mt-[20vh] md:mt-[30vh]">
+                                <h2 className="text-3xl font-bold mb-6 text-white font-bebas tracking-wider uppercase">
+                                    About This Memory
+                                </h2>
+                                <p className="text-lg text-white/80 font-sans leading-relaxed">
+                                    Our gallery showcases the journey of Endeavour. 
+                                    Every component, every event, and every memory is carefully preserved.
+                                    Scroll to fully expand and immerse yourself in the moment.
+                                </p>
                             </div>
-                        </motion.div>
+                        </ScrollExpandMedia>
                     </motion.div>
                 )}
             </AnimatePresence>

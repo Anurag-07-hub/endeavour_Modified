@@ -1,4 +1,4 @@
-import { Mail, MapPin, Phone, Linkedin, Instagram, Facebook } from 'lucide-react';
+import { Mail, MapPin, Phone, Linkedin, Instagram, Facebook, Dribbble } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useCMS } from '../context/CMSContext';
 import { TiltCard } from './TiltCard';
@@ -7,7 +7,49 @@ export function Footer() {
   const { contactInfo } = useCMS();
   
   return (
-    <footer id="contact" className="relative bg-[#a40505] pt-12 md:pt-16 pb-6 md:pb-8 overflow-hidden text-[#ffffff]">
+    <footer id="contact" className="force-light relative z-50 bg-[#a40505] pt-12 md:pt-16 pb-6 md:pb-8 overflow-hidden text-[#ffffff]">
+      <style>
+        {`
+          .contact-liquid-btn {
+            isolation: isolate;
+            overflow: hidden;
+          }
+          .contact-liquid-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            filter: url(#contact-goo-footer);
+            pointer-events: none;
+          }
+          .contact-blob {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            border-radius: 999px;
+            bottom: -32px;
+            background-color: #ffffff;
+            transform: translateY(0) scale(0);
+            transition: transform 700ms cubic-bezier(0.23, 1, 0.32, 1);
+            will-change: transform;
+          }
+          .contact-blob:nth-child(1) { left: calc(50% - 36px); transition-delay: 0ms; transform: translateX(-50%) translateY(0) scale(0); }
+          .contact-blob:nth-child(2) { left: 50%; transition-delay: 50ms; transform: translateX(-50%) translateY(0) scale(0); }
+          .contact-blob:nth-child(3) { left: calc(50% + 36px); transition-delay: 100ms; transform: translateX(-50%) translateY(0) scale(0); }
+          
+          .contact-liquid-btn:hover .contact-blob {
+            transform: translateX(-50%) translateY(-150%) scale(8) !important;
+          }
+        `}
+      </style>
+      <svg width="0" height="0" aria-hidden="true" focusable="false" style={{ position: 'absolute', width: 0, height: 0, overflow: 'hidden' }}>
+        <defs>
+          <filter id="contact-goo-footer">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
+            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8" result="goo" />
+            <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+          </filter>
+        </defs>
+      </svg>
       
       {/* Giant Tech Watermark (Lion/Gear Hybrid Concept) - Darker maroon and more visible */}
       <div className="absolute right-0 bottom-0 top-0 w-full md:w-[50%] opacity-[0.35] pointer-events-none z-0 flex items-center justify-end overflow-hidden">
@@ -49,15 +91,16 @@ export function Footer() {
               {/* Massive Bebas Neue Typography */}
               <h2 className="font-bebas text-[56px] sm:text-[95px] md:text-[110px] leading-[0.8] tracking-[-0.03em] font-bold text-[#ffffff] uppercase select-none">
                 GET IN<br />
-                <span className="text-[#7A0012]">TOUCH.</span>
+                <span className="text-[#27151B]">TOUCH.</span>
               </h2>
             </div>
 
             <div>
-              <p className="font-sans text-[#ffffff]/70 text-[13px] md:text-[14px] leading-[1.6] max-w-[360px] mb-4 md:mb-6">
+              <p className="font-sans text-[#ffffff]/70 text-[13px] md:text-[14px] leading-[1.6] max-w-[360px] mb-6 md:mb-8">
                 The official robotics club of Sant Longowal Institute of Engineering and Technology. Building the future, one robot at a time.
               </p>
               
+
               {/* Social Channels - Brand colors by default, fades to white on hover/click */}
               <div className="flex gap-[12px]">
                 <a 
@@ -209,14 +252,16 @@ export function Footer() {
             </div>
             <h2 className="font-bebas text-[48px] leading-[0.8] tracking-[-0.03em] font-bold text-[#ffffff] uppercase select-none">
               GET IN<br />
-              <span className="text-[#7A0012]">TOUCH.</span>
+              <span className="text-[#27151B]">TOUCH.</span>
             </h2>
           </div>
 
           {/* 2. Description Paragraph */}
-          <p className="font-sans text-[#ffffff]/70 text-[11px] leading-[1.5]">
+          <p className="font-sans text-[#ffffff]/70 text-[11px] leading-[1.5] mb-4">
             The official robotics club of Sant Longowal Institute of Engineering and Technology. Building the future, one robot at a time.
           </p>
+          
+
 
           {/* 3. Contact Cards (Location, Email, Phone contacts) - Moved Up! */}
           <div className="flex flex-col gap-1.5">
@@ -340,6 +385,14 @@ export function Footer() {
               className="w-8 h-8 rounded-full bg-[#0077B5] border border-[#0077B5] text-[#ffffff] shadow-[0_0_10px_rgba(0,119,181,0.2)] hover:bg-[#ffffff] hover:border-[#ffffff] hover:text-[#a40505] transition-all duration-300 flex items-center justify-center shrink-0"
             >
               <Linkedin className="w-3.5 h-3.5" />
+            </a>
+            <a 
+              href="https://dribbble.com/" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="w-8 h-8 rounded-full bg-[#EA4C89] border border-[#EA4C89] text-[#ffffff] shadow-[0_0_10px_rgba(234,76,137,0.2)] hover:bg-[#ffffff] hover:border-[#ffffff] hover:text-[#a40505] transition-all duration-300 flex items-center justify-center shrink-0"
+            >
+              <Dribbble className="w-3.5 h-3.5" />
             </a>
           </div>
 

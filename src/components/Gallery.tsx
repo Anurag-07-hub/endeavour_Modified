@@ -3,6 +3,7 @@ import { motion, useTransform, useSpring, useMotionValue, AnimatePresence } from
 import { FadeIn } from './FadeIn';
 import { AnimatedText } from './AnimatedText';
 import { X } from 'lucide-react';
+import ScrollExpandMedia from './ui/scroll-expansion-hero';
 
 export type AnimationPhase = "scatter" | "line" | "circle" | "bottom-strip";
 
@@ -248,7 +249,7 @@ export function Gallery() {
     const contentY = useTransform(smoothMorph, [0.8, 1], [20, 0]);
 
     return (
-        <section id="gallery" ref={containerRef} className="relative w-full h-[600px] md:h-[800px] bg-black/30 overflow-hidden border-t border-white/10">
+        <section id="gallery" data-cursor-system="true" ref={containerRef} className="relative w-full h-[600px] md:h-[800px] bg-black/30 overflow-hidden border-t border-white/10">
             {/* Container */}
             <div className="flex h-full w-full flex-col items-center justify-center perspective-1000">
 
@@ -373,38 +374,28 @@ export function Gallery() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4 md:p-12 backdrop-blur-md cursor-pointer"
-                        onClick={() => setSelectedImage(null)}
+                        className="fixed inset-0 z-[100]"
                     >
-                        <motion.button 
-                            className="absolute top-6 right-6 text-white hover:text-brand-accent z-[101] transition-colors"
-                            onClick={() => setSelectedImage(null)}
+                        <ScrollExpandMedia
+                            mediaType="image"
+                            mediaSrc={selectedImage}
+                            bgImageSrc={selectedImage}
+                            title="ENDEAVOUR GALLERY"
+                            date="Memories"
+                            scrollToExpand="Scroll to Expand"
+                            onClose={() => setSelectedImage(null)}
                         >
-                            <X className="w-10 h-10" />
-                        </motion.button>
-                        
-                        {/* Bobble effect container */}
-                        <motion.div
-                            initial={{ scale: 0.5, y: 100, rotate: 5, opacity: 0 }}
-                            animate={{ scale: 1, y: 0, rotate: 0, opacity: 1 }}
-                            exit={{ scale: 0.8, y: -50, opacity: 0 }}
-                            transition={{ 
-                                type: "spring", 
-                                damping: 12,
-                                stiffness: 200,
-                                mass: 0.8 
-                            }}
-                            className="relative max-w-[95vw] max-h-[90vh] md:max-w-[85vw] md:max-h-[85vh] cursor-default"
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            <div className="relative w-full h-full flex items-center justify-center rounded-xl shadow-[0_0_50px_rgba(255,0,0,0.15)] bg-black">
-                                <img 
-                                    src={selectedImage} 
-                                    alt="Gallery view" 
-                                    className="max-w-full max-h-[90vh] md:max-h-[85vh] object-contain rounded-xl border border-white/10" 
-                                />
+                            <div className="max-w-4xl mx-auto text-center mt-[20vh] md:mt-[30vh]">
+                                <h2 className="text-3xl font-bold mb-6 text-white font-bebas tracking-wider uppercase">
+                                    About This Memory
+                                </h2>
+                                <p className="text-lg text-white/80 font-sans leading-relaxed">
+                                    Our gallery showcases the journey of Endeavour. 
+                                    Every component, every event, and every memory is carefully preserved.
+                                    Scroll to fully expand and immerse yourself in the moment.
+                                </p>
                             </div>
-                        </motion.div>
+                        </ScrollExpandMedia>
                     </motion.div>
                 )}
             </AnimatePresence>
