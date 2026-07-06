@@ -68,7 +68,7 @@ export function AboutPage() {
       <EndeavourScene />
 
       {/* Canva Style About Us Content */}
-      <div className="relative z-35 overflow-hidden w-full">
+      <div data-cursor-hidden="true" className="relative z-35 overflow-hidden w-full">
         <motion.div 
           initial={{ x: "100%" }}
           whileInView={{ x: 0 }}
