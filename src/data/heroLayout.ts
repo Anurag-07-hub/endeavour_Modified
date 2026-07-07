@@ -53,12 +53,12 @@ export const defaultHeroLayout: HeroLayoutConfig = {
     "text": "WO"
   },
   "statementBox": {
-    "x": 188.33349609375,
-    "y": -20,
+    "x": 196.666748046875,
+    "y": -7.4999847412109375,
     "scale": 0.6,
     "line1": "I BREAK THINGS",
     "line2": "TO SEE WHAT",
-    "line3": "THEY ARE MADE OF",
+    "line3": "THEY ARE MADE  of",
     "brandText": "ENDEAVOUR\nTHINGS"
   },
   "categoriesBlock": {
@@ -86,8 +86,8 @@ export const defaultHeroLayout: HeroLayoutConfig = {
     "text": "PHASE/BUILD"
   },
   "phase4": {
-    "x": 100.8333740234375,
-    "y": 2.500030517578125,
+    "x": 115,
+    "y": -4.1666259765625,
     "scale": 1,
     "text": "PHASE/RELEASE"
   }
