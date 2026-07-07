@@ -86,7 +86,7 @@ export const defaultHeroLayout: HeroLayoutConfig = {
     "text": "PHASE/BUILD"
   },
   "phase4": {
-    "x": 123.3333740234375,
+    "x": 100.8333740234375,
     "y": 2.500030517578125,
     "scale": 1,
     "text": "PHASE/RELEASE"
