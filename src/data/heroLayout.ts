@@ -41,15 +41,15 @@ export const defaultHeroLayout: HeroLayoutConfig = {
     "text": "RKS"
   },
   "centerWO": {
-    "x": 31.66656494140625,
-    "y": 56.66668701171875,
-    "scale": 0.7,
+    "x": 30.833251953125,
+    "y": 60,
+    "scale": 0.6,
     "text": "WO"
   },
   "centerWOShadow": {
     "x": 9.9998779296875,
     "y": 16.666656494140625,
-    "scale": 0.7,
+    "scale": 0.6,
     "text": "WO"
   },
   "statementBox": {
