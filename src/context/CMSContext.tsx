@@ -5,8 +5,9 @@ import { defaultDocuments } from '../data/documents';
 import { defaultGallery, GalleryItem } from '../data/gallery';
 import { defaultModel3D, Model3DConfig } from '../data/model3d';
 import { defaultRecruitment, RecruitmentSettings } from '../data/recruitment';
+import { defaultHeroLayout, HeroLayoutConfig } from '../data/heroLayout';
 
-export type { Model3DConfig, RecruitmentSettings };
+export type { Model3DConfig, RecruitmentSettings, HeroLayoutConfig };
 
 export interface DomainWatermarkConfig {
   uav: { opacity: number; part1X: number; part1Y: number; part2X: number; part2Y: number };
@@ -89,6 +90,8 @@ interface CMSContextType {
   saveRecruitment: (newConfig: RecruitmentSettings) => void;
   domainsConfig: DomainWatermarkConfig;
   saveDomainsConfig: (newConfig: DomainWatermarkConfig) => void;
+  heroLayout: HeroLayoutConfig;
+  saveHeroLayout: (newLayout: HeroLayoutConfig) => void;
 }
 
 const CMSContext = createContext<CMSContextType | undefined>(undefined);
@@ -117,6 +120,7 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [model3D, setModel3DState] = useState<Model3DConfig>(defaultModel3D);
   const [recruitment, setRecruitmentState] = useState<RecruitmentSettings>(defaultRecruitment);
   const [domainsConfig, setDomainsConfigState] = useState<DomainWatermarkConfig>(defaultDomainsConfig);
+  const [heroLayout, setHeroLayoutState] = useState<HeroLayoutConfig>(defaultHeroLayout);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -200,6 +204,25 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       setDomainsConfigState(defaultDomainsConfig);
     }
 
+    const storedHeroLayout = localStorage.getItem('endeavour_hero_layout_v2');
+    if (storedHeroLayout) {
+      try {
+        const parsed = JSON.parse(storedHeroLayout);
+        // Deep merge with defaults to ensure new fields like domainText exist
+        const merged = { ...defaultHeroLayout };
+        for (const key of Object.keys(defaultHeroLayout) as (keyof HeroLayoutConfig)[]) {
+          if (parsed[key]) {
+            merged[key] = { ...defaultHeroLayout[key], ...parsed[key] };
+          }
+        }
+        setHeroLayoutState(merged);
+      } catch (e) {
+        setHeroLayoutState(defaultHeroLayout);
+      }
+    } else {
+      setHeroLayoutState(defaultHeroLayout);
+    }
+
     setIsLoaded(true);
   }, []);
 
@@ -243,6 +266,20 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     localStorage.setItem('endeavour_domains_config_v2', JSON.stringify(newConfig));
   };
 
+  const saveHeroLayout = async (newLayout: HeroLayoutConfig) => {
+    setHeroLayoutState(newLayout);
+    localStorage.setItem('endeavour_hero_layout_v2', JSON.stringify(newLayout));
+    try {
+      await fetch('http://localhost:3001/api/commit-hero-layout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ layout: newLayout }),
+      });
+    } catch (e) {
+      console.error('Failed to commit hero layout', e);
+    }
+  };
+
   if (!isLoaded) return null;
 
   return (
@@ -269,6 +306,8 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         saveRecruitment,
         domainsConfig,
         saveDomainsConfig,
+        heroLayout,
+        saveHeroLayout,
       }}
     >
       {children}

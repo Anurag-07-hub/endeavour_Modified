@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import React, { useRef, useState, useEffect, Suspense } from 'react';
 import {
   CheckCircle2,
@@ -88,6 +88,52 @@ function SlideInText({ children, className = '' }: { children: React.ReactNode; 
 }
 
 
+
+// --- Dust Particles Animation ---
+function DustParticles() {
+  const [particles, setParticles] = useState<{ id: number; left: number; size: number; delay: number; duration: number; xOffset: number; maxOpacity: number }[]>([]);
+  useEffect(() => {
+    const newParticles = Array.from({ length: 80 }).map((_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      size: Math.random() * 4 + 1.5,
+      delay: Math.random() * 10,
+      duration: Math.random() * 20 + 15,
+      xOffset: (Math.random() - 0.5) * 15,
+      maxOpacity: Math.random() * 0.4 + 0.2,
+    }));
+    setParticles(newParticles);
+  }, []);
+
+  return (
+    <div className="absolute inset-0 z-[1] overflow-hidden pointer-events-none mix-blend-screen">
+      {particles.map((p) => (
+        <motion.div
+          key={p.id}
+          className="absolute rounded-full bg-[#FF4500]"
+          style={{
+            width: p.size,
+            height: p.size,
+            left: `${p.left}%`,
+            bottom: '-5%',
+          }}
+          animate={{
+            y: ['0vh', '-110vh'],
+            x: ['0vw', `${p.xOffset}vw`],
+            opacity: [0, p.maxOpacity, 0],
+            scale: [1, 1.2, 1]
+          }}
+          transition={{
+            duration: p.duration,
+            repeat: Infinity,
+            ease: "linear",
+            delay: p.delay,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
 
 // --- Parallax Stacking Section ---
 
@@ -339,10 +385,63 @@ function ProjectPortfolioSection() {
 // --- Main Page Component ---
 
 export function DomainsPage() {
-  const { domainsConfig } = useCMS();
+  const { domainsConfig, heroLayout, saveHeroLayout } = useCMS();
+
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [isEditorMinimized, setIsEditorMinimized] = useState(false);
+  const [localLayout, setLocalLayout] = useState(heroLayout);
+
+  useEffect(() => {
+    setLocalLayout(heroLayout);
+  }, [heroLayout]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.key === 'e') {
+        e.preventDefault();
+        setIsEditMode(prev => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  const handleDragEnd = (key: keyof typeof localLayout, info: any) => {
+    setLocalLayout(prev => ({
+      ...prev,
+      [key]: {
+        ...prev[key],
+        x: prev[key].x + info.offset.x,
+        y: prev[key].y + info.offset.y
+      }
+    }));
+  };
 
   const [activeSection, setActiveSection] = useState('uav');
   const containerRef = useRef<HTMLDivElement>(null);
+  
+  const { scrollYProgress } = useScroll({ 
+    target: containerRef, 
+    offset: ["start start", "end start"] 
+  });
+
+  const heroScrollY = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
+
+  const parallaxY = {
+    ourText: useTransform(heroScrollY, [0, 1], [0, -1200]),
+    rksText: useTransform(heroScrollY, [0, 1], [0, -1200]),
+    centerWO: useTransform(heroScrollY, [0, 1], [0, -1200]),
+    statementBox: useTransform(heroScrollY, [0, 1], [0, -800]),
+    categoriesBlock: useTransform(heroScrollY, [0, 1], [0, -800]),
+    phase1: useTransform(heroScrollY, [0, 1], [0, -1200]),
+    phase2: useTransform(heroScrollY, [0, 1], [0, -1200]),
+    phase3: useTransform(heroScrollY, [0, 1], [0, -1200]),
+    phase4: useTransform(heroScrollY, [0, 1], [0, -1200]),
+  };
 
   const sectionRefs = {
     uav: useRef<HTMLDivElement>(null),
@@ -377,36 +476,268 @@ export function DomainsPage() {
   };
 
   return (
-    <div data-cursor-hidden="true" ref={containerRef} className="force-dark min-h-screen bg-brand-bg text-white font-montserrat relative select-none">
+    <div data-cursor-hidden={!isEditMode} ref={containerRef} className="force-dark min-h-screen bg-[#000000] text-white font-montserrat relative select-none">
 
 
 
-      {/* 1. Hero Block */}
-      <section className="relative h-screen w-full flex flex-col justify-center items-center text-center overflow-hidden pt-20">
-        <div className="max-w-4xl mx-auto px-6 relative z-10 space-y-6">
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#c41515]/10 border border-[#c41515]/25 mb-4"
+      {/* 1. Hero Block (Framer Design) */}
+      <section className="relative h-screen w-full overflow-hidden bg-[#000000] select-none">
+        {/* Grainy Noise Overlay */}
+        <div 
+          className="absolute inset-0 z-0 opacity-[0.25] mix-blend-overlay pointer-events-none"
+          style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }}
+        />
+
+        {/* Dust Mist Animation */}
+        <DustParticles />
+
+        {/* Edit Mode Control Panel */}
+        {isEditMode && (
+          <motion.div 
+            drag dragMomentum={false}
+            className={`absolute z-50 bg-[#07080a] border border-[#FF4500]/30 rounded-2xl p-6 shadow-2xl flex flex-col gap-4 w-[350px] cursor-grab active:cursor-grabbing ${isEditorMinimized ? 'h-auto' : 'max-h-[70vh]'}`}
+            style={{ top: '15%', left: '5%' }}
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-[#c41515] animate-pulse" />
-            <span className="text-[10px] font-mono tracking-widest font-bold text-[#c41515] uppercase">LAUNCHED V1.0</span>
+            <div className="flex justify-between items-center border-b border-white/10 pb-4">
+              <h3 className="font-mono text-sm font-bold text-[#FF4500] tracking-widest">LAYOUT EDITOR</h3>
+              <div className="flex gap-3">
+                <button onClick={() => setIsEditorMinimized(!isEditorMinimized)} className="text-white/50 hover:text-white font-mono">{isEditorMinimized ? '+' : '—'}</button>
+                <button onClick={() => setIsEditMode(false)} className="text-white/50 hover:text-white">✕</button>
+              </div>
+            </div>
+            
+            {!isEditorMinimized && (
+              <>
+                <div className="space-y-6 overflow-y-auto pr-2" style={{ maxHeight: 'calc(70vh - 120px)' }}>
+                  {(['ourText', 'rksText', 'centerWO', 'centerWOShadow', 'categoriesBlock', 'phase1', 'phase2', 'phase3', 'phase4'] as const).map(key => (
+                <div key={key} className="flex flex-col gap-2 border-b border-white/5 pb-4">
+                  <label className="font-mono text-[10px] text-brand-muted uppercase font-bold">{key}</label>
+                  {key === 'categoriesBlock' ? (
+                    <textarea 
+                      value={localLayout[key]?.text || ''}
+                      onChange={(e) => setLocalLayout(prev => ({ ...prev, [key]: { ...prev[key], text: e.target.value } }))}
+                      className="bg-black/50 border border-white/10 rounded px-2 py-1 text-xs text-white font-mono w-full min-h-[80px]"
+                    />
+                  ) : (
+                    <input 
+                      type="text" 
+                      value={localLayout[key]?.text || ''}
+                      onChange={(e) => setLocalLayout(prev => ({ ...prev, [key]: { ...prev[key], text: e.target.value } }))}
+                      className="bg-black/50 border border-white/10 rounded px-2 py-1 text-xs text-white font-mono w-full"
+                    />
+                  )}
+                  <div className="flex items-center gap-2 mt-1">
+                    <span className="text-[10px] text-white/50 w-8">Scale</span>
+                    <input 
+                      type="range" min="0.2" max="3" step="0.05" 
+                      value={localLayout[key]?.scale || 1}
+                      onChange={(e) => setLocalLayout(prev => ({ ...prev, [key]: { ...prev[key], scale: parseFloat(e.target.value) } }))}
+                      className="flex-1 accent-[#FF4500]"
+                    />
+                    <span className="text-[10px] w-6">{(localLayout[key]?.scale || 1).toFixed(1)}</span>
+                  </div>
+                </div>
+              ))}
+
+              <div className="flex flex-col gap-2 border-b border-white/5 pb-4">
+                <label className="font-mono text-[10px] text-brand-muted uppercase font-bold">Statement Box</label>
+                {(['line1', 'line2', 'line3', 'brandText'] as const).map(lineKey => (
+                  <input 
+                    key={lineKey}
+                    type="text" 
+                    value={localLayout.statementBox?.[lineKey] || ''}
+                    onChange={(e) => setLocalLayout(prev => ({ ...prev, statementBox: { ...prev.statementBox, [lineKey]: e.target.value } }))}
+                    className="bg-black/50 border border-white/10 rounded px-2 py-1 text-xs text-white font-mono w-full mb-1"
+                  />
+                ))}
+                <div className="flex items-center gap-2 mt-2">
+                  <span className="text-[10px] text-white/50 w-8">Scale</span>
+                  <input 
+                    type="range" min="0.2" max="3" step="0.05" 
+                    value={localLayout.statementBox?.scale || 1}
+                    onChange={(e) => setLocalLayout(prev => ({ ...prev, statementBox: { ...prev.statementBox, scale: parseFloat(e.target.value) } }))}
+                    className="flex-1 accent-[#FF4500]"
+                  />
+                  <span className="text-[10px] w-6">{(localLayout.statementBox?.scale || 1).toFixed(1)}</span>
+                </div>
+              </div>
+            </div>
+
+            <button 
+              onClick={() => {
+                saveHeroLayout(localLayout);
+                setIsEditMode(false);
+              }}
+              className="mt-2 w-full py-3 bg-[#FF4500] text-black font-mono text-xs font-bold uppercase tracking-widest rounded-lg hover:bg-white transition-colors"
+            >
+              Save Layout
+            </button>
+              </>
+            )}
+          </motion.div>
+        )}
+
+        {/* Large Typography Background */}
+        <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
+          {/* Top Left OUR */}
+          <motion.div style={{ y: parallaxY.ourText }} className="absolute inset-0">
+            <motion.div 
+              drag={isEditMode} dragMomentum={false}
+              onDragEnd={(e, info) => handleDragEnd('ourText', info)}
+              animate={{ opacity: 1, x: localLayout.ourText?.x || 0, y: localLayout.ourText?.y || 0, scale: localLayout.ourText?.scale || 1 }}
+              transition={{ duration: isEditMode ? 0 : 0.8 }}
+              className={`absolute top-[15%] left-[5%] text-[24vw] leading-[0.8] font-clash font-bold text-[#FF4500] opacity-100 tracking-tighter whitespace-pre uppercase ${isEditMode ? 'pointer-events-auto cursor-grab active:cursor-grabbing border-2 border-dashed border-white p-4 bg-white/10' : ''}`}
+            >
+              {localLayout.ourText?.text || 'OUR'}
+            </motion.div>
+          </motion.div>
+          
+          {/* Bottom Right RKS */}
+          <motion.div style={{ y: parallaxY.rksText }} className="absolute inset-0">
+            <motion.div 
+              drag={isEditMode} dragMomentum={false}
+              onDragEnd={(e, info) => handleDragEnd('rksText', info)}
+              animate={{ opacity: 1, x: localLayout.rksText?.x || 0, y: localLayout.rksText?.y || 0, scale: localLayout.rksText?.scale || 1 }}
+              transition={{ duration: isEditMode ? 0 : 0.8 }}
+              className={`absolute bottom-[5%] right-[5%] text-[24vw] leading-[0.8] font-clash font-bold text-[#FF4500] opacity-100 tracking-tighter whitespace-pre uppercase ${isEditMode ? 'pointer-events-auto cursor-grab active:cursor-grabbing border-2 border-dashed border-white p-4 bg-white/10' : ''}`}
+            >
+              {localLayout.rksText?.text || 'RKS'}
+            </motion.div>
           </motion.div>
 
-          <h1 className="font-righteous text-6xl md:text-8xl lg:text-[110px] bg-gradient-to-r from-[#c41515] via-[#ff6b6b] to-[#c41515] bg-clip-text text-transparent animate-text-shimmer tracking-tight leading-none uppercase">
-            WORKING DOMAINS
-          </h1>
+          {/* Center WO Shadow */}
+          <motion.div style={{ y: parallaxY.centerWO }} className="absolute inset-0">
+            <motion.div 
+              drag={isEditMode} dragMomentum={false}
+              onDragEnd={(e, info) => handleDragEnd('centerWOShadow', info)}
+              animate={{ opacity: 1, x: localLayout.centerWOShadow?.x || 0, y: localLayout.centerWOShadow?.y || 0, scale: localLayout.centerWOShadow?.scale || 1 }}
+              transition={{ duration: isEditMode ? 0 : 0.8 }}
+              className={`absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 mt-[2vw] ml-[2vw] text-[26vw] leading-none font-clash font-bold text-[#FF4500] tracking-tighter whitespace-pre uppercase ${isEditMode ? 'pointer-events-auto cursor-grab active:cursor-grabbing border-2 border-dashed border-white p-4 bg-white/10' : ''}`}
+            >
+              {localLayout.centerWOShadow?.text || 'WO'}
+            </motion.div>
+          </motion.div>
 
-          <div className="h-16 flex items-center justify-center">
-            <TypewriterHeading text="Custom Solutions, Infinite Possibilities." className="text-brand-muted font-playfair font-bold text-xl md:text-3xl lg:text-4xl" />
-          </div>
+          {/* Center WO */}
+          <motion.div style={{ y: parallaxY.centerWO }} className="absolute inset-0">
+            <motion.div 
+              drag={isEditMode} dragMomentum={false}
+              onDragEnd={(e, info) => handleDragEnd('centerWO', info)}
+              animate={{ opacity: 1, x: localLayout.centerWO?.x || 0, y: localLayout.centerWO?.y || 0, scale: localLayout.centerWO?.scale || 1 }}
+              transition={{ duration: isEditMode ? 0 : 0.8 }}
+              className={`absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 text-[26vw] leading-none font-clash font-bold text-white tracking-tighter whitespace-pre uppercase drop-shadow-2xl ${isEditMode ? 'pointer-events-auto cursor-grab active:cursor-grabbing border-2 border-dashed border-white p-4 bg-white/10' : ''}`}
+            >
+              {localLayout.centerWO?.text || 'WO'}
+            </motion.div>
+          </motion.div>
+        </div>
 
-          <SlideInText className="max-w-xl mx-auto">
-            <p className="text-brand-muted text-sm md:text-base leading-relaxed">
-              Explore the core technical divisions of Team Endeavour. Pushing the boundaries of autonomous flight, ground robotics, and advanced scientific research.
-            </p>
-          </SlideInText>
+        {/* Statement Box */}
+        <motion.div style={{ y: parallaxY.statementBox }} className="absolute inset-0 z-20 pointer-events-none">
+          <motion.div 
+            drag={isEditMode} dragMomentum={false}
+            onDragEnd={(e, info) => handleDragEnd('statementBox', info)}
+            animate={{ opacity: 1, x: localLayout.statementBox?.x || 0, y: localLayout.statementBox?.y || 0, scale: localLayout.statementBox?.scale || 1 }}
+            transition={{ duration: isEditMode ? 0 : 0.8 }}
+            className={`absolute top-[15%] right-[5%] flex flex-col items-start text-left max-w-[500px] overflow-hidden ${isEditMode ? 'pointer-events-auto cursor-grab active:cursor-grabbing border-2 border-dashed border-white p-4 bg-black/50 backdrop-blur-sm rounded-xl' : ''}`}
+          >
+            <motion.div style={{ y: useTransform(heroScrollY, [0, 1], [0, -400]) }}>
+              <p className="font-clash font-bold text-[2.5rem] md:text-[3.5rem] tracking-tighter opacity-100 uppercase m-0 leading-[0.8] text-white [text-shadow:3px_3px_0px_#FF4500]">{localLayout.statementBox?.line1}</p>
+              <p className="font-clash font-bold text-[2.5rem] md:text-[3.5rem] tracking-tighter opacity-100 uppercase m-0 leading-[0.8] text-white mt-1">{localLayout.statementBox?.line2}</p>
+              <p className="font-clash font-bold text-[2.5rem] md:text-[3.5rem] tracking-tighter opacity-100 uppercase m-0 leading-[0.8] text-white mt-1">{localLayout.statementBox?.line3}</p>
+              
+              <div className="flex items-stretch justify-start gap-3 mt-4 ml-1">
+                <div className="w-2 bg-[#FF4500]" />
+                <p className="font-clash font-bold text-lg md:text-xl tracking-tight leading-none whitespace-pre text-[#FF4500] uppercase m-0 py-1">
+                  {localLayout.statementBox?.brandText}
+                </p>
+              </div>
+            </motion.div>
+          </motion.div>
+        </motion.div>
+
+        {/* Categories Block */}
+        <motion.div style={{ y: parallaxY.categoriesBlock }} className="absolute inset-0 z-20 pointer-events-none overflow-hidden">
+          <motion.div 
+            drag={isEditMode} dragMomentum={false}
+            onDragEnd={(e, info) => handleDragEnd('categoriesBlock', info)}
+            animate={{ opacity: 1, x: localLayout.categoriesBlock?.x || 0, y: localLayout.categoriesBlock?.y || 0, scale: localLayout.categoriesBlock?.scale || 1 }}
+            transition={{ duration: isEditMode ? 0 : 0.8 }}
+            className={`absolute bottom-[10%] left-[10%] flex items-stretch overflow-hidden ${isEditMode ? 'pointer-events-auto cursor-grab active:cursor-grabbing border-2 border-dashed border-white p-4 bg-black/50 backdrop-blur-sm rounded-xl' : ''}`}
+          >
+            {/* Both line and text share the faster parallax to sync the masking */}
+            <motion.div 
+              style={{ y: useTransform(heroScrollY, [0, 1], [0, -400]) }} 
+              className="flex items-stretch"
+            >
+              <div className="w-1.5 bg-white/40 mr-4 shrink-0" />
+              <div className="flex flex-col justify-between py-1">
+                {localLayout.categoriesBlock?.text?.split('\n').map((cat, i) => (
+                  <p key={i} className="font-clash text-lg md:text-2xl font-bold tracking-tight uppercase text-white m-0 leading-none mb-2 last:mb-0">
+                    {cat}
+                  </p>
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
+        </motion.div>
+
+        {/* Timeline Phases */}
+        <div className="absolute inset-0 z-20 pointer-events-none">
+          {[
+            { id: 'phase1', num: '001', defaultLabel: 'PHASE/BREAK', left: '10%', top: '45%' },
+            { id: 'phase2', num: '002', defaultLabel: 'PHASE/THINK', left: '25%', top: '45%' },
+            { id: 'phase3', num: '003', defaultLabel: 'PHASE/BUILD', left: '70%', top: '45%' },
+            { id: 'phase4', num: '004', defaultLabel: 'PHASE/RELEASE', left: '85%', top: '45%' }
+          ].map(({ id, num, defaultLabel, left, top }) => {
+            const phaseKey = id as 'phase1' | 'phase2' | 'phase3' | 'phase4';
+            const layout = localLayout[phaseKey] || { x: 0, y: 0, scale: 1, text: defaultLabel };
+            return (
+              <motion.div key={id} style={{ y: parallaxY[phaseKey] }} className="absolute inset-0">
+                <motion.div
+                  drag={isEditMode} dragMomentum={false}
+                  onDragEnd={(e, info) => handleDragEnd(phaseKey, info)}
+                  animate={{ opacity: 1, x: layout.x, y: layout.y, scale: layout.scale }}
+                  transition={{ duration: isEditMode ? 0 : 0.8 }}
+                  style={{ left, top }}
+                  className={`absolute flex flex-col items-start pointer-events-auto ${isEditMode ? 'cursor-grab active:cursor-grabbing border-2 border-dashed border-white p-4 bg-black/20' : ''}`}
+                >
+                  <span className="font-clash font-bold text-xl opacity-100 uppercase text-white mb-2 ml-1">{num}</span>
+                  <motion.div 
+                    style={{ scaleY: useTransform(heroScrollY, [0, 1], [1, 0.1]), transformOrigin: 'top' }} 
+                    className="w-[1px] h-[100px] bg-white/20 ml-3" 
+                  />
+                  <span className="font-clash text-[10px] md:text-[12px] font-bold tracking-widest opacity-100 whitespace-pre uppercase text-white mt-2">{layout.text || defaultLabel}</span>
+                  <div className="flex items-center gap-1 mt-1 ml-1">
+                    <div className="w-1.5 h-1.5 bg-[#FF4500]" />
+                    <div className="w-[3px] h-1.5 bg-white/25" />
+                    <div className="w-[3px] h-1.5 bg-white/25" />
+                  </div>
+                </motion.div>
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/* Marquee Ticker */}
+        <div className="absolute bottom-[4%] left-0 w-full z-20 overflow-hidden opacity-70 flex">
+          <motion.div 
+            animate={{ x: ["0%", "-50%"] }}
+            transition={{ repeat: Infinity, ease: "linear", duration: 30 }}
+            className="flex whitespace-nowrap"
+          >
+            {[1, 2, 3].map((n) => (
+              <div key={n} className="flex">
+                <span className="font-montserrat text-xs font-semibold tracking-[0.2em] uppercase px-4 flex items-center">
+                  PUSHING THE BOUNDARIES <span className="mx-4 text-[#FD3C00]">·</span> 
+                  CUSTOM SOLUTIONS <span className="mx-4 text-[#FD3C00]">·</span> 
+                  COLLABORATIVE TEAM <span className="mx-4 text-[#FD3C00]">·</span> 
+                  CORE TECHNICAL DIVISION <span className="mx-4 text-[#FD3C00]">·</span> 
+                  INFINITE POSSIBILITIES
+                </span>
+              </div>
+            ))}
+          </motion.div>
         </div>
       </section>
 

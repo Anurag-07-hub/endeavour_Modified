@@ -30,6 +30,7 @@ const DOCUMENTS_FILE = path.join(__dirname, 'src', 'data', 'documents.ts');
 const GALLERY_FILE = path.join(__dirname, 'src', 'data', 'gallery.ts');
 const MODEL3D_FILE = path.join(__dirname, 'src', 'data', 'model3d.ts');
 const RECRUITMENT_FILE = path.join(__dirname, 'src', 'data', 'recruitment.ts');
+const HERO_LAYOUT_FILE = path.join(__dirname, 'src', 'data', 'heroLayout.ts');
 const REPO_ROOT = __dirname;
 
 /**
@@ -258,6 +259,61 @@ app.post('/api/commit-recruitment', (req, res) => {
 
     const msg = commitMessage || 'admin: update recruitment settings [auto]';
     const result = runGitCommands(REPO_ROOT, 'src/data/recruitment.ts', msg);
+    
+    return res.json({ success: true, message: result.message });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+/**
+ * POST /api/commit-hero-layout
+ * Body: { layout: HeroLayoutConfig, commitMessage?: string }
+ */
+app.post('/api/commit-hero-layout', (req, res) => {
+  const { layout, commitMessage } = req.body as {
+    layout: any;
+    commitMessage?: string;
+  };
+
+  if (!layout || typeof layout !== 'object') {
+    return res.status(400).json({ success: false, error: 'Invalid hero layout payload' });
+  }
+
+  try {
+    const fileContent =
+      `export interface ElementLayout {\n` +
+      `  x: number;\n` +
+      `  y: number;\n` +
+      `  scale: number;\n` +
+      `  text?: string;\n` +
+      `}\n\n` +
+      `export interface StatementLayout {\n` +
+      `  x: number;\n` +
+      `  y: number;\n` +
+      `  scale: number;\n` +
+      `  line1: string;\n` +
+      `  line2: string;\n` +
+      `  line3: string;\n` +
+      `  brandText: string;\n` +
+      `}\n\n` +
+      `export interface HeroLayoutConfig {\n` +
+      `  ourText: ElementLayout;\n` +
+      `  rksText: ElementLayout;\n` +
+      `  centerWO: ElementLayout;\n` +
+      `  centerWOShadow: ElementLayout;\n` +
+      `  statementBox: StatementLayout;\n` +
+      `  categoriesBlock: ElementLayout;\n` +
+      `  phase1: ElementLayout;\n` +
+      `  phase2: ElementLayout;\n` +
+      `  phase3: ElementLayout;\n` +
+      `  phase4: ElementLayout;\n` +
+      `}\n\n` +
+      `export const defaultHeroLayout: HeroLayoutConfig = ${JSON.stringify(layout, null, 2)};\n`;
+    writeFileSync(HERO_LAYOUT_FILE, fileContent, 'utf8');
+
+    const msg = commitMessage || 'admin: update hero layout [auto]';
+    const result = runGitCommands(REPO_ROOT, 'src/data/heroLayout.ts', msg);
     
     return res.json({ success: true, message: result.message });
   } catch (err: any) {
