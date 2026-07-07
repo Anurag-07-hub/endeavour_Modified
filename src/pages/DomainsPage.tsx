@@ -93,42 +93,39 @@ function SlideInText({ children, className = '' }: { children: React.ReactNode; 
 function DustParticles() {
   const [particles, setParticles] = useState<{ id: number; left: number; size: number; delay: number; duration: number; xOffset: number; maxOpacity: number }[]>([]);
   useEffect(() => {
-    const newParticles = Array.from({ length: 80 }).map((_, i) => ({
-      id: i,
-      left: Math.random() * 100,
-      size: Math.random() * 4 + 1.5,
-      delay: Math.random() * 10,
-      duration: Math.random() * 20 + 15,
-      xOffset: (Math.random() - 0.5) * 15,
-      maxOpacity: Math.random() * 0.4 + 0.2,
-    }));
+    const newParticles = Array.from({ length: 80 }).map((_, i) => {
+      const duration = Math.random() * 20 + 15;
+      return {
+        id: i,
+        left: Math.random() * 100,
+        size: Math.random() * 4 + 1.5,
+        delay: Math.random() * duration,
+        duration: duration,
+        xOffset: (Math.random() - 0.5) * 15,
+        maxOpacity: Math.random() * 0.4 + 0.2,
+      };
+    });
     setParticles(newParticles);
   }, []);
 
   return (
     <div className="absolute inset-0 z-[1] overflow-hidden pointer-events-none mix-blend-screen">
       {particles.map((p) => (
-        <motion.div
+        <div
           key={p.id}
           className="absolute rounded-full bg-[#FF4500]"
           style={{
-            width: p.size,
-            height: p.size,
+            width: `${p.size}px`,
+            height: `${p.size}px`,
             left: `${p.left}%`,
             bottom: '-5%',
-          }}
-          animate={{
-            y: ['0vh', '-110vh'],
-            x: ['0vw', `${p.xOffset}vw`],
-            opacity: [0, p.maxOpacity, 0],
-            scale: [1, 1.2, 1]
-          }}
-          transition={{
-            duration: p.duration,
-            repeat: Infinity,
-            ease: "linear",
-            delay: p.delay,
-          }}
+            opacity: 0,
+            animation: `dust-float ${p.duration}s linear infinite`,
+            animationDelay: `-${p.delay}s`,
+            WebkitAnimationDelay: `-${p.delay}s`,
+            '--x-offset': `${p.xOffset}vw`,
+            '--max-opacity': p.maxOpacity,
+          } as React.CSSProperties}
         />
       ))}
     </div>
@@ -385,37 +382,10 @@ function ProjectPortfolioSection() {
 // --- Main Page Component ---
 
 export function DomainsPage() {
-  const { domainsConfig, heroLayout, saveHeroLayout } = useCMS();
+  const { domainsConfig, heroLayout } = useCMS();
 
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [isEditorMinimized, setIsEditorMinimized] = useState(false);
-  const [localLayout, setLocalLayout] = useState(heroLayout);
-
-  useEffect(() => {
-    setLocalLayout(heroLayout);
-  }, [heroLayout]);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.ctrlKey && e.key === 'e') {
-        e.preventDefault();
-        setIsEditMode(prev => !prev);
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
-
-  const handleDragEnd = (key: keyof typeof localLayout, info: any) => {
-    setLocalLayout(prev => ({
-      ...prev,
-      [key]: {
-        ...prev[key],
-        x: prev[key].x + info.offset.x,
-        y: prev[key].y + info.offset.y
-      }
-    }));
-  };
+  const isEditMode = false;
+  const localLayout = heroLayout;
 
   const [activeSection, setActiveSection] = useState('uav');
   const containerRef = useRef<HTMLDivElement>(null);
@@ -442,6 +412,13 @@ export function DomainsPage() {
     phase3: useTransform(heroScrollY, [0, 1], [0, -1200]),
     phase4: useTransform(heroScrollY, [0, 1], [0, -1200]),
   };
+
+  // Phase 1 scroll-linked parallax animations (used globally for all phases)
+  const phase1ScaleY = useTransform(heroScrollY, [0.0, 0.025, 0.05, 0.1], [1.0, 0.6, 0.2, 0.2]);
+  const phase1TextOpacity = useTransform(heroScrollY, [0.0, 0.025, 0.05, 0.1], [1.0, 0.5, 0.1, 0.1]);
+  const phase1TextY = useTransform(heroScrollY, [0.0, 0.025, 0.05, 0.1], [0, -7.5, -15, -15]);
+  const phase1TopGhostY = useTransform(heroScrollY, [0.0, 0.025, 0.05, 0.1], [0, -15.5, -15, -15]);
+  const phase1BottomGhostY = useTransform(heroScrollY, [0.0, 0.025, 0.05, 0.1], [0, 0.5, -15, -15]);
 
   const sectionRefs = {
     uav: useRef<HTMLDivElement>(null),
@@ -491,91 +468,7 @@ export function DomainsPage() {
         {/* Dust Mist Animation */}
         <DustParticles />
 
-        {/* Edit Mode Control Panel */}
-        {isEditMode && (
-          <motion.div 
-            drag dragMomentum={false}
-            className={`absolute z-50 bg-[#07080a] border border-[#FF4500]/30 rounded-2xl p-6 shadow-2xl flex flex-col gap-4 w-[350px] cursor-grab active:cursor-grabbing ${isEditorMinimized ? 'h-auto' : 'max-h-[70vh]'}`}
-            style={{ top: '15%', left: '5%' }}
-          >
-            <div className="flex justify-between items-center border-b border-white/10 pb-4">
-              <h3 className="font-mono text-sm font-bold text-[#FF4500] tracking-widest">LAYOUT EDITOR</h3>
-              <div className="flex gap-3">
-                <button onClick={() => setIsEditorMinimized(!isEditorMinimized)} className="text-white/50 hover:text-white font-mono">{isEditorMinimized ? '+' : '—'}</button>
-                <button onClick={() => setIsEditMode(false)} className="text-white/50 hover:text-white">✕</button>
-              </div>
-            </div>
-            
-            {!isEditorMinimized && (
-              <>
-                <div className="space-y-6 overflow-y-auto pr-2" style={{ maxHeight: 'calc(70vh - 120px)' }}>
-                  {(['ourText', 'rksText', 'centerWO', 'centerWOShadow', 'categoriesBlock', 'phase1', 'phase2', 'phase3', 'phase4'] as const).map(key => (
-                <div key={key} className="flex flex-col gap-2 border-b border-white/5 pb-4">
-                  <label className="font-mono text-[10px] text-brand-muted uppercase font-bold">{key}</label>
-                  {key === 'categoriesBlock' ? (
-                    <textarea 
-                      value={localLayout[key]?.text || ''}
-                      onChange={(e) => setLocalLayout(prev => ({ ...prev, [key]: { ...prev[key], text: e.target.value } }))}
-                      className="bg-black/50 border border-white/10 rounded px-2 py-1 text-xs text-white font-mono w-full min-h-[80px]"
-                    />
-                  ) : (
-                    <input 
-                      type="text" 
-                      value={localLayout[key]?.text || ''}
-                      onChange={(e) => setLocalLayout(prev => ({ ...prev, [key]: { ...prev[key], text: e.target.value } }))}
-                      className="bg-black/50 border border-white/10 rounded px-2 py-1 text-xs text-white font-mono w-full"
-                    />
-                  )}
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="text-[10px] text-white/50 w-8">Scale</span>
-                    <input 
-                      type="range" min="0.2" max="3" step="0.05" 
-                      value={localLayout[key]?.scale || 1}
-                      onChange={(e) => setLocalLayout(prev => ({ ...prev, [key]: { ...prev[key], scale: parseFloat(e.target.value) } }))}
-                      className="flex-1 accent-[#FF4500]"
-                    />
-                    <span className="text-[10px] w-6">{(localLayout[key]?.scale || 1).toFixed(1)}</span>
-                  </div>
-                </div>
-              ))}
 
-              <div className="flex flex-col gap-2 border-b border-white/5 pb-4">
-                <label className="font-mono text-[10px] text-brand-muted uppercase font-bold">Statement Box</label>
-                {(['line1', 'line2', 'line3', 'brandText'] as const).map(lineKey => (
-                  <input 
-                    key={lineKey}
-                    type="text" 
-                    value={localLayout.statementBox?.[lineKey] || ''}
-                    onChange={(e) => setLocalLayout(prev => ({ ...prev, statementBox: { ...prev.statementBox, [lineKey]: e.target.value } }))}
-                    className="bg-black/50 border border-white/10 rounded px-2 py-1 text-xs text-white font-mono w-full mb-1"
-                  />
-                ))}
-                <div className="flex items-center gap-2 mt-2">
-                  <span className="text-[10px] text-white/50 w-8">Scale</span>
-                  <input 
-                    type="range" min="0.2" max="3" step="0.05" 
-                    value={localLayout.statementBox?.scale || 1}
-                    onChange={(e) => setLocalLayout(prev => ({ ...prev, statementBox: { ...prev.statementBox, scale: parseFloat(e.target.value) } }))}
-                    className="flex-1 accent-[#FF4500]"
-                  />
-                  <span className="text-[10px] w-6">{(localLayout.statementBox?.scale || 1).toFixed(1)}</span>
-                </div>
-              </div>
-            </div>
-
-            <button 
-              onClick={() => {
-                saveHeroLayout(localLayout);
-                setIsEditMode(false);
-              }}
-              className="mt-2 w-full py-3 bg-[#FF4500] text-black font-mono text-xs font-bold uppercase tracking-widest rounded-lg hover:bg-white transition-colors"
-            >
-              Save Layout
-            </button>
-              </>
-            )}
-          </motion.div>
-        )}
 
         {/* Large Typography Background */}
         <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
@@ -692,6 +585,14 @@ export function DomainsPage() {
           ].map(({ id, num, defaultLabel, left, top }) => {
             const phaseKey = id as 'phase1' | 'phase2' | 'phase3' | 'phase4';
             const layout = localLayout[phaseKey] || { x: 0, y: 0, scale: 1, text: defaultLabel };
+
+            // Choose the correct MotionValues for each phase (all phases behave exactly like Phase 1)
+            const scaleY = phase1ScaleY;
+            const textOpacity = phase1TextOpacity;
+            const textY = phase1TextY;
+            const topGhostY = phase1TopGhostY;
+            const bottomGhostY = phase1BottomGhostY;
+
             return (
               <motion.div key={id} style={{ y: parallaxY[phaseKey] }} className="absolute inset-0">
                 <motion.div
@@ -704,12 +605,36 @@ export function DomainsPage() {
                 >
                   <span className="font-clash font-bold text-xl opacity-100 uppercase text-white mb-2 ml-1">{num}</span>
                   <motion.div 
-                    style={{ scaleY: useTransform(heroScrollY, [0, 1], [1, 0.1]), transformOrigin: 'top' }} 
-                    className="w-[1px] h-[100px] bg-white/20 ml-3" 
+                    style={{ scaleY: scaleY, opacity: useTransform(scaleY, [0.2, 1.0], [0.25, 1.0]), transformOrigin: 'top' }} 
+                    className="w-[1px] h-[100px] bg-white ml-3" 
                   />
-                  <span className="font-clash text-[10px] md:text-[12px] font-bold tracking-widest opacity-100 whitespace-pre uppercase text-white mt-2">{layout.text || defaultLabel}</span>
+                  <div className="relative mt-2 h-5 w-full pointer-events-none">
+                    {/* Top Ghost */}
+                    <motion.span
+                      style={{ y: topGhostY, opacity: useTransform(textOpacity, o => o * 0.25) }}
+                      className="absolute left-0 top-0 font-clash text-[10px] md:text-[12px] font-bold tracking-widest whitespace-nowrap uppercase text-[#7F0303]"
+                    >
+                      {layout.text || defaultLabel}
+                    </motion.span>
+                    
+                    {/* Main Text */}
+                    <motion.span
+                      style={{ y: textY, opacity: textOpacity }}
+                      className="absolute left-0 top-0 font-clash text-[10px] md:text-[12px] font-bold tracking-widest whitespace-nowrap uppercase text-white"
+                    >
+                      {layout.text || defaultLabel}
+                    </motion.span>
+
+                    {/* Bottom Ghost */}
+                    <motion.span
+                      style={{ y: bottomGhostY, opacity: useTransform(textOpacity, o => o * 0.25) }}
+                      className="absolute left-0 top-0 font-clash text-[10px] md:text-[12px] font-bold tracking-widest whitespace-nowrap uppercase text-[#7F0303]"
+                    >
+                      {layout.text || defaultLabel}
+                    </motion.span>
+                  </div>
                   <div className="flex items-center gap-1 mt-1 ml-1">
-                    <div className="w-1.5 h-1.5 bg-[#FF4500]" />
+                    <div className="w-1.5 h-1.5 bg-[#FF4500] animate-blink" />
                     <div className="w-[3px] h-1.5 bg-white/25" />
                     <div className="w-[3px] h-1.5 bg-white/25" />
                   </div>

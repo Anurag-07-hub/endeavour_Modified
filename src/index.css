@@ -40,6 +40,21 @@ body {
   animation: blob-morph 8s ease-in-out infinite;
 }
 
+@keyframes dust-float {
+  0% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 0;
+  }
+  50% {
+    opacity: var(--max-opacity, 0.4);
+    transform: translateY(-55vh) translateX(calc(var(--x-offset, 0vw) * 0.5)) scale(1.2);
+  }
+  100% {
+    transform: translateY(-110vh) translateX(var(--x-offset, 0vw)) scale(1);
+    opacity: 0;
+  }
+}
+
 @keyframes fluid-gradient {
   0% { background-position: 0% 0%; }
   25% { background-position: 100% 0%; }
@@ -68,4 +83,13 @@ body {
 .animate-text-shimmer {
   background-size: 200% auto;
   animation: text-shimmer 6s linear infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.animate-blink {
+  animation: blink 2s infinite;
 }
