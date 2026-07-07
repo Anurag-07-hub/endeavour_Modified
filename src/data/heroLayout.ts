@@ -43,13 +43,13 @@ export const defaultHeroLayout: HeroLayoutConfig = {
   "centerWO": {
     "x": 30.833251953125,
     "y": 60,
-    "scale": 0.6,
+    "scale": 0.65,
     "text": "WO"
   },
   "centerWOShadow": {
     "x": 9.9998779296875,
     "y": 16.666656494140625,
-    "scale": 0.6,
+    "scale": 0.65,
     "text": "WO"
   },
   "statementBox": {
