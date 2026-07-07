@@ -36,7 +36,7 @@ export const defaultHeroLayout: HeroLayoutConfig = {
   },
   "rksText": {
     "x": 177.5,
-    "y": 60.8333740234375,
+    "y": 48.3333740234375,
     "scale": 0.7,
     "text": "RKS"
   },
