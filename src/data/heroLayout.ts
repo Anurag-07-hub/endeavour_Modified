@@ -36,7 +36,7 @@ export const defaultHeroLayout: HeroLayoutConfig = {
   },
   "rksText": {
     "x": 177.5,
-    "y": 48.3333740234375,
+    "y": 53.3333740234375,
     "scale": 0.7,
     "text": "RKS"
   },
@@ -68,26 +68,26 @@ export const defaultHeroLayout: HeroLayoutConfig = {
     "text": "PUSHING THE BOUNDARIES\nCUSTOM SOLUTIONS\nCOLLABORATIVE TEAM\nCORE TECHNICAL DIVISION\nINFINITE POSSIBILITIES"
   },
   "phase1": {
-    "x": -42.5,
-    "y": -21.666656494140625,
+    "x": -66.66667175292969,
+    "y": 0.000030517578125,
     "scale": 1,
     "text": "PHASE/BREAK"
   },
   "phase2": {
-    "x": 21.66668701171875,
-    "y": -22.5,
+    "x": -24.1666259765625,
+    "y": 2.5,
     "scale": 1,
     "text": "PHASE/THINK"
   },
   "phase3": {
-    "x": -20.8333740234375,
-    "y": -26.666656494140625,
+    "x": 56.6666259765625,
+    "y": 5.833343505859375,
     "scale": 1.05,
     "text": "PHASE/BUILD"
   },
   "phase4": {
-    "x": 41.666748046875,
-    "y": -28.333343505859375,
+    "x": 123.3333740234375,
+    "y": 2.500030517578125,
     "scale": 1,
     "text": "PHASE/RELEASE"
   }
