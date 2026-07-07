@@ -30,7 +30,7 @@ export interface HeroLayoutConfig {
 export const defaultHeroLayout: HeroLayoutConfig = {
   "ourText": {
     "x": -168.33328247070312,
-    "y": -45.83338928222656,
+    "y": -37.50004577636719,
     "scale": 0.7,
     "text": "OUR"
   },
@@ -69,25 +69,25 @@ export const defaultHeroLayout: HeroLayoutConfig = {
   },
   "phase1": {
     "x": -42.5,
-    "y": -7.499969482421875,
+    "y": -21.666656494140625,
     "scale": 1,
     "text": "PHASE/BREAK"
   },
   "phase2": {
-    "x": 20.833343505859375,
-    "y": -8.333343505859375,
+    "x": 21.66668701171875,
+    "y": -22.5,
     "scale": 1,
     "text": "PHASE/THINK"
   },
   "phase3": {
-    "x": 22.4998779296875,
-    "y": -12.5,
+    "x": -20.8333740234375,
+    "y": -26.666656494140625,
     "scale": 1.05,
     "text": "PHASE/BUILD"
   },
   "phase4": {
-    "x": 45.8333740234375,
-    "y": -6.66668701171875,
+    "x": 41.666748046875,
+    "y": -28.333343505859375,
     "scale": 1,
     "text": "PHASE/RELEASE"
   }
