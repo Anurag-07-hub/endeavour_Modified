@@ -54,8 +54,8 @@ export const defaultHeroLayout: HeroLayoutConfig = {
     "text": "WO"
   },
   "statementBox": {
-    "x": 208.3333740234375,
-    "y": -88.33332824707031,
+    "x": 188.3333740234375,
+    "y": -74.16665649414062,
     "scale": 0.5499999999999999,
     "line1": "I BREAK THINGS",
     "line2": "TO SEE WHAT",
