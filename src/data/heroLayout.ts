@@ -17,10 +17,11 @@ export interface StatementLayout {
 
 export interface HeroLayoutConfig {
   ourText: ElementLayout;
-  woText: ElementLayout;
   rksText: ElementLayout;
-  domainText: ElementLayout;
+  centerWO: ElementLayout;
+  centerWOShadow: ElementLayout;
   statementBox: StatementLayout;
+  categoriesBlock: ElementLayout;
   phase1: ElementLayout;
   phase2: ElementLayout;
   phase3: ElementLayout;
@@ -53,8 +54,8 @@ export const defaultHeroLayout: HeroLayoutConfig = {
     "text": "WO"
   },
   "statementBox": {
-    "x": 196.666748046875,
-    "y": -7.4999847412109375,
+    "x": 150.0001220703125,
+    "y": -50.83329772949219,
     "scale": 0.6,
     "line1": "I BREAK THINGS",
     "line2": "TO SEE WHAT",
@@ -62,9 +63,9 @@ export const defaultHeroLayout: HeroLayoutConfig = {
     "brandText": "ENDEAVOUR\nTHINGS"
   },
   "categoriesBlock": {
-    "x": -35.000030517578125,
-    "y": 32.5,
-    "scale": 0.65,
+    "x": 16.6666259765625,
+    "y": 21.6666259765625,
+    "scale": 0.8,
     "text": "PUSHING THE BOUNDARIES\nCUSTOM SOLUTIONS\nCOLLABORATIVE TEAM\nCORE TECHNICAL DIVISION\nINFINITE POSSIBILITIES"
   },
   "phase1": {
