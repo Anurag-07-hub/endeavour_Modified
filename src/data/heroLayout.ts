@@ -64,7 +64,7 @@ export const defaultHeroLayout: HeroLayoutConfig = {
   },
   "categoriesBlock": {
     "x": 16.6666259765625,
-    "y": 21.6666259765625,
+    "y": 9.1666259765625,
     "scale": 0.8500000000000001,
     "text": "PUSHING THE BOUNDARIES\nCUSTOM SOLUTIONS\nCOLLABORATIVE TEAM\nCORE TECHNICAL DIVISION\nINFINITE POSSIBILITIES"
   },
