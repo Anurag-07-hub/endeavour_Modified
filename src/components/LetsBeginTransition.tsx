@@ -23,7 +23,7 @@ export function LetsBeginTransition({ onComplete }: LetsBeginTransitionProps) {
   }, [onComplete]);
 
   return (
-    <div className="fixed inset-0 z-[9999] pointer-events-none flex">
+    <div data-cursor-hidden="true" className="fixed inset-0 z-[9999] pointer-events-none flex">
       {/* Background: 5 Vertical Columns from Option 1 */}
       {columns.map((i) => (
         <motion.div

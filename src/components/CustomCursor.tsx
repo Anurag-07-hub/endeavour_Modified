@@ -6,9 +6,37 @@ export function CustomCursor() {
   const cursorY = useMotionValue(-100);
 
   const [isHidden, setIsHidden] = useState(false);
+  const [hasGlobalHidden, setHasGlobalHidden] = useState(false);
   const [cursorMode, setCursorMode] = useState<'normal' | 'enroll' | 'red' | 'white' | 'maroon'>('normal');
   const [isDarkMode, setIsDarkMode] = useState(true);
   const lastTargetRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const checkGlobalHidden = () => {
+      const isGlobalHidden = !!document.querySelector('[data-cursor-hidden="true"].fixed');
+      setHasGlobalHidden(isGlobalHidden);
+      if (isGlobalHidden) {
+        document.body.classList.add('global-cursor-hidden');
+      } else {
+        document.body.classList.remove('global-cursor-hidden');
+      }
+    };
+
+    checkGlobalHidden();
+
+    const observer = new MutationObserver(checkGlobalHidden);
+    observer.observe(document.documentElement, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['data-cursor-hidden']
+    });
+
+    return () => {
+      observer.disconnect();
+      document.body.classList.remove('global-cursor-hidden');
+    };
+  }, []);
 
   useEffect(() => {
     const isLight = document.documentElement.getAttribute('data-theme') === 'light';
@@ -114,6 +142,12 @@ export function CustomCursor() {
         [data-cursor-system="true"], [data-cursor-system="true"] * {
           cursor: auto !important;
         }
+        body.global-cursor-hidden,
+        body.global-cursor-hidden *,
+        body.global-cursor-hidden [data-cursor-system="true"],
+        body.global-cursor-hidden [data-cursor-system="true"] * {
+          cursor: none !important;
+        }
       `}</style>
       <motion.div
         className="fixed top-0 left-0 pointer-events-none z-[10000]"
@@ -132,8 +166,8 @@ export function CustomCursor() {
                              cursorMode === 'maroon' ? "#27151B" :
                              cursorMode === 'white' ? "#ffffff" : "#E7B4B4",
             color: cursorMode === 'enroll' ? (isDarkMode ? "#ffffff" : "#000000") : "#ffffff",
-            opacity: isHidden ? 0 : 1,
-            scale: isHidden ? 0 : 1
+            opacity: isHidden || hasGlobalHidden ? 0 : 1,
+            scale: isHidden || hasGlobalHidden ? 0 : 1
           }}
           transition={{ type: "tween", duration: isHidden ? 0 : 0.35, ease: "easeOut" }}
           className={`rounded-full flex items-center justify-center overflow-hidden whitespace-nowrap font-bold tracking-widest text-xs shadow-xl ${cursorMode === 'white' ? 'shadow-black/20' : 'shadow-[#E7B4B4]/20'}`}

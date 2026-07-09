@@ -285,9 +285,11 @@ export function EndeavourBanner() {
     offset: ["start end", "end start"]
   });
 
-  const yBg = useTransform(scrollYProgress, [0, 1], ["-15%", "15%"]);
-  const yText = useTransform(scrollYProgress, [0, 1], ["20%", "-20%"]);
-  const yImage = useTransform(scrollYProgress, [0, 1], ["20%", "-20%"]);
+  const smoothedProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+
+  const yBg = useTransform(smoothedProgress, [0, 1], ["-15%", "15%"]);
+  const yText = useTransform(smoothedProgress, [0, 1], ["20%", "-20%"]);
+  const yImage = useTransform(smoothedProgress, [0, 1], ["20%", "-20%"]);
 
   // Shrink the 3D car model by 28% and adjust position on mobile to show the full car
   const finalScale = isMobile ? model3D.scale * 0.72 : model3D.scale;

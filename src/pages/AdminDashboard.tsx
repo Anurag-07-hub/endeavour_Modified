@@ -16,7 +16,7 @@ function AdminCarModel({ scale, position, rotation }: { scale: number; position:
 export const AdminDashboard = () => {
   const { user, isAdmin, logout } = useAuth();
   const { team, documents, contactInfo, deletedMembers, gallery, model3D, recruitment, saveTeam, saveDocuments, saveContactInfo, saveDeletedMembers, saveGallery, saveModel3D, saveRecruitment } = useCMS();
-  const [activeTab, setActiveTab] = useState<'team' | 'docs' | 'contact' | 'recycle' | 'gallery' | 'model3d' | 'recruitment' | 'domains'>('team');
+  const [activeTab, setActiveTab] = useState<'team' | 'docs' | 'contact' | 'recycle' | 'gallery' | 'model3d' | 'recruitment'>('team');
 
   const apiBase = `http://${window.location.hostname}:3001`;
 
@@ -607,14 +607,7 @@ export const AdminDashboard = () => {
           >
             <Sliders className="w-4 h-4" /> 3D Model
           </button>
-          <button
-            onClick={() => setActiveTab('domains')}
-            className={`flex-1 min-w-[120px] flex items-center justify-center gap-2 px-4 py-3 rounded-lg transition-all font-bold text-[12px] uppercase tracking-[1px] ${
-              activeTab === 'domains' ? 'bg-brand-accent text-white shadow-[0_0_15px_rgba(164,5,5,0.4)]' : 'text-brand-accent/80 hover:bg-brand-accent/10 hover:text-white'
-            }`}
-          >
-            <Sliders className="w-4 h-4" /> Domains Config
-          </button>
+
         </div>
 
         {/* Content Area */}
@@ -1355,112 +1348,7 @@ export const AdminDashboard = () => {
               </motion.div>
             )}
 
-            {activeTab === 'domains' && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="space-y-6"
-              >
-                <div className="flex justify-between items-center bg-black/40 p-6 rounded-xl border border-white/5">
-                  <div>
-                    <h2 className="font-bebas text-3xl tracking-wide text-white">DOMAINS WATERMARK CONFIG</h2>
-                    <p className="text-brand-muted text-sm mt-1">Adjust position and opacity for the large background text on the Domains page.</p>
-                  </div>
-                  <button
-                    onClick={handleDomainsSave}
-                    className="flex items-center gap-2 bg-brand-accent hover:bg-red-600 text-white px-6 py-2.5 rounded-lg font-bold tracking-widest text-xs transition-colors"
-                  >
-                    <Save className="w-4 h-4" />
-                    SAVE CONFIG
-                  </button>
-                </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {['uav', 'ugv', 'research'].map((domain) => {
-                    const typedDomain = domain as keyof typeof domainsEdit;
-                    return (
-                      <div key={domain} className="bg-black/40 rounded-xl p-6 border border-white/5 space-y-4">
-                        <h3 className="font-bebas text-2xl tracking-wide text-brand-accent uppercase border-b border-white/10 pb-2">{domain} config</h3>
-                        
-                        <div>
-                          <div className="flex justify-between mb-1">
-                            <label className="text-xs font-bold tracking-wider text-brand-muted uppercase">Opacity ({domainsEdit[typedDomain].opacity.toFixed(2)})</label>
-                          </div>
-                          <input 
-                            type="range" 
-                            min="0" max="1" step="0.01" 
-                            value={domainsEdit[typedDomain].opacity}
-                            onChange={(e) => setDomainsEdit(prev => ({ ...prev, [typedDomain]: { ...prev[typedDomain], opacity: parseFloat(e.target.value) } }))}
-                            className="w-full accent-brand-accent"
-                          />
-                        </div>
-
-                        <div className="border-t border-white/5 pt-3 mt-3">
-                          <span className="text-[10px] font-bold text-brand-accent uppercase tracking-wider block mb-2">Part 1 (ENDEAVOUR / WORKIN)</span>
-                          <div className="space-y-3">
-                            <div>
-                              <div className="flex justify-between mb-1">
-                                <label className="text-[10px] font-medium tracking-wider text-brand-muted uppercase">X Offset ({domainsEdit[typedDomain].part1X}px)</label>
-                              </div>
-                              <input 
-                                type="range" 
-                                min="-1000" max="1000" step="1" 
-                                value={domainsEdit[typedDomain].part1X}
-                                onChange={(e) => setDomainsEdit(prev => ({ ...prev, [typedDomain]: { ...prev[typedDomain], part1X: parseInt(e.target.value) } }))}
-                                className="w-full accent-brand-accent"
-                              />
-                            </div>
-                            <div>
-                              <div className="flex justify-between mb-1">
-                                <label className="text-[10px] font-medium tracking-wider text-brand-muted uppercase">Y Offset ({domainsEdit[typedDomain].part1Y}px)</label>
-                              </div>
-                              <input 
-                                type="range" 
-                                min="-1000" max="1000" step="1" 
-                                value={domainsEdit[typedDomain].part1Y}
-                                onChange={(e) => setDomainsEdit(prev => ({ ...prev, [typedDomain]: { ...prev[typedDomain], part1Y: parseInt(e.target.value) } }))}
-                                className="w-full accent-brand-accent"
-                              />
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="border-t border-white/5 pt-3 mt-3">
-                          <span className="text-[10px] font-bold text-brand-accent uppercase tracking-wider block mb-2">Part 2 ({domain.toUpperCase()})</span>
-                          <div className="space-y-3">
-                            <div>
-                              <div className="flex justify-between mb-1">
-                                <label className="text-[10px] font-medium tracking-wider text-brand-muted uppercase">X Offset ({domainsEdit[typedDomain].part2X}px)</label>
-                              </div>
-                              <input 
-                                type="range" 
-                                min="-1000" max="1000" step="1" 
-                                value={domainsEdit[typedDomain].part2X}
-                                onChange={(e) => setDomainsEdit(prev => ({ ...prev, [typedDomain]: { ...prev[typedDomain], part2X: parseInt(e.target.value) } }))}
-                                className="w-full accent-brand-accent"
-                              />
-                            </div>
-                            <div>
-                              <div className="flex justify-between mb-1">
-                                <label className="text-[10px] font-medium tracking-wider text-brand-muted uppercase">Y Offset ({domainsEdit[typedDomain].part2Y}px)</label>
-                              </div>
-                              <input 
-                                type="range" 
-                                min="-1000" max="1000" step="1" 
-                                value={domainsEdit[typedDomain].part2Y}
-                                onChange={(e) => setDomainsEdit(prev => ({ ...prev, [typedDomain]: { ...prev[typedDomain], part2Y: parseInt(e.target.value) } }))}
-                                className="w-full accent-brand-accent"
-                              />
-                            </div>
-                          </div>
-                        </div>
-
-                      </div>
-                    );
-                  })}
-                </div>
-              </motion.div>
-            )}
 
         </div>
       </div>

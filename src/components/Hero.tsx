@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform } from 'motion/react';
+import { motion, useScroll, useTransform, useSpring } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { Circle } from 'lucide-react';
@@ -67,6 +67,7 @@ function ElegantShape({
 
 export function Hero() {
   const { scrollY } = useScroll();
+  const smoothedScrollY = useSpring(scrollY, { stiffness: 100, damping: 30, restDelta: 0.001 });
   const navigate = useNavigate();
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -80,8 +81,8 @@ export function Hero() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const y1 = useTransform(scrollY, [0, 1000], [0, 200]);
-  const opacity = useTransform(scrollY, [0, 400], [1, 0]);
+  const y1 = useTransform(smoothedScrollY, [0, 1000], [0, 200]);
+  const opacity = useTransform(smoothedScrollY, [0, 400], [1, 0]);
 
   const containerVariants = {
     hidden: { opacity: 0 },

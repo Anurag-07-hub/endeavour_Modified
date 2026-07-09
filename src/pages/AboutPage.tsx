@@ -68,7 +68,7 @@ export function AboutPage() {
       <EndeavourScene />
 
       {/* Canva Style About Us Content */}
-      <div data-cursor-hidden="true" className="relative z-35 overflow-hidden w-full">
+      <div className="relative z-35 overflow-hidden w-full">
         <motion.div 
           initial={{ x: "100%" }}
           whileInView={{ x: 0 }}
@@ -174,7 +174,6 @@ export function AboutPage() {
               BEST TEAMWORK CAN ACHIEVE ANYTHING
             </h2>
           </motion.div>
-          
           <div>
             <HistoryCircuit />
           </div>

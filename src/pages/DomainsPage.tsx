@@ -144,10 +144,11 @@ interface StackingSectionProps {
 
 function StackingSection({ index, total, sectionRef, children }: StackingSectionProps) {
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end start'] });
+  const smoothedProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
   const isLast = index === total - 1;
-  const scale = useTransform(scrollYProgress, [0, 1], isLast ? [1, 1] : [1, 0.93]);
-  const opacity = useTransform(scrollYProgress, [0, 1], isLast ? [1, 1] : [1, 0.45]);
-  const y = useTransform(scrollYProgress, [0, 1], isLast ? [0, 0] : [0, -50]);
+  const scale = useTransform(smoothedProgress, [0, 1], isLast ? [1, 1] : [1, 0.93]);
+  const opacity = useTransform(smoothedProgress, [0, 1], isLast ? [1, 1] : [1, 0.45]);
+  const y = useTransform(smoothedProgress, [0, 1], isLast ? [0, 0] : [0, -50]);
 
   return (
     <motion.div
@@ -476,7 +477,7 @@ export function DomainsPage() {
 
 
       {/* 1. Hero Block (Framer Design) */}
-      <section className="relative h-screen w-full overflow-hidden bg-[#000000] select-none">
+      <section data-cursor-hidden="true" className="relative h-screen w-full overflow-hidden bg-[#000000] select-none">
         {/* Grainy Noise Overlay */}
         <div 
           className="absolute inset-0 z-0 opacity-[0.25] mix-blend-overlay pointer-events-none"
@@ -707,7 +708,7 @@ export function DomainsPage() {
       </section>
 
       {/* 2. Stacking Sections */}
-      <div className="relative bg-brand-bg cursor-none">
+      <div data-cursor-hidden="true" className="relative bg-brand-bg cursor-none">
         {sections.map((domain, index) => {
           const sectionRef = sectionRefs[domain.id as keyof typeof sectionRefs];
           const cfg = domainsConfig[domain.id as keyof typeof domainsConfig];
