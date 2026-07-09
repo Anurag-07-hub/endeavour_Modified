@@ -1,5 +1,5 @@
 import React, { useRef, Suspense, useEffect, useState } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useMotionValue, useSpring, useMotionTemplate } from 'framer-motion';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { useGLTF, Environment, OrbitControls } from '@react-three/drei';
 import { useCMS } from '../context/CMSContext';
@@ -253,6 +253,24 @@ export function EndeavourBanner() {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
+  // Spotlight mouse tracking with motion value springs
+  const [isHovered, setIsHovered] = useState(false);
+  const spotlightX = useMotionValue(0);
+  const spotlightY = useMotionValue(0);
+  
+  const springConfig = { stiffness: 60, damping: 20, mass: 0.6 };
+  const smoothX = useSpring(spotlightX, springConfig);
+  const smoothY = useSpring(spotlightY, springConfig);
+  
+  const spotlightBg = useMotionTemplate`radial-gradient(circle 350px at ${smoothX}px ${smoothY}px, rgba(255, 255, 255, 0.08) 0%, rgba(200, 16, 46, 0.04) 50%, transparent 100%)`;
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    spotlightX.set(e.clientX - rect.left);
+    spotlightY.set(e.clientY - rect.top);
+  };
+
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 640);
@@ -289,38 +307,111 @@ export function EndeavourBanner() {
             text-transform: uppercase;
             letter-spacing: 0.02em;
           }
+          .grain-overlay {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+          }
+          .editorial-text-gradient {
+            background: linear-gradient(135deg, #ffffff 10%, #e11d48 60%, #1c0a10 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+          }
         `}
       </style>
       
       <section 
         id="endeavour-banner"
         ref={containerRef}
-        className="relative w-full h-[240px] sm:h-auto sm:min-h-[100svh] py-0 sm:py-24 overflow-hidden flex items-center"
+        onMouseMove={handleMouseMove}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        className="relative w-full h-[320px] sm:h-auto sm:min-h-[100svh] py-0 sm:py-24 overflow-hidden flex items-center bg-[#12090c]"
       >
         {/* Parallax Background */}
         <motion.div
           style={{ 
-            y: yBg,
-            background: 'linear-gradient(to right, #c8102e 0%, #c8102e 40%, #27151b 40%, #27151b 100%)'
+            y: yBg
           }}
           className="absolute top-[-20%] left-0 w-full h-[140%] z-0"
+        >
+          {/* Base Split Background with rich lighting gradients based on original brand colors */}
+          <div className="absolute inset-0 flex">
+            {/* Left side: Premium Crimson Red Gradient using #c8102e */}
+            <div 
+              className="w-[40%] h-full relative"
+              style={{
+                background: 'radial-gradient(circle at 100% 30%, #e31837 0%, #c8102e 45%, #7a0618 100%)'
+              }}
+            >
+              {/* Fine vertical boundary divider glow */}
+              <div className="absolute right-0 top-0 w-[1px] h-full bg-gradient-to-b from-white/15 via-white/5 to-transparent z-1" />
+            </div>
+            {/* Right side: Deep Luxury Brown/Maroon Dark Gradient using #27151b */}
+            <div 
+              className="w-[60%] h-full"
+              style={{
+                background: 'radial-gradient(circle at 20% 70%, #301a21 0%, #27151b 50%, #12090c 100%)'
+              }}
+            />
+          </div>
+
+          {/* Ambient Backlight behind the 3D car model to lift it from the dark background */}
+          <div 
+            className="absolute right-[5%] top-1/2 -translate-y-1/2 w-[55%] h-[60%] pointer-events-none z-1 mix-blend-screen opacity-60"
+            style={{
+              background: 'radial-gradient(circle at 55% 50%, rgba(200, 16, 46, 0.25) 0%, rgba(200, 16, 46, 0.05) 55%, transparent 80%)'
+            }}
+          />
+        </motion.div>
+
+        {/* Vintage Film Grain Overlay */}
+        <div className="absolute inset-0 pointer-events-none z-20 mix-blend-overlay opacity-[0.20] grain-overlay" />
+
+        {/* Studio Lighting Vignette Overlay */}
+        <div 
+          className="absolute inset-0 pointer-events-none z-10"
+          style={{
+            background: 'radial-gradient(circle at center, transparent 35%, rgba(0, 0, 0, 0.65) 100%)'
+          }}
         />
+
+        {/* Dynamic Cursor-Tracking Spotlight */}
+        <motion.div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            zIndex: 11,
+            opacity: isHovered ? 1 : 0,
+            background: spotlightBg,
+            transition: 'opacity 0.4s ease-in-out'
+          }}
+        />
+
+        {/* Editorial Framing Layout Details */}
+        {/* Left Monospace Metadata Frame */}
+        <div className="absolute left-6 md:left-[60px] top-8 md:top-[120px] hidden md:flex flex-col text-[11px] tracking-[0.22em] text-white/40 font-mono gap-1.5 uppercase select-none pointer-events-none z-15">
+          <span className="text-white/70 font-bold tracking-[0.25em] mb-1">// SYSTEM ARCHITECTURE</span>
+          <span>AUTONOMOUS SYSTEMS</span>
+          <span>ROBOTIC SENSORS</span>
+          <span>ESTABLISHED 2026</span>
+        </div>
+
+
 
         <div className="absolute inset-0 max-w-[1500px] mx-auto w-full flex items-center px-5 md:px-[60px]">
           
           {/* Right Side: 3D Car Model with wobble, wheel spin & smoke */}
           <motion.div 
             style={{ y: yImage }}
-            className="absolute right-[0%] sm:right-[0%] top-1/2 -translate-y-1/2 w-[55%] sm:w-[50%] h-[100%] z-10"
+            className="absolute right-[0%] sm:right-[0%] top-1/2 -translate-y-1/2 w-[55%] sm:w-[50%] h-[100%] z-20"
           >
             {/* Scroll Zone Overlay: Prevents the right thumb edge from rotating the car, allowing normal page scrolling */}
-            <div className="absolute right-0 top-0 w-[40%] md:w-[20%] h-full z-20" style={{ touchAction: "pan-y" }} />
+            <div className="absolute right-0 top-0 w-[40%] md:w-[20%] h-full z-25" style={{ touchAction: "pan-y" }} />
             
             <Canvas camera={{ position: [0, 2, 10], fov: 45 }} style={{ width: '100%', height: '100%', background: 'transparent' }}>
               <Suspense fallback={null}>
-                <ambientLight intensity={0.6} />
-                <directionalLight position={[10, 10, 5]} intensity={1.5} color="#ffffff" />
-                <directionalLight position={[-10, 5, -5]} intensity={0.8} color="#c8102e" />
+                <ambientLight intensity={0.65} />
+                <directionalLight position={[10, 10, 5]} intensity={1.8} color="#ffffff" />
+                <directionalLight position={[-10, 5, -5]} intensity={1.0} color="#c8102e" />
                 <Environment preset="city" />
                 <ModelErrorBoundary>
                   <CarModel 
@@ -337,18 +428,21 @@ export function EndeavourBanner() {
           {/* Left Side: Animated Typography */}
           <motion.div 
             style={{ y: yText }}
-            className="relative z-10 flex flex-col justify-center pt-0 sm:pt-10 w-full md:w-[85%] banner-text select-none pointer-events-none text-white"
+            className="relative z-20 flex flex-col justify-center pt-0 sm:pt-10 w-full md:w-[85%] banner-text select-none pointer-events-none text-white"
           >
             <span className="text-[15vw] sm:text-[18vw] lg:text-[16vw] whitespace-nowrap block">
               ENDE
-              <span className="bg-[#c8102e] text-[#27151b] px-1 sm:px-2 py-0.5 mx-0.5 sm:mx-1 rounded-sm inline-block align-middle">
+              <span 
+                style={{ background: 'linear-gradient(to right, rgba(200, 16, 46, 0) 0%, rgba(200, 16, 46, 1) 20%)' }}
+                className="text-[#27151b] px-1 sm:px-2 py-0.5 mx-0.5 sm:mx-1 rounded-sm inline-block align-middle select-none"
+              >
                 AV
               </span>
               <span className="mix-blend-difference inline-block">OUR</span>
             </span>
             <span className="text-[15vw] sm:text-[18vw] lg:text-[16vw] whitespace-nowrap block">
               RO
-              <span className="bg-[#27151b] text-[#c8102e] px-1 sm:px-2 py-0.5 mx-0.5 sm:mx-1 rounded-sm inline-block align-middle">
+              <span className="bg-[#27151b] text-[#c8102e] px-1 sm:px-2 py-0.5 mx-0.5 sm:mx-1 rounded-sm inline-block align-middle select-none">
                 BO
               </span>
               TICS
@@ -357,10 +451,16 @@ export function EndeavourBanner() {
 
         </div>
 
-        {/* Explore About Us — liquid button pinned to bottom-right corner of the banner */}
-        <div className="absolute bottom-4 right-4 sm:bottom-10 sm:right-12 z-20">
+        {/* Explore About Us — liquid button pinned to bottom-right corner of the banner with scroll reveal */}
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.85, y: 30 }}
+          whileInView={{ opacity: 1, scale: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ type: "spring", stiffness: 80, damping: 15, delay: 0.2 }}
+          className="absolute bottom-6 right-6 sm:bottom-12 sm:right-[60px] z-30"
+        >
           <LiquidExploreButton onClick={() => setIsTransitioning(true)} />
-        </div>
+        </motion.div>
 
         {/* Let's Begin Transition Animation */}
         {isTransitioning && (

@@ -384,7 +384,6 @@ function ProjectPortfolioSection() {
 export function DomainsPage() {
   const { domainsConfig, heroLayout } = useCMS();
 
-  const isEditMode = false;
   const localLayout = heroLayout;
 
   const [activeSection, setActiveSection] = useState('uav');
@@ -415,10 +414,29 @@ export function DomainsPage() {
 
   // Phase 1 scroll-linked parallax animations (used globally for all phases)
   const phase1ScaleY = useTransform(heroScrollY, [0.0, 0.025, 0.05, 0.1], [1.0, 0.6, 0.2, 0.2]);
+  const orangeScaleY = useTransform(heroScrollY, [0.0, 0.015, 0.03, 0.05], [1.0, 0.5, 0.1, 0.1]);
   const phase1TextOpacity = useTransform(heroScrollY, [0.0, 0.025, 0.05, 0.1], [1.0, 0.5, 0.1, 0.1]);
   const phase1TextY = useTransform(heroScrollY, [0.0, 0.025, 0.05, 0.1], [0, -7.5, -15, -15]);
   const phase1TopGhostY = useTransform(heroScrollY, [0.0, 0.025, 0.05, 0.1], [0, -15.5, -15, -15]);
   const phase1BottomGhostY = useTransform(heroScrollY, [0.0, 0.025, 0.05, 0.1], [0, 0.5, -15, -15]);
+
+  // Scroll-linked synchronized horizontal hide transforms for brandText
+  const brandTextX0 = useTransform(heroScrollY, [0.0, 0.03], [0, -80]);
+  const brandTextOpacity0 = useTransform(heroScrollY, [0.0, 0.03], [1, 0]);
+  const brandTextX1 = useTransform(heroScrollY, [0.0, 0.03], [0, -80]);
+  const brandTextOpacity1 = useTransform(heroScrollY, [0.0, 0.03], [1, 0]);
+
+  // Scroll-linked staggered horizontal hide transforms for categoriesBlock lines
+  const catX0 = useTransform(heroScrollY, [0.0, 0.025], [0, -120]);
+  const catOpacity0 = useTransform(heroScrollY, [0.0, 0.025], [1, 0]);
+  const catX1 = useTransform(heroScrollY, [0.008, 0.033], [0, -120]);
+  const catOpacity1 = useTransform(heroScrollY, [0.008, 0.033], [1, 0]);
+  const catX2 = useTransform(heroScrollY, [0.016, 0.041], [0, -120]);
+  const catOpacity2 = useTransform(heroScrollY, [0.016, 0.041], [1, 0]);
+  const catX3 = useTransform(heroScrollY, [0.024, 0.049], [0, -120]);
+  const catOpacity3 = useTransform(heroScrollY, [0.024, 0.049], [1, 0]);
+  const catX4 = useTransform(heroScrollY, [0.032, 0.057], [0, -120]);
+  const catOpacity4 = useTransform(heroScrollY, [0.032, 0.057], [1, 0]);
 
   const sectionRefs = {
     uav: useRef<HTMLDivElement>(null),
@@ -453,7 +471,7 @@ export function DomainsPage() {
   };
 
   return (
-    <div data-cursor-hidden={!isEditMode} ref={containerRef} className="force-dark min-h-screen bg-[#000000] text-white font-montserrat relative select-none">
+    <div ref={containerRef} className="force-dark min-h-screen bg-[#000000] text-white font-montserrat relative select-none">
 
 
 
@@ -475,11 +493,9 @@ export function DomainsPage() {
           {/* Top Left OUR */}
           <motion.div style={{ y: parallaxY.ourText }} className="absolute inset-0">
             <motion.div 
-              drag={isEditMode} dragMomentum={false}
-              onDragEnd={(e, info) => handleDragEnd('ourText', info)}
               animate={{ opacity: 1, x: localLayout.ourText?.x || 0, y: localLayout.ourText?.y || 0, scale: localLayout.ourText?.scale || 1 }}
-              transition={{ duration: isEditMode ? 0 : 0.8 }}
-              className={`absolute top-[15%] left-[5%] text-[24vw] leading-[0.8] font-clash font-bold text-[#FF4500] opacity-100 tracking-tighter whitespace-pre uppercase ${isEditMode ? 'pointer-events-auto cursor-grab active:cursor-grabbing border-2 border-dashed border-white p-4 bg-white/10' : ''}`}
+              transition={{ duration: 0.8 }}
+              className="absolute top-[15%] left-[5%] text-[24vw] leading-[0.8] font-clash font-bold text-[#FF4500] opacity-100 tracking-tighter whitespace-pre uppercase"
             >
               {localLayout.ourText?.text || 'OUR'}
             </motion.div>
@@ -488,11 +504,9 @@ export function DomainsPage() {
           {/* Bottom Right RKS */}
           <motion.div style={{ y: parallaxY.rksText }} className="absolute inset-0">
             <motion.div 
-              drag={isEditMode} dragMomentum={false}
-              onDragEnd={(e, info) => handleDragEnd('rksText', info)}
               animate={{ opacity: 1, x: localLayout.rksText?.x || 0, y: localLayout.rksText?.y || 0, scale: localLayout.rksText?.scale || 1 }}
-              transition={{ duration: isEditMode ? 0 : 0.8 }}
-              className={`absolute bottom-[5%] right-[5%] text-[24vw] leading-[0.8] font-clash font-bold text-[#FF4500] opacity-100 tracking-tighter whitespace-pre uppercase ${isEditMode ? 'pointer-events-auto cursor-grab active:cursor-grabbing border-2 border-dashed border-white p-4 bg-white/10' : ''}`}
+              transition={{ duration: 0.8 }}
+              className="absolute bottom-[5%] right-[5%] text-[24vw] leading-[0.8] font-clash font-bold text-[#FF4500] opacity-100 tracking-tighter whitespace-pre uppercase"
             >
               {localLayout.rksText?.text || 'RKS'}
             </motion.div>
@@ -501,11 +515,9 @@ export function DomainsPage() {
           {/* Center WO Shadow */}
           <motion.div style={{ y: parallaxY.centerWO }} className="absolute inset-0">
             <motion.div 
-              drag={isEditMode} dragMomentum={false}
-              onDragEnd={(e, info) => handleDragEnd('centerWOShadow', info)}
               animate={{ opacity: 1, x: localLayout.centerWOShadow?.x || 0, y: localLayout.centerWOShadow?.y || 0, scale: localLayout.centerWOShadow?.scale || 1 }}
-              transition={{ duration: isEditMode ? 0 : 0.8 }}
-              className={`absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 mt-[2vw] ml-[2vw] text-[26vw] leading-none font-clash font-bold text-[#FF4500] tracking-tighter whitespace-pre uppercase ${isEditMode ? 'pointer-events-auto cursor-grab active:cursor-grabbing border-2 border-dashed border-white p-4 bg-white/10' : ''}`}
+              transition={{ duration: 0.8 }}
+              className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 mt-[2vw] ml-[2vw] text-[26vw] leading-none font-clash font-bold text-[#FF4500] tracking-tighter whitespace-pre uppercase"
             >
               {localLayout.centerWOShadow?.text || 'WO'}
             </motion.div>
@@ -514,11 +526,9 @@ export function DomainsPage() {
           {/* Center WO */}
           <motion.div style={{ y: parallaxY.centerWO }} className="absolute inset-0">
             <motion.div 
-              drag={isEditMode} dragMomentum={false}
-              onDragEnd={(e, info) => handleDragEnd('centerWO', info)}
               animate={{ opacity: 1, x: localLayout.centerWO?.x || 0, y: localLayout.centerWO?.y || 0, scale: localLayout.centerWO?.scale || 1 }}
-              transition={{ duration: isEditMode ? 0 : 0.8 }}
-              className={`absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 text-[26vw] leading-none font-clash font-bold text-white tracking-tighter whitespace-pre uppercase drop-shadow-2xl ${isEditMode ? 'pointer-events-auto cursor-grab active:cursor-grabbing border-2 border-dashed border-white p-4 bg-white/10' : ''}`}
+              transition={{ duration: 0.8 }}
+              className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 text-[26vw] leading-none font-clash font-bold text-white tracking-tighter whitespace-pre uppercase drop-shadow-2xl"
             >
               {localLayout.centerWO?.text || 'WO'}
             </motion.div>
@@ -528,22 +538,42 @@ export function DomainsPage() {
         {/* Statement Box */}
         <motion.div style={{ y: parallaxY.statementBox }} className="absolute inset-0 z-20 pointer-events-none">
           <motion.div 
-            drag={isEditMode} dragMomentum={false}
-            onDragEnd={(e, info) => handleDragEnd('statementBox', info)}
             animate={{ opacity: 1, x: localLayout.statementBox?.x || 0, y: localLayout.statementBox?.y || 0, scale: localLayout.statementBox?.scale || 1 }}
-            transition={{ duration: isEditMode ? 0 : 0.8 }}
-            className={`absolute top-[15%] right-[5%] flex flex-col items-start text-left max-w-[500px] overflow-hidden ${isEditMode ? 'pointer-events-auto cursor-grab active:cursor-grabbing border-2 border-dashed border-white p-4 bg-black/50 backdrop-blur-sm rounded-xl' : ''}`}
+            transition={{ duration: 0.8 }}
+            className="absolute top-[15%] right-[5%] flex flex-col items-start text-left max-w-[700px] overflow-hidden"
           >
             <motion.div style={{ y: useTransform(heroScrollY, [0, 1], [0, -400]) }}>
-              <p className="font-clash font-bold text-[2.5rem] md:text-[3.5rem] tracking-tighter opacity-100 uppercase m-0 leading-[0.8] text-white [text-shadow:3px_3px_0px_#FF4500]">{localLayout.statementBox?.line1}</p>
-              <p className="font-clash font-bold text-[2.5rem] md:text-[3.5rem] tracking-tighter opacity-100 uppercase m-0 leading-[0.8] text-white mt-1">{localLayout.statementBox?.line2}</p>
-              <p className="font-clash font-bold text-[2.5rem] md:text-[3.5rem] tracking-tighter opacity-100 uppercase m-0 leading-[0.8] text-white mt-1">{localLayout.statementBox?.line3}</p>
+              <p className="font-clash font-bold text-[2.5rem] md:text-[3.5rem] tracking-tighter opacity-100 uppercase m-0 leading-[1.15] text-white [text-shadow:3px_3px_0px_#FF4500] whitespace-nowrap">{localLayout.statementBox?.line1}</p>
+              <p className="font-clash font-bold text-[2.5rem] md:text-[3.5rem] tracking-tighter opacity-100 uppercase m-0 leading-[1.15] text-white mt-2.5 whitespace-nowrap">{localLayout.statementBox?.line2}</p>
+              <p className="font-clash font-bold text-[2.5rem] md:text-[3.5rem] tracking-tighter opacity-100 uppercase m-0 leading-[1.15] text-white mt-2.5 whitespace-nowrap">{localLayout.statementBox?.line3}</p>
               
-              <div className="flex items-stretch justify-start gap-3 mt-4 ml-1">
-                <div className="w-2 bg-[#FF4500]" />
-                <p className="font-clash font-bold text-lg md:text-xl tracking-tight leading-none whitespace-pre text-[#FF4500] uppercase m-0 py-1">
-                  {localLayout.statementBox?.brandText}
-                </p>
+              <div className="flex items-stretch justify-start gap-3 mt-4 ml-1 relative">
+                <motion.div 
+                  style={{ 
+                    scaleY: orangeScaleY,
+                    opacity: useTransform(orangeScaleY, [0.1, 1.0], [0.25, 1.0]),
+                    transformOrigin: 'top',
+                    y: useTransform(heroScrollY, [0, 1], [0, -180])
+                  }}
+                  className="w-2 bg-[#FF4500] shrink-0 self-stretch" 
+                />
+                <div className="flex flex-col">
+                  {localLayout.statementBox?.brandText?.split('\n').map((line, idx) => {
+                    const x = idx === 0 ? brandTextX0 : brandTextX1;
+                    const opacity = idx === 0 ? brandTextOpacity0 : brandTextOpacity1;
+                    const textColor = idx === 0 ? 'text-[#FF4500]' : 'text-white';
+                    return (
+                      <div key={idx} className="overflow-hidden">
+                        <motion.p
+                          style={{ x, opacity }}
+                          className={`font-clash font-bold text-xl md:text-2xl tracking-tight leading-none uppercase m-0 py-0.5 ${textColor}`}
+                        >
+                          {line}
+                        </motion.p>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </motion.div>
           </motion.div>
@@ -552,24 +582,36 @@ export function DomainsPage() {
         {/* Categories Block */}
         <motion.div style={{ y: parallaxY.categoriesBlock }} className="absolute inset-0 z-20 pointer-events-none overflow-hidden">
           <motion.div 
-            drag={isEditMode} dragMomentum={false}
-            onDragEnd={(e, info) => handleDragEnd('categoriesBlock', info)}
             animate={{ opacity: 1, x: localLayout.categoriesBlock?.x || 0, y: localLayout.categoriesBlock?.y || 0, scale: localLayout.categoriesBlock?.scale || 1 }}
-            transition={{ duration: isEditMode ? 0 : 0.8 }}
-            className={`absolute bottom-[10%] left-[10%] flex items-stretch overflow-hidden ${isEditMode ? 'pointer-events-auto cursor-grab active:cursor-grabbing border-2 border-dashed border-white p-4 bg-black/50 backdrop-blur-sm rounded-xl' : ''}`}
+            transition={{ duration: 0.8 }}
+            className="absolute bottom-[10%] left-[10%] flex items-stretch overflow-hidden"
           >
             {/* Both line and text share the faster parallax to sync the masking */}
             <motion.div 
               style={{ y: useTransform(heroScrollY, [0, 1], [0, -400]) }} 
               className="flex items-stretch"
             >
-              <div className="w-1.5 bg-white/40 mr-4 shrink-0" />
+              <div className="w-2 bg-white/30 mr-4 shrink-0" />
               <div className="flex flex-col justify-between py-1">
-                {localLayout.categoriesBlock?.text?.split('\n').map((cat, i) => (
-                  <p key={i} className="font-clash text-lg md:text-2xl font-bold tracking-tight uppercase text-white m-0 leading-none mb-2 last:mb-0">
-                    {cat}
-                  </p>
-                ))}
+                {localLayout.categoriesBlock?.text?.split('\n').map((cat, i) => {
+                  let x = catX0;
+                  let opacity = catOpacity0;
+                  if (i === 1) { x = catX1; opacity = catOpacity1; }
+                  else if (i === 2) { x = catX2; opacity = catOpacity2; }
+                  else if (i === 3) { x = catX3; opacity = catOpacity3; }
+                  else if (i === 4) { x = catX4; opacity = catOpacity4; }
+
+                  return (
+                    <div key={i} className="overflow-hidden">
+                      <motion.p 
+                        style={{ x, opacity }}
+                        className="font-clash text-lg md:text-2xl font-bold tracking-tight uppercase text-white m-0 leading-none mb-2 last:mb-0"
+                      >
+                        {cat}
+                      </motion.p>
+                    </div>
+                  );
+                })}
               </div>
             </motion.div>
           </motion.div>
@@ -596,12 +638,10 @@ export function DomainsPage() {
             return (
               <motion.div key={id} style={{ y: parallaxY[phaseKey] }} className="absolute inset-0">
                 <motion.div
-                  drag={isEditMode} dragMomentum={false}
-                  onDragEnd={(e, info) => handleDragEnd(phaseKey, info)}
                   animate={{ opacity: 1, x: layout.x, y: layout.y, scale: layout.scale }}
-                  transition={{ duration: isEditMode ? 0 : 0.8 }}
+                  transition={{ duration: 0.8 }}
                   style={{ left, top }}
-                  className={`absolute flex flex-col items-start pointer-events-auto ${isEditMode ? 'cursor-grab active:cursor-grabbing border-2 border-dashed border-white p-4 bg-black/20' : ''}`}
+                  className="absolute flex flex-col items-start pointer-events-auto"
                 >
                   <span className="font-clash font-bold text-xl opacity-100 uppercase text-white mb-2 ml-1">{num}</span>
                   <motion.div 
@@ -776,8 +816,12 @@ export function DomainsPage() {
         })}
       </div>
 
-      {/* 3. Sub-projects Showcase Grid */}
-      <ProjectPortfolioSection />
+      {/* 3. Sub-projects Showcase Grid with padding-bottom for curtain reveal */}
+      <div className="pb-[320px] sm:pb-[480px]">
+        <ProjectPortfolioSection />
+      </div>
+
+
 
     </div>
   );
