@@ -10,7 +10,7 @@ import {
   Eye,
   Layers,
 } from 'lucide-react';
-import { Canvas } from '@react-three/fiber';
+import { Canvas, useFrame } from '@react-three/fiber';
 import { useGLTF, Environment } from '@react-three/drei';
 import { useCMS } from '../context/CMSContext';
 
@@ -39,6 +39,17 @@ class ModelErrorBoundary extends React.Component<{ children: React.ReactNode }, 
   }
 }
 
+function ModelWrapper({ scene }: { scene: any }) {
+  const modelRef = useRef<any>(null);
+  useFrame((state) => {
+    if (modelRef.current) {
+      // Smooth slow rotation on y-axis
+      modelRef.current.rotation.y = state.clock.getElapsedTime() * 0.15;
+    }
+  });
+  return <primitive ref={modelRef} object={scene} scale={2.2} position={[0.2, 0.4, 0]} rotation={[0.3, 0.6, 0.1]} />;
+}
+
 function UGVModel({ url }: { url: string }) {
   const { scene } = useGLTF(url);
   return (
@@ -46,7 +57,7 @@ function UGVModel({ url }: { url: string }) {
       <ambientLight intensity={0.6} />
       <directionalLight position={[5, 10, 5]} intensity={1.8} />
       <Environment preset="city" />
-      <primitive object={scene} scale={2.2} position={[0.2, 0.4, 0]} rotation={[0.3, 0.6, 0.1]} />
+      <ModelWrapper scene={scene} />
     </Canvas>
   );
 }
@@ -318,8 +329,8 @@ interface ParallaxCardProps {
 }
 
 function ParallaxCard({ proj, index, parentScrollYProgress }: ParallaxCardProps) {
-  const speed = index % 3 === 0 ? 1.6 : index % 3 === 1 ? 0.9 : 1.3;
-  const initialOffset = index % 3 === 0 ? -50 : index % 3 === 1 ? 70 : 15;
+  const speed = 1.2;
+  const initialOffset = -50;
   const y = useTransform(parentScrollYProgress, [0, 1], [initialOffset, -240 * speed + initialOffset]);
   const opacity = useTransform(parentScrollYProgress, [0, 0.18, 0.82, 1], [0.35, 1, 1, 0]);
   const scale = useTransform(parentScrollYProgress, [0, 0.15, 0.85, 1], [0.93, 1, 1, 0.94]);
@@ -389,6 +400,18 @@ export function DomainsPage() {
 
   const [activeSection, setActiveSection] = useState('uav');
   const containerRef = useRef<HTMLDivElement>(null);
+  const exploreRef = useRef<HTMLDivElement>(null);
+  
+  const { scrollYProgress: exploreProgress } = useScroll({
+    target: exploreRef,
+    offset: ["start end", "end start"]
+  });
+  const smoothedExploreProgress = useSpring(exploreProgress, {
+    stiffness: 45,
+    damping: 25,
+    restDelta: 0.001
+  });
+  const exploreTextY = useTransform(smoothedExploreProgress, [0.08, 0.38], ["100%", "0%"]);
   
   const { scrollYProgress } = useScroll({ 
     target: containerRef, 
@@ -396,8 +419,8 @@ export function DomainsPage() {
   });
 
   const heroScrollY = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
+    stiffness: 45,
+    damping: 25,
     restDelta: 0.001
   });
 
@@ -412,6 +435,10 @@ export function DomainsPage() {
     phase3: useTransform(heroScrollY, [0, 1], [0, -1200]),
     phase4: useTransform(heroScrollY, [0, 1], [0, -1200]),
   };
+
+  const ourTextScaleY = useTransform(heroScrollY, [0, 1], [1, 1.35]);
+  const rksTextScaleY = useTransform(heroScrollY, [0, 1], [1, 1.35]);
+  const centerWOScaleY = useTransform(heroScrollY, [0, 1], [1, 1.35]);
 
   // Phase 1 scroll-linked parallax animations (used globally for all phases)
   const phase1ScaleY = useTransform(heroScrollY, [0.0, 0.025, 0.05, 0.1], [1.0, 0.6, 0.2, 0.2]);
@@ -474,14 +501,19 @@ export function DomainsPage() {
   return (
     <div ref={containerRef} className="force-dark min-h-screen bg-[#000000] text-white font-montserrat relative select-none">
 
-
-
       {/* 1. Hero Block (Framer Design) */}
-      <section data-cursor-hidden="true" className="relative h-screen w-full overflow-hidden bg-[#000000] select-none">
+      <section 
+        data-cursor-system="true"
+        data-cursor-hidden="false" 
+        className="relative h-screen w-full overflow-hidden bg-[#000000] select-none z-30"
+      >
         {/* Grainy Noise Overlay */}
         <div 
-          className="absolute inset-0 z-0 opacity-[0.25] mix-blend-overlay pointer-events-none"
-          style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }}
+          className="absolute inset-0 z-40 opacity-[0.38] mix-blend-overlay pointer-events-none"
+          style={{ 
+            backgroundImage: 'url("data:image/svg+xml,%3Csvg width=%22128%22 height=%22128%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.95%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22128%22 height=%22128%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")',
+            backgroundSize: '128px 128px'
+          }}
         />
 
         {/* Dust Mist Animation */}
@@ -492,40 +524,40 @@ export function DomainsPage() {
         {/* Large Typography Background */}
         <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
           {/* Top Left OUR */}
-          <motion.div style={{ y: parallaxY.ourText }} className="absolute inset-0">
+          <motion.div style={{ y: parallaxY.ourText, scaleY: ourTextScaleY, transformOrigin: 'top' }} className="absolute inset-0">
             <motion.div 
               animate={{ opacity: 1, x: localLayout.ourText?.x || 0, y: localLayout.ourText?.y || 0, scale: localLayout.ourText?.scale || 1 }}
               transition={{ duration: 0.8 }}
-              className="absolute top-[15%] left-[5%] text-[24vw] leading-[0.8] font-clash font-bold text-[#FF4500] opacity-100 tracking-tighter whitespace-pre uppercase"
+              className="absolute top-[15%] left-[5%] text-[24vw] leading-[0.8] font-clash font-bold text-hero-accent opacity-100 tracking-tighter whitespace-pre uppercase"
             >
               {localLayout.ourText?.text || 'OUR'}
             </motion.div>
           </motion.div>
           
           {/* Bottom Right RKS */}
-          <motion.div style={{ y: parallaxY.rksText }} className="absolute inset-0">
+          <motion.div style={{ y: parallaxY.rksText, scaleY: rksTextScaleY, transformOrigin: 'bottom' }} className="absolute inset-0">
             <motion.div 
               animate={{ opacity: 1, x: localLayout.rksText?.x || 0, y: localLayout.rksText?.y || 0, scale: localLayout.rksText?.scale || 1 }}
               transition={{ duration: 0.8 }}
-              className="absolute bottom-[5%] right-[5%] text-[24vw] leading-[0.8] font-clash font-bold text-[#FF4500] opacity-100 tracking-tighter whitespace-pre uppercase"
+              className="absolute bottom-[5%] right-[5%] text-[24vw] leading-[0.8] font-clash font-bold text-hero-accent opacity-100 tracking-tighter whitespace-pre uppercase"
             >
               {localLayout.rksText?.text || 'RKS'}
             </motion.div>
           </motion.div>
 
           {/* Center WO Shadow */}
-          <motion.div style={{ y: parallaxY.centerWO }} className="absolute inset-0">
+          <motion.div style={{ y: parallaxY.centerWO, scaleY: centerWOScaleY, transformOrigin: 'center' }} className="absolute inset-0">
             <motion.div 
               animate={{ opacity: 1, x: localLayout.centerWOShadow?.x || 0, y: localLayout.centerWOShadow?.y || 0, scale: localLayout.centerWOShadow?.scale || 1 }}
               transition={{ duration: 0.8 }}
-              className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 mt-[2vw] ml-[2vw] text-[26vw] leading-none font-clash font-bold text-[#FF4500] tracking-tighter whitespace-pre uppercase"
+              className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 mt-[2vw] ml-[2vw] text-[26vw] leading-none font-clash font-bold text-hero-accent tracking-tighter whitespace-pre uppercase"
             >
               {localLayout.centerWOShadow?.text || 'WO'}
             </motion.div>
           </motion.div>
 
           {/* Center WO */}
-          <motion.div style={{ y: parallaxY.centerWO }} className="absolute inset-0">
+          <motion.div style={{ y: parallaxY.centerWO, scaleY: centerWOScaleY, transformOrigin: 'center' }} className="absolute inset-0">
             <motion.div 
               animate={{ opacity: 1, x: localLayout.centerWO?.x || 0, y: localLayout.centerWO?.y || 0, scale: localLayout.centerWO?.scale || 1 }}
               transition={{ duration: 0.8 }}
@@ -537,37 +569,47 @@ export function DomainsPage() {
         </div>
 
         {/* Statement Box */}
-        <motion.div style={{ y: parallaxY.statementBox }} className="absolute inset-0 z-20 pointer-events-none">
+        <div className="absolute inset-0 z-20 pointer-events-none">
           <motion.div 
             animate={{ opacity: 1, x: localLayout.statementBox?.x || 0, y: localLayout.statementBox?.y || 0, scale: localLayout.statementBox?.scale || 1 }}
             transition={{ duration: 0.8 }}
             className="absolute top-[15%] right-[5%] flex flex-col items-start text-left max-w-[700px] overflow-hidden"
           >
-            <motion.div style={{ y: useTransform(heroScrollY, [0, 1], [0, -400]) }}>
-              <p className="font-clash font-bold text-[2.5rem] md:text-[3.5rem] tracking-tighter opacity-100 uppercase m-0 leading-[1.15] text-white [text-shadow:3px_3px_0px_#FF4500] whitespace-nowrap">{localLayout.statementBox?.line1}</p>
-              <p className="font-clash font-bold text-[2.5rem] md:text-[3.5rem] tracking-tighter opacity-100 uppercase m-0 leading-[1.15] text-white mt-2.5 whitespace-nowrap">{localLayout.statementBox?.line2}</p>
-              <p className="font-clash font-bold text-[2.5rem] md:text-[3.5rem] tracking-tighter opacity-100 uppercase m-0 leading-[1.15] text-white mt-2.5 whitespace-nowrap">{localLayout.statementBox?.line3}</p>
+            <div className="flex flex-col gap-[2px]">
+              <div className="relative">
+                {/* Orange Shadow Layer (shifted UP and RIGHT) */}
+                <p className="absolute left-[0.06em] -top-[0.06em] font-clash font-bold text-[2.5rem] md:text-[3.5rem] tracking-[-0.08em] opacity-100 uppercase m-0 leading-[0.9] text-[#FF4500] whitespace-nowrap select-none">
+                  {localLayout.statementBox?.line1}
+                </p>
+                {/* Foreground White Layer */}
+                <p className="relative z-10 font-clash font-bold text-[2.5rem] md:text-[3.5rem] tracking-[-0.08em] opacity-100 uppercase m-0 leading-[0.9] text-white whitespace-nowrap">
+                  {localLayout.statementBox?.line1}
+                </p>
+              </div>
+              <p className="font-clash font-bold text-[2.5rem] md:text-[3.5rem] tracking-[-0.08em] opacity-100 uppercase m-0 leading-[0.9] text-white whitespace-nowrap">{localLayout.statementBox?.line2}</p>
+              <p className="font-clash font-bold text-[2.5rem] md:text-[3.5rem] tracking-[-0.08em] opacity-100 uppercase m-0 leading-[0.9] text-white whitespace-nowrap">{localLayout.statementBox?.line3}</p>
               
               <div className="flex items-stretch justify-start gap-3 mt-4 ml-1 relative">
                 <motion.div 
                   style={{ 
                     scaleY: orangeScaleY,
                     opacity: useTransform(orangeScaleY, [0.1, 1.0], [0.25, 1.0]),
-                    transformOrigin: 'top',
-                    y: useTransform(heroScrollY, [0, 1], [0, -180])
+                    transformOrigin: 'top'
                   }}
-                  className="w-2 bg-[#FF4500] shrink-0 self-stretch" 
+                  className="w-2 bg-gradient-to-b from-[#AE0605] to-[#E31837] shrink-0 self-stretch" 
                 />
                 <div className="flex flex-col">
                   {localLayout.statementBox?.brandText?.split('\n').map((line, idx) => {
                     const x = idx === 0 ? brandTextX0 : brandTextX1;
                     const opacity = idx === 0 ? brandTextOpacity0 : brandTextOpacity1;
-                    const textColor = idx === 0 ? 'text-[#FF4500]' : 'text-white';
+                    const textColorClass = idx === 0 
+                      ? 'text-transparent bg-clip-text bg-gradient-to-r from-[#AE0605] to-[#E31837]' 
+                      : 'text-white';
                     return (
                       <div key={idx} className="overflow-hidden">
                         <motion.p
-                          style={{ x, opacity }}
-                          className={`font-clash font-bold text-xl md:text-2xl tracking-tight leading-none uppercase m-0 py-0.5 ${textColor}`}
+                          style={{ x, opacity, willChange: "transform, opacity", backfaceVisibility: "hidden" }}
+                          className={`font-clash font-bold text-xl md:text-2xl tracking-tight leading-none uppercase m-0 py-0.5 ${textColorClass}`}
                         >
                           {line}
                         </motion.p>
@@ -576,22 +618,19 @@ export function DomainsPage() {
                   })}
                 </div>
               </div>
-            </motion.div>
+            </div>
           </motion.div>
-        </motion.div>
+        </div>
 
         {/* Categories Block */}
-        <motion.div style={{ y: parallaxY.categoriesBlock }} className="absolute inset-0 z-20 pointer-events-none overflow-hidden">
+        <div className="absolute inset-0 z-20 pointer-events-none overflow-hidden">
           <motion.div 
             animate={{ opacity: 1, x: localLayout.categoriesBlock?.x || 0, y: localLayout.categoriesBlock?.y || 0, scale: localLayout.categoriesBlock?.scale || 1 }}
             transition={{ duration: 0.8 }}
             className="absolute bottom-[10%] left-[10%] flex items-stretch overflow-hidden"
           >
             {/* Both line and text share the faster parallax to sync the masking */}
-            <motion.div 
-              style={{ y: useTransform(heroScrollY, [0, 1], [0, -400]) }} 
-              className="flex items-stretch"
-            >
+            <div className="flex items-stretch">
               <div className="w-2 bg-white/30 mr-4 shrink-0" />
               <div className="flex flex-col justify-between py-1">
                 {localLayout.categoriesBlock?.text?.split('\n').map((cat, i) => {
@@ -605,7 +644,7 @@ export function DomainsPage() {
                   return (
                     <div key={i} className="overflow-hidden">
                       <motion.p 
-                        style={{ x, opacity }}
+                        style={{ x, opacity, willChange: "transform, opacity", backfaceVisibility: "hidden" }}
                         className="font-clash text-lg md:text-2xl font-bold tracking-tight uppercase text-white m-0 leading-none mb-2 last:mb-0"
                       >
                         {cat}
@@ -614,9 +653,9 @@ export function DomainsPage() {
                   );
                 })}
               </div>
-            </motion.div>
+            </div>
           </motion.div>
-        </motion.div>
+        </div>
 
         {/* Timeline Phases */}
         <div className="absolute inset-0 z-20 pointer-events-none">
@@ -652,32 +691,54 @@ export function DomainsPage() {
                   <div className="relative mt-2 h-5 w-full pointer-events-none">
                     {/* Top Ghost */}
                     <motion.span
-                      style={{ y: topGhostY, opacity: useTransform(textOpacity, o => o * 0.25) }}
+                      style={{ y: topGhostY, opacity: useTransform(textOpacity, o => o * 0.25), willChange: "transform, opacity", backfaceVisibility: "hidden" }}
                       className="absolute left-0 top-0 font-clash text-[10px] md:text-[12px] font-bold tracking-widest whitespace-nowrap uppercase text-[#7F0303]"
                     >
-                      {layout.text || defaultLabel}
+                      {(() => {
+                        const val = layout.text || defaultLabel;
+                        if (val.includes('/')) {
+                          const [p1, p2] = val.split('/');
+                          return <>{p1}/<span className="text-[#FF4500]/40">{p2}</span></>;
+                        }
+                        return val;
+                      })()}
                     </motion.span>
                     
                     {/* Main Text */}
                     <motion.span
-                      style={{ y: textY, opacity: textOpacity }}
+                      style={{ y: textY, opacity: textOpacity, willChange: "transform, opacity", backfaceVisibility: "hidden" }}
                       className="absolute left-0 top-0 font-clash text-[10px] md:text-[12px] font-bold tracking-widest whitespace-nowrap uppercase text-white"
                     >
-                      {layout.text || defaultLabel}
+                      {(() => {
+                        const val = layout.text || defaultLabel;
+                        if (val.includes('/')) {
+                          const [p1, p2] = val.split('/');
+                          return <>{p1}/<span className="text-[#FF4500]">{p2}</span></>;
+                        }
+                        return val;
+                      })()}
                     </motion.span>
 
                     {/* Bottom Ghost */}
                     <motion.span
-                      style={{ y: bottomGhostY, opacity: useTransform(textOpacity, o => o * 0.25) }}
+                      style={{ y: bottomGhostY, opacity: useTransform(textOpacity, o => o * 0.25), willChange: "transform, opacity", backfaceVisibility: "hidden" }}
                       className="absolute left-0 top-0 font-clash text-[10px] md:text-[12px] font-bold tracking-widest whitespace-nowrap uppercase text-[#7F0303]"
                     >
-                      {layout.text || defaultLabel}
+                      {(() => {
+                        const val = layout.text || defaultLabel;
+                        if (val.includes('/')) {
+                          const [p1, p2] = val.split('/');
+                          return <>{p1}/<span className="text-[#FF4500]/40">{p2}</span></>;
+                        }
+                        return val;
+                      })()}
                     </motion.span>
                   </div>
-                  <div className="flex items-center gap-1 mt-1 ml-1">
-                    <div className="w-1.5 h-1.5 bg-[#FF4500] animate-blink" />
-                    <div className="w-[3px] h-1.5 bg-white/25" />
-                    <div className="w-[3px] h-1.5 bg-white/25" />
+                  <div className="flex items-center gap-[2px] mt-1.5 ml-1">
+                    <div className="w-[8px] h-[6px] bg-[#FF4500] animate-blink" />
+                    <div className="w-[3px] h-[6px] bg-white/20" />
+                    <div className="w-[3px] h-[6px] bg-white/20" />
+                    <div className="w-[3px] h-[6px] bg-white/20" />
                   </div>
                 </motion.div>
               </motion.div>
@@ -685,8 +746,51 @@ export function DomainsPage() {
           })}
         </div>
 
-        {/* Marquee Ticker */}
-        <div className="absolute bottom-[4%] left-0 w-full z-20 overflow-hidden opacity-70 flex">
+      </section>
+
+      {/* Explore Parallax Transition Screen */}
+      <div
+        id="explore-section"
+        ref={exploreRef}
+        data-cursor-system="true"
+        className="relative h-[180vh] w-full bg-[#080808] z-10"
+      >
+        <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
+        {/* Grainy Noise Overlay */}
+        <div 
+          className="absolute inset-0 z-20 opacity-[0.38] mix-blend-overlay pointer-events-none"
+          style={{ 
+            backgroundImage: 'url("data:image/svg+xml,%3Csvg width=%22128%22 height=%22128%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.95%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22128%22 height=%22128%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")',
+            backgroundSize: '128px 128px'
+          }}
+        />
+
+        {/* Diagonal Photo Mask Section */}
+        <div className="absolute top-0 right-0 w-[55%] h-full pointer-events-none z-[5] overflow-hidden">
+          <img 
+            src="https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=1200&auto=format&fit=crop" 
+            alt="Editorial Portrait"
+            className="w-full h-full object-cover opacity-45"
+            style={{
+              clipPath: "polygon(25% 0%, 100% 0%, 100% 100%, 0% 100%)"
+            }}
+          />
+        </div>
+
+        {/* Giant "explore" text with masking-up reveal */}
+        <div className="relative overflow-hidden w-full h-[30vh] flex items-center justify-center z-[15]">
+          <motion.span
+            style={{
+              y: exploreTextY
+            }}
+            className="block font-clash font-bold uppercase select-none whitespace-nowrap text-[#1a1a1a] text-[17vw] leading-none tracking-[-0.04em] [text-shadow:0_0_1px_rgba(255,255,255,0.1)]"
+          >
+            explore
+          </motion.span>
+        </div>
+
+        {/* Marquee Ticker (Continuous Line shifted to Explore page) */}
+        <div className="absolute bottom-[6%] left-0 w-full z-20 overflow-hidden opacity-70 flex">
           <motion.div 
             animate={{ x: ["0%", "-50%"] }}
             transition={{ repeat: Infinity, ease: "linear", duration: 30 }}
@@ -695,20 +799,25 @@ export function DomainsPage() {
             {[1, 2, 3].map((n) => (
               <div key={n} className="flex">
                 <span className="font-montserrat text-xs font-semibold tracking-[0.2em] uppercase px-4 flex items-center">
-                  PUSHING THE BOUNDARIES <span className="mx-4 text-[#FD3C00]">·</span> 
-                  CUSTOM SOLUTIONS <span className="mx-4 text-[#FD3C00]">·</span> 
-                  COLLABORATIVE TEAM <span className="mx-4 text-[#FD3C00]">·</span> 
-                  CORE TECHNICAL DIVISION <span className="mx-4 text-[#FD3C00]">·</span> 
-                  INFINITE POSSIBILITIES
+                  PIONEERING ROBOTICS & AEROSPACE <span className="mx-4 text-[#AE0605]">·</span> 
+                  BUILDING INTELLIGENT SYSTEMS <span className="mx-4 text-[#AE0605]">·</span> 
+                  SHAPING FUTURE MOBILITY <span className="mx-4 text-[#AE0605]">·</span> 
+                  INNOVATING BEYOND THE HORIZON <span className="mx-4 text-[#AE0605]">·</span> 
+                  EMPOWERING AUTONOMOUS TECHNOLOGY
                 </span>
               </div>
             ))}
           </motion.div>
         </div>
-      </section>
+
+      </div>
+    </div>
 
       {/* 2. Stacking Sections */}
-      <div data-cursor-hidden="true" className="relative bg-brand-bg cursor-none">
+      <div 
+        data-cursor-hidden="false" 
+        className="relative bg-brand-bg z-20 shadow-[0_-20px_60px_rgba(0,0,0,0.95)]"
+      >
         {sections.map((domain, index) => {
           const sectionRef = sectionRefs[domain.id as keyof typeof sectionRefs];
           const cfg = domainsConfig[domain.id as keyof typeof domainsConfig];
@@ -719,15 +828,6 @@ export function DomainsPage() {
               {/* Static watermark background text */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0 overflow-hidden select-none">
                 <div className="relative w-full h-full flex items-center justify-center">
-                  <h2
-                    style={{
-                      transform: `translate(${cfg?.part1X ?? 0}px, ${cfg?.part1Y ?? 0}px)`,
-                      opacity: cfg?.opacity ?? 0.10,
-                    }}
-                    className="absolute font-righteous text-[11vw] leading-none tracking-tighter uppercase whitespace-nowrap text-white select-none"
-                  >
-                    {domain.watermark.split(' ')[0]}
-                  </h2>
                   <h2
                     style={{
                       transform: `translate(${cfg?.part2X ?? 0}px, ${cfg?.part2Y ?? 0}px)`,
@@ -781,7 +881,7 @@ export function DomainsPage() {
                     initial={{ opacity: 0, scale: 0.96 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.8 }}
+                    transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
                     className="relative w-full h-[360px] md:h-[400px] bg-brand-bg border border-white/15 rounded-[2.5rem] p-4 flex flex-col overflow-hidden shadow-2xl hover:border-white/20 transition-colors duration-500"
                   >
                     <div className="absolute top-0 right-0 w-48 h-48 rounded-full blur-[80px] opacity-20" style={{ backgroundColor: domain.accent }} />
@@ -791,7 +891,7 @@ export function DomainsPage() {
                     </div>
                     <div className="flex-1 w-full relative min-h-0 flex items-center justify-center p-4">
                       {domain.modelUrl ? (
-                        <div className="w-full h-full relative z-20 cursor-none">
+                        <div className="w-full h-full relative z-20">
                           <ModelErrorBoundary>
                             <Suspense fallback={
                               <div className="w-full h-full flex items-center justify-center text-brand-muted font-mono text-xs bg-white/5 backdrop-blur-md rounded-2xl border border-white/10">
@@ -817,10 +917,8 @@ export function DomainsPage() {
         })}
       </div>
 
-      {/* 3. Sub-projects Showcase Grid with padding-bottom for curtain reveal */}
-      <div className="pb-[320px] sm:pb-[480px]">
-        <ProjectPortfolioSection />
-      </div>
+      {/* 3. Sub-projects Showcase Grid */}
+      <ProjectPortfolioSection />
 
 
 

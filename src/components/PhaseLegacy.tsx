@@ -74,11 +74,11 @@ export function PhaseLegacy() {
             initial={{ opacity: 0, x: -50 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
             transition={{ duration: 0.8 }}
-            className="w-full lg:w-5/12"
+            className="w-full lg:w-1/2"
           >
-            <div className="bg-white/5 border border-white/10 p-4 rounded-2xl backdrop-blur-xl shadow-2xl relative group">
+            <div className="bg-white/5 border border-white/10 p-4 rounded-2xl shadow-2xl relative group">
               <CornerBrackets />
-              <div className="relative rounded-xl overflow-hidden h-[350px] md:h-[480px]">
+              <div className="relative rounded-xl overflow-hidden h-[400px] md:h-[550px]">
                 <img 
                   src="/phase4_workshop.png" 
                   alt="Student Workshop" 
@@ -99,7 +99,7 @@ export function PhaseLegacy() {
             variants={containerVariants}
             initial="hidden"
             animate={isInView ? "show" : "hidden"}
-            className="w-full lg:w-7/12 grid grid-cols-1 md:grid-cols-2 gap-6"
+            className="w-full lg:w-1/2 grid grid-cols-1 md:grid-cols-2 gap-6"
           >
             {projects.map((proj, idx) => (
               <motion.div 
@@ -111,7 +111,7 @@ export function PhaseLegacy() {
                 
                 {/* Header info bar */}
                 <div className="flex justify-between items-center mb-4">
-                  <span className="inline-block px-3 py-1 bg-white/10 rounded-full font-roboto font-bold text-[10px] text-gray-900 tracking-widest uppercase border border-white/20">
+                  <span className="inline-block px-3 py-1 bg-white/10 rounded-full font-roboto font-bold text-[10px] text-gray-200 tracking-widest uppercase border border-white/20">
                     {proj.tag}
                   </span>
                   <span className="font-mono text-[9px] text-brand-accent tracking-wider font-bold">
@@ -120,7 +120,7 @@ export function PhaseLegacy() {
                 </div>
 
                 <h4 className="font-space text-xl font-bold text-white mb-2 group-hover:text-brand-accent transition-colors">{proj.title}</h4>
-                <p className="font-inter text-gray-800 font-semibold text-sm leading-relaxed">
+                <p className="font-inter text-gray-300 font-medium text-sm leading-relaxed">
                   {proj.desc}
                 </p>
               </motion.div>
@@ -139,10 +139,10 @@ export function PhaseLegacy() {
                   <div className="text-[10px] font-mono text-brand-accent tracking-widest uppercase mb-2 font-bold">CAMPUS MATCH // IIT BHU</div>
                   <h4 className="font-space text-xl font-bold text-white uppercase">Technex'23</h4>
                 </div>
-                <ul className="font-roboto text-gray-950 font-bold text-sm mt-4 space-y-2 border-l border-white/10 pl-4 py-1">
-                  <li><span className="text-brand-accent font-black">1ST PLACE</span> // Build It & Momentum</li>
-                  <li><span className="text-brand-accent font-black">2ND PLACE</span> // Maze X</li>
-                  <li><span className="text-brand-accent font-black">3RD PLACE</span> // Robowar (15kg)</li>
+                <ul className="font-roboto text-gray-300 font-medium text-sm mt-4 space-y-2 border-l border-white/10 pl-4 py-1">
+                  <li><span className="text-brand-accent font-bold">1ST PLACE</span> // Build It & Momentum</li>
+                  <li><span className="text-brand-accent font-bold">2ND PLACE</span> // Maze X</li>
+                  <li><span className="text-brand-accent font-bold">3RD PLACE</span> // Robowar (15kg)</li>
                 </ul>
               </div>
 
@@ -152,9 +152,9 @@ export function PhaseLegacy() {
                   <div className="text-[10px] font-mono text-[#00a2ff] tracking-widest uppercase mb-2 font-bold">HOST STATE // SLIET</div>
                   <h4 className="font-space text-xl font-bold text-white uppercase">techFEST</h4>
                 </div>
-                <ul className="font-roboto text-gray-950 font-bold text-sm mt-4 space-y-2 border-l border-white/10 pl-4 py-1">
-                  <li>Secured <span className="text-gray-950 font-black">21 positions</span> in techFEST'22</li>
-                  <li>Secured <span className="text-gray-950 font-black">13 positions</span> in techFEST'23</li>
+                <ul className="font-roboto text-gray-300 font-medium text-sm mt-4 space-y-2 border-l border-white/10 pl-4 py-1">
+                  <li>Secured <span className="text-white font-bold">21 positions</span> in techFEST'22</li>
+                  <li>Secured <span className="text-white font-bold">13 positions</span> in techFEST'23</li>
                 </ul>
               </div>
             </motion.div>
@@ -170,7 +170,7 @@ export function PhaseLegacy() {
                 <span className="w-2 h-2 rounded-full bg-[#00ff66] animate-pulse"></span>
                 Tryst'23 IIT Delhi
               </h4>
-              <p className="font-roboto text-gray-800 font-semibold text-sm mt-2 leading-relaxed">
+              <p className="font-roboto text-gray-300 font-medium text-sm mt-2 leading-relaxed">
                 Participated in several events at Tryst'23. Current team members got the opportunity to meet the founders of the team who were pursuing their PhD from IIT DELHI, representing an unbroken chain of legacy.
               </p>
             </motion.div>

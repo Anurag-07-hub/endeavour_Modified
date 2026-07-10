@@ -34,7 +34,26 @@ export function EndeavourScene() {
   const finalBlur = useTransform(scrollYProgress, [0.5, 0.65], ["blur(10px)", "blur(0px)"]);
 
   return (
-    <div ref={containerRef} data-cursor-hidden="true" className="relative w-full h-[200vh] bg-black z-20 cursor-none">
+    <div id="endeavour-scene" ref={containerRef} data-cursor-hidden="true" className="relative w-full h-[200vh] bg-black z-20 cursor-none">
+      <style>{`
+        .grainy-text {
+          background-color: #A40505;
+          background-image: 
+            linear-gradient(to right, #A40505, #C8102E),
+            url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+          background-blend-mode: overlay;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+        .bg-letters {
+          color: #000000;
+          transition: color 0.3s ease;
+        }
+        :root:not([data-theme="light"]) .bg-letters {
+          color: #ffffff;
+        }
+      `}</style>
       
       {/* Sticky container holds the animation in the viewport while scrolling the 200vh */}
       <div className="sticky top-0 h-screen w-full flex flex-col justify-center items-center overflow-hidden">
@@ -71,7 +90,7 @@ export function EndeavourScene() {
                         <motion.span
                           key={`letter-${i}`}
                           style={{ opacity: individualOpacity, y: individualY }}
-                          className="text-[12vw] sm:text-[14vw] font-sans font-medium tracking-[-0.03em] text-white/90 leading-[0.8] select-none"
+                          className="bg-letters text-[12vw] sm:text-[14vw] font-sans font-medium tracking-[-0.03em] leading-[0.8] select-none"
                         >
                           {letter}
                         </motion.span>
@@ -94,7 +113,7 @@ export function EndeavourScene() {
           }}
           className="absolute inset-0 flex items-center justify-center pointer-events-none z-30"
         >
-          <h1 className="text-[12vw] sm:text-[14vw] font-black uppercase text-white tracking-[-0.02em] leading-none select-none text-center">
+          <h1 className="grainy-text text-[12vw] sm:text-[14vw] font-black uppercase tracking-[-0.02em] leading-none select-none text-center">
             Endeavour
           </h1>
         </motion.div>

@@ -10,7 +10,6 @@ export function GestureController() {
     if (!isGestureEnabled) return;
 
     // VERY IMPORTANT: Disable native CSS smooth scrolling!
-    // Otherwise, window.scrollTo at 60fps fights with CSS transitions and causes massive jitter.
     document.documentElement.style.scrollBehavior = 'auto';
 
     let targetScrollVelocity = 0;
@@ -18,6 +17,8 @@ export function GestureController() {
     const SCROLL_SPEED = 18;
     let currentScrollY = window.scrollY;
     let animationFrameId: number;
+    let localStream: MediaStream | null = null;
+    let isStreamActive = true;
 
     const updateScroll = () => {
       if (targetScrollVelocity === 0) {
@@ -52,21 +53,14 @@ export function GestureController() {
     };
     window.addEventListener('scroll', handleManualScroll);
 
-    function dist(p1: any, p2: any) {
-      return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
-    }
-
     const analyzeHand = (landmarks: any) => {
-      const wrist = landmarks[0];
-      
-      // A finger is extended if its tip is significantly further from the wrist than its MCP
-      const indexUp = dist(landmarks[8], wrist) > dist(landmarks[5], wrist) * 1.25;
-      const middleUp = dist(landmarks[12], wrist) > dist(landmarks[9], wrist) * 1.25;
-      const ringUp = dist(landmarks[16], wrist) > dist(landmarks[13], wrist) * 1.25;
-      const pinkyUp = dist(landmarks[20], wrist) > dist(landmarks[17], wrist) * 1.25;
-      const thumbOut = dist(landmarks[4], landmarks[17]) > dist(landmarks[5], landmarks[17]) * 1.2;
+      // Robust height check: if a tip is higher (smaller y coordinate) than the PIP and MCP joints, it is extended
+      const indexUp = landmarks[8].y < landmarks[6].y && landmarks[8].y < landmarks[5].y;
+      const middleUp = landmarks[12].y < landmarks[10].y && landmarks[12].y < landmarks[9].y;
+      const ringUp = landmarks[16].y < landmarks[14].y && landmarks[16].y < landmarks[13].y;
+      const pinkyUp = landmarks[20].y < landmarks[18].y && landmarks[20].y < landmarks[17].y;
 
-      // Continuous Scrolling logic
+      // Gesture mapping
       const isPointingUp = indexUp && !middleUp && !ringUp && !pinkyUp;
       const isPeaceSign = indexUp && middleUp && !ringUp && !pinkyUp;
       const isTurnOffGesture = indexUp && middleUp && ringUp && pinkyUp;
@@ -84,15 +78,14 @@ export function GestureController() {
 
     const onResults = (results: any) => {
       if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
-        // Just take the first detected hand
         const landmarks = results.multiHandLandmarks[0];
         analyzeHand(landmarks);
       } else {
-        targetScrollVelocity = 0; // Stop scrolling if hand leaves camera
+        targetScrollVelocity = 0;
       }
     };
 
-    // Initialize MediaPipe
+    // Initialize MediaPipe Hands
     const hands = new (window as any).Hands({
       locateFile: (file: string) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
     });
@@ -114,27 +107,69 @@ export function GestureController() {
     window.addEventListener('touchstart', handleTouch, { passive: true });
     window.addEventListener('touchmove', handleTouch, { passive: true });
 
-    const camera = new (window as any).Camera(videoRef.current, {
-      onFrame: async () => {
-        if (videoRef.current) {
-          await hands.send({ image: videoRef.current });
-        }
-      },
-      facingMode: 'user', // Ensure front camera is used on mobile
-      width: 320,
-      height: 240
-    });
+    // Custom WebRTC getUserMedia implementation for reliable startup & shutdown control
+    const startCamera = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            width: 320,
+            height: 240,
+            facingMode: 'user'
+          },
+          audio: false
+        });
 
-    camera.start();
+        if (!isStreamActive) {
+          stream.getTracks().forEach(track => track.stop());
+          return;
+        }
+
+        localStream = stream;
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+          videoRef.current.play().catch(err => console.log("Video playback warning:", err));
+        }
+
+        const processFrame = async () => {
+          if (!isStreamActive || !videoRef.current) return;
+          if (videoRef.current.readyState === videoRef.current.HAVE_ENOUGH_DATA) {
+            try {
+              await hands.send({ image: videoRef.current });
+            } catch (err) {
+              console.error("Hands detection frame error:", err);
+            }
+          }
+          if (isStreamActive) {
+            animationFrameId = requestAnimationFrame(processFrame);
+          }
+        };
+        animationFrameId = requestAnimationFrame(processFrame);
+
+      } catch (err) {
+        console.error("Camera access failed:", err);
+      }
+    };
+
+    startCamera();
 
     return () => {
+      isStreamActive = false;
       document.documentElement.style.scrollBehavior = ''; // Restore original CSS behavior
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('scroll', handleManualScroll);
       window.removeEventListener('touchstart', handleTouch);
       window.removeEventListener('touchmove', handleTouch);
-      camera.stop();
-      hands.close();
+      
+      if (localStream) {
+        localStream.getTracks().forEach(track => {
+          track.stop();
+        });
+      }
+      try {
+        hands.close();
+      } catch (err) {
+        console.log("Error closing MediaPipe hands:", err);
+      }
     };
   }, [isGestureEnabled]);
 

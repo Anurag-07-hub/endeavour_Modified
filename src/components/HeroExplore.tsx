@@ -1,4 +1,4 @@
-﻿import React, { useRef, useEffect, useState, useCallback } from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
 import { motion, useTransform, MotionValue } from "framer-motion";
 
 interface HeroExploreProps {
@@ -206,7 +206,19 @@ export function HeroExplore({ heroScrollY }: HeroExploreProps) {
       </svg>
 
       {/* Explore CTA button */}
-      <div className="absolute bottom-9 left-6 md:left-14 z-[30] flex items-center gap-5 pointer-events-auto">
+      <motion.div 
+        initial={{ y: -80, opacity: 0 }}
+        animate={{ y: [null, 30, 0], opacity: [0, 1, 1] }}
+        transition={{
+          y: {
+            times: [0, 0.375, 1], // 0.3s relative to 0.8s total is 0.375.
+            duration: 0.8,
+            ease: ["easeIn", "backOut"]
+          },
+          opacity: { duration: 0.5 }
+        }}
+        className="absolute bottom-9 left-6 md:left-14 z-[30] flex items-center gap-5 pointer-events-auto"
+      >
         <button
           className="group flex items-center gap-4 cursor-pointer bg-transparent border-none p-0"
           onMouseEnter={() => setHovered(true)}
@@ -237,7 +249,7 @@ export function HeroExplore({ heroScrollY }: HeroExploreProps) {
             ↓
           </span>
         </button>
-
+ 
         {/* Vertical scroll indicator */}
         <div className="hidden md:flex flex-col items-center gap-1.5 ml-2">
           <div className="w-px h-10 bg-white/15" />
@@ -248,7 +260,7 @@ export function HeroExplore({ heroScrollY }: HeroExploreProps) {
             scroll
           </span>
         </div>
-      </div>
+      </motion.div>
 
       {/* Bottom edge fade */}
       <div

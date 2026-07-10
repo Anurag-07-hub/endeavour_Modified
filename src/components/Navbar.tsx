@@ -44,15 +44,80 @@ export function Navbar() {
     if (current) setActiveTab(current.name);
   }, [location]);
 
+  const [isHidden, setIsHidden] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const banner = document.getElementById('endeavour-banner');
+      const scene = document.getElementById('endeavour-scene');
+      const explore = document.getElementById('explore-section');
+      
+      let shouldHide = false;
+      const vh = window.innerHeight;
+      const scrollY = window.scrollY;
+
+      // Bulletproof scroll range fallbacks based on pathname
+      if (location.pathname === '/') {
+        if (scrollY > vh * 0.85 && scrollY < vh * 2.0) {
+          shouldHide = true;
+        }
+      } else if (location.pathname === '/about') {
+        if (scrollY > vh * 0.85 && scrollY < vh * 3.0) {
+          shouldHide = true;
+        }
+      } else if (location.pathname === '/domains') {
+        if (scrollY > vh * 0.85 && scrollY < vh * 2.8) {
+          shouldHide = true;
+        }
+      }
+
+      if (banner) {
+        const rect = banner.getBoundingClientRect();
+        // Hide while banner is primarily visible on screen
+        if (rect.top < vh * 0.99 && rect.bottom > vh * 0.01) {
+          shouldHide = true;
+        }
+      }
+
+      if (scene) {
+        const rect = scene.getBoundingClientRect();
+        // Hide while scene is active
+        if (rect.top < vh * 0.99 && rect.bottom > vh * 0.01) {
+          shouldHide = true;
+        }
+      }
+
+      if (explore) {
+        const rect = explore.getBoundingClientRect();
+        // Hide while explore section is active
+        if (rect.top < vh * 0.99 && rect.bottom > vh * 0.01) {
+          shouldHide = true;
+        }
+      }
+
+      setIsHidden(shouldHide);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    // Check initial state
+    handleScroll();
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [location.pathname]);
+
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'instant' });
 
   return (
     <>
-      <div id="main-navbar" data-cursor-system="true" className="fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 z-50 w-max max-w-[calc(100%-16px)] sm:max-w-none flex justify-center transition-opacity duration-300">
+      <div id="main-navbar" data-cursor-system="true" className={`fixed top-4 sm:top-6 left-1/2 -translate-x-1/2 z-50 w-max max-w-[calc(100%-16px)] sm:max-w-none flex justify-center transition-all duration-500 ${
+        isHidden ? 'opacity-0 pointer-events-none -translate-y-10' : 'opacity-100 translate-y-0'
+      }`}>
         <div className="flex items-center gap-0.5 sm:gap-3 lg:gap-5 bg-brand-bg/80 border border-white/10 backdrop-blur-xl py-1 px-1 sm:py-2 sm:px-4 rounded-[24px] sm:rounded-[40px] shadow-[0_8px_32px_0_rgba(164,5,5,0.15)] overflow-x-auto overflow-y-visible [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           
           {/* Logo */}
-          <Link to="/" onClick={() => { scrollToTop(); setActiveTab('Home'); }} className="flex items-center justify-center h-8 sm:h-auto px-2 sm:px-3 lg:px-4 shrink-0 rounded-full hover:bg-white/5 transition-colors group mr-1 sm:mr-2">
+          <Link to="/" onClick={() => { setActiveTab('Home'); }} className="flex items-center justify-center h-8 sm:h-auto px-2 sm:px-3 lg:px-4 shrink-0 rounded-full hover:bg-white/5 transition-colors group mr-1 sm:mr-2">
              <img src="https://www.endeavoursliet.in/images/mainlogo.png" alt="Endeavour" className="w-7 sm:w-[34px] h-auto object-contain filter brightness-125 saturate-110 drop-shadow-[0_0_10px_rgba(200,16,46,0.9)] z-10" />
              <motion.div
                initial={{ width: 0, opacity: 0, marginLeft: 0 }}
@@ -117,7 +182,6 @@ export function Navbar() {
                     key={item.name}
                     onClick={() => {
                       setActiveTab(item.name);
-                      scrollToTop();
                       setIsTransitioning(true);
                     }}
                     className={className}
@@ -125,12 +189,12 @@ export function Navbar() {
                     {content}
                   </button>
                 ) : (
-                <Link key={item.name} to={item.url} onClick={() => { setActiveTab(item.name); scrollToTop(); }} className={className}>
+                <Link key={item.name} to={item.url} onClick={() => { setActiveTab(item.name); }} className={className}>
                   {content}
                 </Link>
                 )
               ) : (
-                <a key={item.name} href={item.url} onClick={() => { setActiveTab(item.name); scrollToTop(); }} className={className}>
+                <a key={item.name} href={item.url} onClick={() => { setActiveTab(item.name); }} className={className}>
                   {content}
                 </a>
               );
