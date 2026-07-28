@@ -52,9 +52,10 @@ export function PhasePandemic() {
               className="border-l-2 border-[#00ff66] pl-6 py-2 relative group"
             >
               <div className="absolute -left-[5px] top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#00ff66] shadow-[0_0_10px_#00ff66]"></div>
-              <h3 className="font-space text-2xl md:text-3xl font-bold text-[#ffffff] mb-2 group-hover:text-[#00ff66] transition-colors">E-yantra 2020 (IIT Bombay)</h3>
+              <div className="font-mono text-xs text-[#00ff66] font-bold mb-1">5TH RANK // NATIONAL FINALISTS</div>
+              <h3 className="font-space text-2xl font-bold text-[#ffffff] mb-2 group-hover:text-[#00ff66] transition-colors">E-yantra 2020 (IIT Bombay / MHRD)</h3>
               <p className="font-roboto text-gray-400 text-sm leading-relaxed">
-                Secured 5th rank in the final round conducted by IITB with MHRD. Mastered remote collaboration and heavy simulation environments.
+                Secured 5th rank in the final round of the EYRC robotics competition, excelling in system design and remote software simulations.
               </p>
             </motion.div>
 
@@ -65,9 +66,10 @@ export function PhasePandemic() {
               className="border-l-2 border-brand-accent pl-6 py-2 relative group"
             >
               <div className="absolute -left-[5px] top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-brand-accent shadow-[0_0_10px_#a40505]"></div>
-              <h3 className="font-space text-2xl md:text-3xl font-bold text-[#ffffff] mb-2 group-hover:text-brand-accent transition-colors">Techfest'21 SLIET</h3>
+              <div className="font-mono text-xs text-brand-accent font-bold mb-1">21 PODIUM POSITIONS</div>
+              <h3 className="font-space text-2xl font-bold text-[#ffffff] mb-2 group-hover:text-brand-accent transition-colors">Techfest'21 SLIET</h3>
               <p className="font-roboto text-gray-400 text-sm leading-relaxed">
-                Dominated the virtual edition of techFEST'21 with a whopping 21 positions across all major technical events.
+                Dominated the virtual fests by winning a record-breaking 21 podium positions across all major robotic and circuital events.
               </p>
             </motion.div>
 
@@ -78,9 +80,10 @@ export function PhasePandemic() {
               className="border-l-2 border-[#00a2ff] pl-6 py-2 relative group"
             >
               <div className="absolute -left-[5px] top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#00a2ff] shadow-[0_0_10px_#00a2ff]"></div>
-              <h3 className="font-space text-2xl md:text-3xl font-bold text-[#ffffff] mb-2 group-hover:text-[#00a2ff] transition-colors">TECHNEX & Advitiya</h3>
+              <div className="font-mono text-xs text-[#00a2ff] font-bold mb-1">1ST, 2ND & 3RD PLACE</div>
+              <h3 className="font-space text-2xl font-bold text-[#ffffff] mb-2 group-hover:text-[#00a2ff] transition-colors">Technex'20 (IIT BHU) & Advitiya'20 (IIT Ropar)</h3>
               <p className="font-roboto text-gray-400 text-sm leading-relaxed">
-                1st in Axelerate and Hydrac at Technex'20. 2nd in Aqua Rocket at Advitiya'20.
+                Secured 1st place in Axelerate & Hydrac, and 3rd in Momentum at Technex'20. Secured 2nd place in Aqua Rocket, and 4th place in Off Road Asphalt at Advitiya'20.
               </p>
             </motion.div>
           </div>
@@ -97,9 +100,9 @@ export function PhasePandemic() {
                <div className="absolute inset-0 bg-[linear-gradient(transparent_50%,rgba(0,0,0,0.25)_50%)] bg-[size:100%_4px] pointer-events-none z-10"></div>
                
                <img 
-                 src="/phase3_pandemic.png" 
-                 alt="ROS Simulation and Hardware" 
-                 className="w-full h-auto object-cover opacity-90 mix-blend-screen"
+                 src="/images/achievements/phase3_pandemic.webp" 
+                 alt="Technex'23 Victory" 
+                 className="w-full h-auto object-cover opacity-90"
                />
                
                <div className="absolute bottom-4 right-4 z-20 flex gap-2">

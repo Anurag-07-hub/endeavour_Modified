@@ -6,6 +6,7 @@ import { TextReveal } from '../components/TextReveal';
 import { EndeavourScene } from '../components/EndeavourScene';
 import GradientWaveText from '../components/GradientWaveText';
 import { LetsBeginTransition } from '../components/LetsBeginTransition';
+import { FAQ } from '../components/FAQ';
 
 export function AboutPage() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -93,13 +94,6 @@ export function AboutPage() {
               transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 1 }}
               className="absolute top-[35%] left-[-10%] w-[45vw] max-w-[450px] opacity-[0.8] mix-blend-multiply"
             />
-            <motion.img 
-              src="/sketch_trophy_1781800226405.png" 
-              alt="Trophy Sketch"
-              animate={{ y: [-15, 15, -15], rotate: [-5, 5, -5] }}
-              transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-              className="absolute bottom-[5%] left-[5%] w-[35vw] max-w-[350px] opacity-[0.9] mix-blend-multiply"
-            />
           </div>
 
           <div className="relative z-10 max-w-[1024px] mx-auto px-5 md:px-[60px]">
@@ -176,6 +170,10 @@ export function AboutPage() {
           </motion.div>
           <div>
             <HistoryCircuit />
+          </div>
+          
+          <div className="mt-20 border-t border-white/10 pt-20">
+            <FAQ />
           </div>
         </motion.div>
       </div>

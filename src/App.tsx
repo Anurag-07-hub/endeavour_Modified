@@ -5,7 +5,7 @@ import { EndeavourBanner } from './components/EndeavourBanner';
 import { RecruitmentBanner } from './components/RecruitmentBanner';
 import { About } from './components/About';
 import { Events } from './components/Events';
-import { JoinUsCTA } from './components/JoinUsCTA';
+import { FAQ } from './components/FAQ';
 import { Footer } from './components/Footer';
 import { AboutPage } from './pages/AboutPage';
 import { TeamPage } from './pages/TeamPage';
@@ -32,7 +32,7 @@ function Home() {
       <RecruitmentBanner />
       <About />
       <Events />
-      <JoinUsCTA />
+      <FAQ />
     </main>
   );
 }

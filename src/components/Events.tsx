@@ -42,8 +42,8 @@ export function Events() {
       delay: 0.1,
     },
     {
-      title: 'Madhuram',
-      description: 'The cultural extravaganza where technology meets art, showcasing the vibrant life at SLIET.',
+      title: 'Research and Development',
+      description: 'Fostering innovation by exploring new technologies, publishing research, and developing advanced robotic solutions.',
       icon: <Calendar className="w-4 h-4 sm:w-6 sm:h-6 text-brand-accent" />,
       delay: 0.2,
     },

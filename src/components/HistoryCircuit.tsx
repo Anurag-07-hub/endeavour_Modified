@@ -4,6 +4,7 @@ import { PhaseGenesis } from './PhaseGenesis';
 import { PhaseScaling } from './PhaseScaling';
 import { PhasePandemic } from './PhasePandemic';
 import { PhaseLegacy } from './PhaseLegacy';
+import { PhaseCurrent } from './PhaseCurrent';
 
 export function HistoryCircuit() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -55,6 +56,7 @@ export function HistoryCircuit() {
         <PhaseScaling />
         <PhasePandemic />
         <PhaseLegacy />
+        <PhaseCurrent />
         
       </div>
     </section>

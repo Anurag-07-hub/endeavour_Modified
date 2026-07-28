@@ -13,6 +13,7 @@ import {
 import { Canvas, useFrame } from '@react-three/fiber';
 import { useGLTF, Environment } from '@react-three/drei';
 import { useCMS } from '../context/CMSContext';
+import { FAQ } from '../components/FAQ';
 
 // --- 3D Model Renderer (no particle background) ---
 
@@ -920,7 +921,9 @@ export function DomainsPage() {
       {/* 3. Sub-projects Showcase Grid */}
       <ProjectPortfolioSection />
 
-
+      <div className="mt-20 border-t border-white/10 pt-20 relative z-30">
+        <FAQ />
+      </div>
 
     </div>
   );

@@ -63,8 +63,8 @@ export function PhaseGenesis() {
             <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none opacity-20"></div>
             
             <img 
-              src="/phase1_robot.png" 
-              alt="Line Following Robot" 
+              src="/images/achievements/phase1_genesis.jpg" 
+              alt="Alumni Visit" 
               className="w-full h-full object-cover opacity-90"
             />
             
@@ -75,7 +75,7 @@ export function PhaseGenesis() {
             </div>
           </motion.div>
 
-          {/* Right: Blueprint Cards */}
+          {/* Right: Achievements Cards */}
           <motion.div 
             variants={containerVariants}
             initial="hidden"
@@ -83,11 +83,24 @@ export function PhaseGenesis() {
             className="flex flex-col gap-6"
           >
             {[
-              { title: 'UNIMATE', desc: 'An LFR that participated and won in zonals for IIT BOMBAY (Techfest\'16)', metric: 'SPEED: OPTIMIZED' },
-              { title: 'GLADIATOR', desc: 'Air pocket mechanism with high speed propellers. Participated in HOVERCRAFT in BITS Pilani (Apogee\'17)', metric: 'AERO: ACTIVE' },
-              { title: 'OPTIMUS 1.0', desc: 'Hybrid combat robot with applied pneumatics and advanced mechanical design destined to fight in ROBOWAR.', metric: 'ARMOR: MAX' },
-              { title: 'HOPPER', desc: 'Four-wheeled wired car with high torque motors. Participated in HURDLEMANIA held at IIT BHU (Technex\'17)', metric: 'TORQUE: HIGH' },
-              { title: 'BLUE CAR', desc: 'Four-wheeled Bluetooth controlled car. Participated and won in ROBORACE in SLIET (Metamorphosis\'16)', metric: 'BLUETOOTH: LINKED' }
+              { 
+                event: "Techfest'16 (IIT Bombay)",
+                position: "1st Place (Zonals)",
+                desc: "Secured zonal first position with UNIMATE, a high-precision line following robot.", 
+                metric: "UNIMATE" 
+              },
+              { 
+                event: "Metamorphosis'16 (SLIET)",
+                position: "1st Place",
+                desc: "Won first prize in Roborace with BLUE CAR, a custom Bluetooth-controlled vehicle.", 
+                metric: "BLUE CAR" 
+              },
+              { 
+                event: "Metamorphosis'16 (SLIET)",
+                position: "Winner",
+                desc: "Secured winning positions across both the Robo Exhibition and Robo Race events.", 
+                metric: "ROBO EXHIBITION" 
+              }
             ].map((project, idx) => (
               <motion.div 
                 key={idx}
@@ -96,11 +109,14 @@ export function PhaseGenesis() {
               >
                 {/* Circuit accent line */}
                 <div className="absolute left-0 top-0 bottom-0 w-1 bg-brand-accent/20 group-hover:bg-brand-accent transition-colors"></div>
-                <div className="absolute right-4 top-4 font-roboto text-xs text-brand-accent/50 group-hover:text-brand-accent transition-colors">
-                  {project.metric}
+                <div className="absolute right-4 top-4 font-mono text-xs text-brand-accent font-bold tracking-wider">
+                  {project.position}
                 </div>
 
-                <h4 className="font-space text-2xl font-bold text-white mb-2">{project.title}</h4>
+                <h4 className="font-space text-xs font-bold text-brand-accent/70 group-hover:text-brand-accent transition-colors uppercase tracking-[2px]">{project.event}</h4>
+                <div className="font-michroma text-lg font-bold text-white mt-1 mb-2">
+                  {project.metric}
+                </div>
                 <p className="font-roboto text-brand-muted text-sm leading-relaxed">
                   {project.desc}
                 </p>

@@ -11,7 +11,7 @@ const CornerBrackets = () => (
   </>
 );
 
-export function PhaseLegacy() {
+export function PhaseCurrent() {
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: false, amount: 0.1 });
 
@@ -41,7 +41,7 @@ export function PhaseLegacy() {
             transition={{ duration: 0.5 }}
             className="font-syncopate text-brand-accent uppercase tracking-[8px] text-sm md:text-base font-bold"
           >
-            Phase 4 // 2022-2023
+            Phase 5 // 2024-2025
           </motion.h4>
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
@@ -49,7 +49,7 @@ export function PhaseLegacy() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="font-michroma text-[40px] md:text-[80px] leading-none mt-4 text-white uppercase"
           >
-            Legacy & Peak
+            Horizon & Beyond
           </motion.h2>
           <motion.div 
              initial={{ opacity: 0, scaleX: 0 }}
@@ -73,15 +73,15 @@ export function PhaseLegacy() {
               <CornerBrackets />
               <div className="relative rounded-xl overflow-hidden h-[400px] md:h-[550px]">
                 <img 
-                  src="/images/achievements/phase4_legacy.webp" 
-                  alt="Glimpses of Achievements" 
+                  src="/images/achievements/phase5_current.webp" 
+                  alt="Competition Team Photo" 
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent"></div>
                 <div className="absolute bottom-6 left-6">
-                  <div className="text-[10px] font-mono text-brand-accent tracking-widest uppercase mb-1">PROG: MENTORSHIP</div>
-                  <h3 className="font-space font-bold text-white text-xl">Building the Future</h3>
-                  <p className="font-roboto font-medium text-gray-200 text-sm mt-1">Mentorship & Institutional Innovation</p>
+                  <div className="text-[10px] font-mono text-brand-accent tracking-widest uppercase mb-1">PROG: HORIZON</div>
+                  <h3 className="font-space font-bold text-white text-xl">Scaling Innovation</h3>
+                  <p className="font-roboto font-medium text-gray-200 text-sm mt-1">Expanding Technical Horizons & Engineering Excellence</p>
                 </div>
               </div>
             </div>
@@ -94,7 +94,7 @@ export function PhaseLegacy() {
             animate={isInView ? "show" : "hidden"}
             className="w-full lg:w-1/2 flex flex-col gap-6"
           >
-            {/* Technex'23 Card */}
+            {/* Technex'24 Card */}
             <motion.div 
               variants={itemVariants}
               className="bg-black/55 backdrop-blur-md border border-white/10 p-8 rounded-xl transition-all duration-300 group relative overflow-hidden hover:border-brand-accent/60 hover:shadow-[0_0_20px_rgba(164,5,5,0.25)] flex flex-col justify-between"
@@ -106,26 +106,24 @@ export function PhaseLegacy() {
                     CAMPUS MATCH // IIT BHU
                   </span>
                   <span className="font-mono text-xs text-[#00ff66] tracking-wider font-bold shadow-[0_0_10px_rgba(0,255,102,0.3)]">
-                    1ST PLACE (X3)
+                    1ST PLACE (X2)
                   </span>
                 </div>
 
-                <h4 className="font-michroma text-2xl font-bold text-white mb-2 uppercase tracking-wide">Technex'23</h4>
+                <h4 className="font-michroma text-2xl font-bold text-white mb-2 uppercase tracking-wide">Technex'24</h4>
                 <p className="font-roboto text-brand-muted text-sm leading-relaxed mb-6">
-                  Team Endeavour dominated one of India's largest technical fests at IIT BHU.
+                  Secured multiple podium finishes at the prestigious national technical festival at IIT BHU.
                 </p>
               </div>
 
               <ul className="font-roboto text-gray-300 font-medium text-sm space-y-3 border-l-2 border-brand-accent/30 pl-6 py-1">
-                <li><span className="text-brand-accent font-bold">1ST PLACE</span> // Build It (Robotics Challenge)</li>
-                <li><span className="text-brand-accent font-bold">1ST PLACE</span> // Momentum (Line Follower Challenge)</li>
-                <li><span className="text-brand-accent font-bold">1ST PLACE</span> // Bridge The Gap (Structural Challenge)</li>
-                <li><span className="text-brand-accent font-bold">2ND PLACE</span> // Maze X (Autonomous Bot)</li>
-                <li><span className="text-brand-accent font-bold">3RD PLACE</span> // Bridge The Gap & Robowar (15kg)</li>
+                <li><span className="text-brand-accent font-bold">1ST PLACE</span> // Robowar (Combat category)</li>
+                <li><span className="text-brand-accent font-bold">1ST PLACE</span> // Hurdlemania (Maneuver challenge)</li>
+                <li><span className="text-brand-accent font-bold">2ND PLACE</span> // Maze Solver (Autonomous navigation)</li>
               </ul>
             </motion.div>
 
-            {/* techFEST Card */}
+            {/* Cognizance & techFEST Card */}
             <motion.div 
               variants={itemVariants}
               className="bg-black/55 backdrop-blur-md border border-white/10 p-8 rounded-xl transition-all duration-300 group relative overflow-hidden hover:border-[#00a2ff]/60 hover:shadow-[0_0_20px_rgba(0,162,255,0.25)] flex flex-col justify-between"
@@ -134,22 +132,23 @@ export function PhaseLegacy() {
               <div>
                 <div className="flex justify-between items-start mb-4">
                   <span className="inline-block px-3 py-1 bg-[#00a2ff]/10 rounded font-mono font-bold text-[10px] text-[#00a2ff] tracking-widest uppercase border border-[#00a2ff]/30">
-                    HOST STATE // SLIET
+                    NATIONALS & HOST STATE
                   </span>
                   <span className="font-mono text-xs text-[#00a2ff] tracking-wider font-bold shadow-[0_0_10px_rgba(0,162,255,0.3)]">
-                    34 PODIUMS TOTAL
+                    35+ PODIUMS TOTAL
                   </span>
                 </div>
 
-                <h4 className="font-michroma text-2xl font-bold text-white mb-2 uppercase tracking-wide">techFEST</h4>
+                <h4 className="font-michroma text-2xl font-bold text-white mb-2 uppercase tracking-wide">Cognizance & techFEST</h4>
                 <p className="font-roboto text-brand-muted text-sm leading-relaxed mb-6">
-                  Dominated consecutive editions of the institute's annual national technical festival.
+                  Continued dominant winning streaks at premier CFTIs fests and state-level championships.
                 </p>
               </div>
 
               <ul className="font-roboto text-gray-300 font-medium text-sm space-y-3 border-l-2 border-[#00a2ff]/30 pl-6 py-1">
-                <li><span className="text-[#00a2ff] font-bold">21 POSITIONS WON</span> // techFEST'22</li>
-                <li><span className="text-[#00a2ff] font-bold">13 POSITIONS WON</span> // techFEST'23</li>
+                <li><span className="text-[#00a2ff] font-bold">1ST PLACE</span> // Armageddon Robowar at Cognizance'24 (IIT Roorkee)</li>
+                <li><span className="text-[#00a2ff] font-bold">1ST PLACE</span> // UAV Drone Racing at Cognizance'24 (IIT Roorkee)</li>
+                <li><span className="text-white font-bold">35+ Podium Positions</span> // techFEST'24 & techFEST'25</li>
               </ul>
             </motion.div>
           </motion.div>
