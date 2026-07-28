@@ -1,485 +1,293 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
-import { motion, useTransform, useSpring, useMotionValue, AnimatePresence } from "motion/react";
-import { X } from 'lucide-react';
+import { motion, AnimatePresence } from "motion/react";
+import { X, Maximize2, Compass, Layers, Radio, Camera } from 'lucide-react';
 import { useParticlesBackground } from '../hooks/useParticlesBackground';
 import { useCMS } from '../context/CMSContext';
 import ScrollExpandMedia from '../components/ui/scroll-expansion-hero';
 
-export type AnimationPhase = "scatter" | "line" | "circle" | "bottom-strip";
+export type GalleryCategory = 'all' | 'uav' | 'ugv' | 'events' | 'team';
 
-interface FlipCardProps {
-    item: { id: string; type: 'image'|'video'|'empty'; url: string };
-    index: number;
-    total: number;
-    phase: AnimationPhase;
-    target: { x: number; y: number; rotation: number; scale: number; opacity: number };
-    onClick: () => void;
+interface BentoItem {
+  id: string;
+  type: 'image' | 'video';
+  url: string;
+  category: GalleryCategory;
+  title: string;
+  description: string;
 }
 
-const IMG_WIDTH = 60;
-const IMG_HEIGHT = 85;
+const bentoLayouts = [
+  'md:col-span-2 md:row-span-2', // index 0 (large)
+  'md:col-span-1 md:row-span-1', // index 1 (small)
+  'md:col-span-1 md:row-span-2', // index 2 (tall)
+  'md:col-span-2 md:row-span-1', // index 3 (wide)
+  'md:col-span-1 md:row-span-1', // index 4 (small)
+  'md:col-span-1 md:row-span-1', // index 5 (small)
+  'md:col-span-2 md:row-span-2', // index 6 (large)
+  'md:col-span-1 md:row-span-1', // index 7 (small)
+  'md:col-span-1 md:row-span-1', // index 8 (small)
+  'md:col-span-2 md:row-span-1', // index 9 (wide)
+  'md:col-span-1 md:row-span-2', // index 10 (tall)
+  'md:col-span-1 md:row-span-1', // index 11 (small)
+  'md:col-span-2 md:row-span-1', // index 12 (wide)
+];
 
-function FlipCard({
-    item,
-    index,
-    total,
-    phase,
-    target,
-    onClick,
-}: FlipCardProps) {
-    return (
-        <motion.div
-            animate={{
-                x: target.x,
-                y: target.y,
-                rotate: target.rotation,
-                scale: target.scale,
-                opacity: target.opacity,
-            }}
-            transition={{
-                type: "spring",
-                stiffness: 40,
-                damping: 15,
-            }}
-            style={{
-                position: "absolute",
-                width: IMG_WIDTH,
-                height: IMG_HEIGHT,
-                transformStyle: "preserve-3d",
-                zIndex: Math.round(target.scale * 100),
-            }}
-            className={`group ${item.type === 'empty' ? 'cursor-default' : 'cursor-pointer'}`}
-            onClick={() => {
-                if (item.type !== 'empty') onClick();
-            }}
-        >
-            <motion.div
-                className="relative h-full w-full"
-                style={{ transformStyle: "preserve-3d" }}
-                transition={{ duration: 0.6, type: "spring", stiffness: 260, damping: 20 }}
-            >
-                {/* Front Face */}
-                <div
-                    className="absolute inset-0 h-full w-full overflow-hidden rounded-xl shadow-lg bg-gray-200"
-                    style={{ backfaceVisibility: "hidden" }}
-                >
-                    {item.type === 'video' && item.url ? (
-                        <video src={item.url} autoPlay loop muted playsInline className="h-full w-full object-cover pointer-events-none" />
-                    ) : item.type === 'image' && item.url ? (
-                        <img src={item.url} alt={`gallery-${index}`} className="h-full w-full object-cover pointer-events-none" />
-                    ) : (
-                        <div className="h-full w-full flex flex-wrap gap-1 p-2 bg-[#050505] overflow-hidden justify-center items-center pointer-events-none" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "San Francisco", "Helvetica Neue", Helvetica, sans-serif' }}>
-                            {Array.from({ length: 45 }).map((_, i) => (
-                                <span key={i} className="text-[#a40505] opacity-30 font-black uppercase tracking-[2px] leading-none" style={{ fontSize: `${Math.random() * 10 + 6}px`, transform: `rotate(${Math.random() * 60 - 30}deg)`, textShadow: '0 0 10px rgba(164, 5, 5, 0.9)' }}>
-                                    ENDEAVOUR
-                                </span>
-                            ))}
-                        </div>
-                    )}
-                    <div className="absolute inset-0 bg-black/10 transition-colors group-hover:bg-black/60" />
-                    
-                    {/* View Full Overlay */}
-                    {item.type !== 'empty' && (
-                        <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                            <div className="border border-brand-accent/50 bg-black/60 backdrop-blur-sm rounded-lg p-3 text-center shadow-[0_0_15px_rgba(164,5,5,0.5)] transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                                <p className="text-[8px] font-bold text-brand-accent uppercase tracking-widest mb-1">View</p>
-                                <p className="text-xs font-medium text-white">Full</p>
-                            </div>
-                        </div>
-                    )}
-                </div>
-            </motion.div>
-        </motion.div>
-    );
-}
-
-const TOTAL_IMAGES = 20;
-const MAX_SCROLL = 3000;
-
-const lerp = (start: number, end: number, t: number) => start * (1 - t) + end * t;
+const categoryLabels: { value: GalleryCategory; label: string; icon: React.ComponentType<any> }[] = [
+  { value: 'all', label: 'All Memories', icon: Camera },
+  { value: 'uav', label: 'UAV Division', icon: Radio },
+  { value: 'ugv', label: 'UGV Division', icon: Layers },
+  { value: 'events', label: 'Events & Wins', icon: Compass },
+  { value: 'team', label: 'Team Moments', icon: Camera },
+];
 
 export function GalleryPage() {
-    const { gallery } = useCMS();
-    const displayGallery = Array.from({ length: TOTAL_IMAGES }).map((_, i) => gallery[i] || { id: `empty-${i}`, type: 'empty', url: '' } as const);
-    
-    const [introPhase, setIntroPhase] = useState<AnimationPhase>("scatter");
-    const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
-    const containerRef = useRef<HTMLDivElement>(null);
-    const [selectedItem, setSelectedItem] = useState<{ type: 'image'|'video'; url: string } | null>(null);
+  const { gallery } = useCMS();
+  
+  const [activeCategory, setActiveCategory] = useState<GalleryCategory>('all');
+  const [selectedItem, setSelectedItem] = useState<{ type: 'image'|'video'; url: string } | null>(null);
+  const [isLight, setIsLight] = useState(false);
+  const canvasRef = useParticlesBackground();
 
-    // Hide Navbar when lightbox is open
-    useEffect(() => {
-        const navbar = document.getElementById('main-navbar');
-        if (navbar) {
-            if (selectedItem) {
-                navbar.style.opacity = '0';
-                navbar.style.pointerEvents = 'none';
-            } else {
-                navbar.style.opacity = '1';
-                navbar.style.pointerEvents = 'auto';
-            }
+  // Sync theme changes dynamically
+  useEffect(() => {
+    const checkTheme = () => setIsLight(document.documentElement.getAttribute('data-theme') === 'light');
+    checkTheme();
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'data-theme') {
+          checkTheme();
         }
-    }, [selectedItem]);
+      });
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    return () => observer.disconnect();
+  }, []);
 
-    // New Particles Hook
-    const canvasRef = useParticlesBackground();
+  // Hide Navbar when lightbox is open
+  useEffect(() => {
+    const navbar = document.getElementById('main-navbar');
+    if (navbar) {
+      if (selectedItem) {
+        navbar.style.opacity = '0';
+        navbar.style.pointerEvents = 'none';
+      } else {
+        navbar.style.opacity = '1';
+        navbar.style.pointerEvents = 'auto';
+      }
+    }
+  }, [selectedItem]);
 
-    // --- Container Size ---
-    useEffect(() => {
-        if (!containerRef.current) return;
+  // Enrich gallery items with categories and text labels
+  const enrichedGallery = useMemo(() => {
+    return gallery
+      .filter((item) => item.type !== 'empty' && item.url)
+      .map((item, index) => {
+        let category: GalleryCategory = 'team';
+        let title = 'Lab Brainstorm Session';
+        let description = 'Collaborative discussions refining mechanics and circuits.';
 
-        const handleResize = (entries: ResizeObserverEntry[]) => {
-            for (const entry of entries) {
-                setContainerSize({
-                    width: entry.contentRect.width,
-                    height: entry.contentRect.height,
-                });
-            }
+        const lowerUrl = item.url.toLowerCase();
+        if (lowerUrl.includes('ugv') || lowerUrl.includes('rover') || index % 4 === 1) {
+          category = 'ugv';
+          title = 'UGV Field Run';
+          description = 'Testing autonomous SLAM mapping routes and chassis endurance.';
+        } else if (lowerUrl.includes('uav') || lowerUrl.includes('drone') || index % 4 === 2) {
+          category = 'uav';
+          title = 'UAV Autonomous Flight';
+          description = 'Validating flight control loops and obstacle compliance algorithms.';
+        } else if (lowerUrl.includes('technex') || lowerUrl.includes('win') || index % 4 === 3) {
+          category = 'events';
+          title = 'Technex IIT BHU Win';
+          description = 'Celebrating national achievements and podium wins.';
+        }
+
+        return {
+          id: item.id || `gallery-item-${index}`,
+          type: item.type as 'image' | 'video',
+          url: item.url,
+          category,
+          title,
+          description,
         };
+      });
+  }, [gallery]);
 
-        const observer = new ResizeObserver(handleResize);
-        observer.observe(containerRef.current);
+  // Filter gallery items based on active category selection
+  const filteredItems = useMemo(() => {
+    if (activeCategory === 'all') return enrichedGallery;
+    return enrichedGallery.filter((item) => item.category === activeCategory);
+  }, [enrichedGallery, activeCategory]);
 
-        setContainerSize({
-            width: containerRef.current.offsetWidth,
-            height: containerRef.current.offsetHeight,
-        });
+  return (
+    <div 
+      className={`min-h-screen w-full relative transition-colors duration-500 pb-24 pt-28 px-6 sm:px-12
+        ${isLight ? 'bg-[#ffffff] text-[#111827]' : 'bg-brand-bg text-white'}`}
+      style={{
+        backgroundImage: 'linear-gradient(to right, var(--color-grid-lines) 1px, transparent 1px), linear-gradient(to bottom, var(--color-grid-lines) 1px, transparent 1px)',
+        backgroundSize: '40px 40px'
+      }}
+    >
+      {/* Grainy Noise Overlay */}
+      <div 
+        className="absolute inset-0 z-0 opacity-[0.02] pointer-events-none"
+        style={{ 
+          backgroundImage: 'url("data:image/svg+xml,%3Csvg width=%22128%22 height=%22128%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.95%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22128%22 height=%22128%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")',
+          backgroundSize: '128px 128px'
+        }}
+      />
 
-        return () => observer.disconnect();
-    }, []);
+      {/* Sparkles Canvas Background */}
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 pointer-events-none z-0 opacity-40"
+      />
 
-    // --- Virtual Scroll Logic ---
-    const virtualScroll = useMotionValue(0);
-    const scrollRef = useRef(0);
-
-    useEffect(() => {
-        const container = containerRef.current;
-        if (!container) return;
-
-        const handleWheel = (e: WheelEvent) => {
-            e.preventDefault();
-            const newScroll = Math.min(Math.max(scrollRef.current + e.deltaY, 0), MAX_SCROLL);
-            scrollRef.current = newScroll;
-            virtualScroll.set(newScroll);
-        };
-
-        let touchStartY = 0;
-        const handleTouchStart = (e: TouchEvent) => {
-            touchStartY = e.touches[0].clientY;
-        };
-        const handleTouchMove = (e: TouchEvent) => {
-            e.preventDefault();
-            const touchY = e.touches[0].clientY;
-            const deltaY = touchStartY - touchY;
-            touchStartY = touchY;
-
-            const newScroll = Math.min(Math.max(scrollRef.current + deltaY, 0), MAX_SCROLL);
-            scrollRef.current = newScroll;
-            virtualScroll.set(newScroll);
-        };
-
-        container.addEventListener("wheel", handleWheel, { passive: false });
-        container.addEventListener("touchstart", handleTouchStart, { passive: false });
-        container.addEventListener("touchmove", handleTouchMove, { passive: false });
-
-        return () => {
-            container.removeEventListener("wheel", handleWheel);
-            container.removeEventListener("touchstart", handleTouchStart);
-            container.removeEventListener("touchmove", handleTouchMove);
-        };
-    }, [virtualScroll]);
-
-    // Morph Progress: 0 (Circle) -> 1 (Bottom Arc)
-    const morphProgress = useTransform(virtualScroll, [0, 600], [0, 1]);
-    const smoothMorph = useSpring(morphProgress, { stiffness: 40, damping: 20 });
-
-    // Scroll Rotation
-    const scrollRotate = useTransform(virtualScroll, [600, 3000], [0, 360]);
-    const smoothScrollRotate = useSpring(scrollRotate, { stiffness: 40, damping: 20 });
-
-    // Mouse Parallax
-    const mouseX = useMotionValue(0);
-    const smoothMouseX = useSpring(mouseX, { stiffness: 30, damping: 20 });
-
-    useEffect(() => {
-        const container = containerRef.current;
-        if (!container) return;
-
-        const handleMouseMove = (e: MouseEvent) => {
-            const rect = container.getBoundingClientRect();
-            const relativeX = e.clientX - rect.left;
-            const normalizedX = (relativeX / rect.width) * 2 - 1;
-            mouseX.set(normalizedX * 100);
-        };
-        container.addEventListener("mousemove", handleMouseMove);
-        return () => container.removeEventListener("mousemove", handleMouseMove);
-    }, [mouseX]);
-
-    // Intro Sequence
-    useEffect(() => {
-        const timer1 = setTimeout(() => setIntroPhase("line"), 500);
-        const timer2 = setTimeout(() => setIntroPhase("circle"), 2500);
-        return () => { clearTimeout(timer1); clearTimeout(timer2); };
-    }, []);
-
-    // Random Scatter Positions
-    const scatterPositions = useMemo(() => {
-        return displayGallery.map(() => ({
-            x: (Math.random() - 0.5) * 1500,
-            y: (Math.random() - 0.5) * 1000,
-            rotation: (Math.random() - 0.5) * 180,
-            scale: 0.6,
-            opacity: 0,
-        }));
-    }, [displayGallery.length]);
-
-    const [morphValue, setMorphValue] = useState(0);
-    const [rotateValue, setRotateValue] = useState(0);
-    const [parallaxValue, setParallaxValue] = useState(0);
-
-    useEffect(() => {
-        const unsubscribeMorph = smoothMorph.on("change", setMorphValue);
-        const unsubscribeRotate = smoothScrollRotate.on("change", setRotateValue);
-        const unsubscribeParallax = smoothMouseX.on("change", setParallaxValue);
-        return () => {
-            unsubscribeMorph();
-            unsubscribeRotate();
-            unsubscribeParallax();
-        };
-    }, [smoothMorph, smoothScrollRotate, smoothMouseX]);
-
-    // --- Content Opacity ---
-    // Fade in content when arc is formed (morphValue > 0.8)
-    const contentOpacity = useTransform(smoothMorph, [0.8, 1], [0, 1]);
-    const contentY = useTransform(smoothMorph, [0.8, 1], [20, 0]);
-
-    return (
-        <div data-cursor-system="true" ref={containerRef} className="force-dark relative w-full h-[100svh] bg-brand-bg overflow-hidden pt-[80px]">
-            <style>{`
-                @keyframes load {  
-                    0% { opacity: 0;}    
-                    100% { opacity: 1;}    
-                }
-                @keyframes loadrot {
-                    0% { transform: scaleY(0); opacity: 0; }
-                    100% { transform: scaleY(1); opacity: 1; }
-                }
-                @keyframes spotlight {
-                    0% { opacity: 0.7; filter: blur(15px); }
-                    50% { opacity: 1; filter: blur(25px); }    
-                    100% { opacity: 0.7; filter: blur(15px); }    
-                }
-            `}</style>
-
-            {/* Glowing Spotlight Effects positioned above the circle */}
-            <div
-                className="pointer-events-none"
-                style={{
-                    display: "flex",
-                    width: "100%",
-                    justifyContent: "center",
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    margin: "0 auto",
-                    zIndex: 0, // Behind the gallery cards
-                }}
-            >
-                <div
-                    style={{
-                        position: "absolute",
-                        top: "-2em",
-                        left: 0,
-                        right: 0,
-                        margin: "0 auto",
-                        width: "15em",
-                        height: "4em",
-                        borderRadius: "50%",
-                        background: "rgba(164, 5, 5, 0.8)",
-                        boxShadow: "0 0 5em 2em #a40505",
-                        filter: "blur(10px)",
-                    }}
-                />
-                
-                {/* Linear Light Beam extending downwards */}
-                <div
-                    style={{
-                        position: "absolute",
-                        left: 0,
-                        right: 0,
-                        top: 0,
-                        margin: "0 auto",
-                        width: "100%", // Covers the region fully horizontally
-                        height: "85vh", // Reaches down beautifully over the circle
-                        backgroundImage: "linear-gradient(90deg, transparent 10%, rgba(164, 5, 5, 0.1) 30%, rgba(164, 5, 5, 0.4) 50%, rgba(164, 5, 5, 0.1) 70%, transparent 90%)",
-                        WebkitMaskImage: "linear-gradient(to bottom, black 0%, black 20%, transparent 100%)",
-                        maskImage: "linear-gradient(to bottom, black 0%, black 20%, transparent 100%)",
-                        transformOrigin: "50% 0",
-                        animation: "loadrot 4s ease-out forwards, spotlight 8s ease-in-out infinite",
-                        zIndex: -1,
-                    }}
-                />
-            </div>
-
-            {/* Sparkle Particles Canvas */}
-            <canvas
-                ref={canvasRef}
-                style={{
-                    position: "absolute",
-                    pointerEvents: "none",
-                    animation: "load 0.4s ease-in-out forwards",
-                    zIndex: 0,
-                    width: "100%",
-                    height: "100%",
-                    opacity: 0.8,
-                }}
-            />
-
-            {/* Container */}
-            <div className="flex h-full w-full flex-col items-center justify-center perspective-1000 z-10">
-
-                {/* Intro Text (Fades out) */}
-                <div className="absolute z-0 flex flex-col items-center justify-center text-center pointer-events-none top-1/2 -translate-y-1/2">
-                    <motion.p
-                        initial={{ opacity: 0 }}
-                        animate={introPhase === "circle" && morphValue < 0.5 ? { opacity: 0.5 - morphValue } : { opacity: 0 }}
-                        transition={{ duration: 1, delay: 0.2 }}
-                        className="mt-4 text-xs font-bold tracking-[0.2em] text-gray-400"
-                    >
-                        SCROLL TO EXPLORE
-                    </motion.p>
-                    <motion.h2
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={introPhase === "circle" && morphValue < 0.5 ? { opacity: 1 - morphValue * 2, y: 0 } : { opacity: 0, y: 10 }}
-                        transition={{ duration: 1, delay: 0.4 }}
-                        className="mt-2 text-2xl md:text-3xl font-black tracking-[0.1em] text-brand-accent uppercase font-sans select-none"
-                    >
-                        OUR MEMORIES
-                    </motion.h2>
-                </div>
-
-                {/* Arc Active Content (Fades in) */}
-                <motion.div
-                    style={{ opacity: contentOpacity, y: contentY }}
-                    className={`absolute top-[15%] z-10 flex flex-col items-center justify-center text-center pointer-events-none px-4 transition-opacity duration-500 ${selectedItem ? 'opacity-0' : ''}`}
-                >
-                    <h2 
-                        className="text-5xl md:text-7xl font-semibold tracking-tight mb-4 drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)]"
-                        style={{ color: "#FFFFFF" }}
-                    >
-                        Explore Our Vision
-                    </h2>
-                    <p className="text-lg md:text-2xl text-gray-100 max-w-2xl leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] font-bold">
-                        Discover a world where technology meets creativity. <br className="hidden md:block" />
-                        Scroll through our curated collection of innovations designed to shape the future.
-                    </p>
-                </motion.div>
-
-                {/* Main Container */}
-                <div className={`relative flex items-center justify-center w-full h-full mt-4 transition-opacity duration-500 ${selectedItem ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-                    {displayGallery.map((item, i) => {
-                        let target = { x: 0, y: 0, rotation: 0, scale: 1, opacity: 1 };
-
-                        if (introPhase === "scatter") {
-                            target = scatterPositions[i];
-                        } else if (introPhase === "line") {
-                            const lineSpacing = 70;
-                            const lineTotalWidth = TOTAL_IMAGES * lineSpacing;
-                            const lineX = i * lineSpacing - lineTotalWidth / 2;
-                            target = { x: lineX, y: 0, rotation: 0, scale: 1, opacity: 1 };
-                        } else {
-                            const isMobile = containerSize.width < 768;
-                            const minDimension = Math.min(containerSize.width, containerSize.height);
-
-                            const circleRadius = Math.min(minDimension * 0.35, 350);
-                            const circleAngle = (i / TOTAL_IMAGES) * 360;
-                            const circleRad = (circleAngle * Math.PI) / 180;
-                            const circlePos = {
-                                x: Math.cos(circleRad) * circleRadius,
-                                y: Math.sin(circleRad) * circleRadius,
-                                rotation: circleAngle + 90,
-                            };
-
-                            const baseRadius = Math.min(containerSize.width, containerSize.height * 1.5);
-                            const arcRadius = baseRadius * (isMobile ? 1.4 : 1.1);
-                            const arcApexY = containerSize.height * (isMobile ? 0.35 : 0.25);
-                            const arcCenterY = arcApexY + arcRadius;
-
-                            const spreadAngle = isMobile ? 100 : 130;
-                            const startAngle = -90 - (spreadAngle / 2);
-                            const step = spreadAngle / (TOTAL_IMAGES - 1);
-
-                            const scrollProgress = Math.min(Math.max(rotateValue / 360, 0), 1);
-                            const maxRotation = spreadAngle * 0.8;
-                            const boundedRotation = -scrollProgress * maxRotation;
-
-                            const currentArcAngle = startAngle + (i * step) + boundedRotation;
-                            const arcRad = (currentArcAngle * Math.PI) / 180;
-
-                            const arcPos = {
-                                x: Math.cos(arcRad) * arcRadius + parallaxValue,
-                                y: Math.sin(arcRad) * arcRadius + arcCenterY,
-                                rotation: currentArcAngle + 90,
-                                scale: isMobile ? 1.4 : 1.8,
-                            };
-
-                            target = {
-                                x: lerp(circlePos.x, arcPos.x, morphValue),
-                                y: lerp(circlePos.y, arcPos.y, morphValue),
-                                rotation: lerp(circlePos.rotation, arcPos.rotation, morphValue),
-                                scale: lerp(1, arcPos.scale, morphValue),
-                                opacity: 1,
-                            };
-                        }
-
-                        return (
-                            <FlipCard
-                                key={item.id}
-                                item={item}
-                                index={i}
-                                total={displayGallery.length}
-                                phase={introPhase}
-                                target={target}
-                                onClick={() => { if (item.type !== 'empty') setSelectedItem({ type: item.type, url: item.url }) }}
-                            />
-                        );
-                    })}
-                </div>
-            </div>
-
-            {/* Lightbox Modal */}
-            <AnimatePresence>
-                {selectedItem && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[100]"
-                    >
-                        <ScrollExpandMedia
-                            mediaType={selectedItem.type === 'video' ? 'video' : 'image'}
-                            mediaSrc={selectedItem.url}
-                            bgImageSrc={selectedItem.type === 'image' ? selectedItem.url : 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1920&auto=format&fit=crop'}
-                            title="ENDEAVOUR GALLERY"
-                            date="Memories"
-                            scrollToExpand="Scroll to Expand"
-                            onClose={() => setSelectedItem(null)}
-                        >
-                            <div className="max-w-4xl mx-auto text-center mt-[20vh] md:mt-[30vh]">
-                                <h2 className="text-3xl font-bold mb-6 text-white font-bebas tracking-wider uppercase">
-                                    About This Memory
-                                </h2>
-                                <p className="text-lg text-white/80 font-sans leading-relaxed">
-                                    Our gallery showcases the journey of Endeavour. 
-                                    Every component, every event, and every memory is carefully preserved.
-                                    Scroll to fully expand and immerse yourself in the moment.
-                                </p>
-                            </div>
-                        </ScrollExpandMedia>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+      <div className="max-w-7xl mx-auto relative z-10 space-y-12">
+        
+        {/* Header Block */}
+        <div className="text-center md:text-left space-y-4">
+          <span className="font-mono text-xs uppercase tracking-[0.25em] text-[#c41515] font-bold block">
+            MEMORIAL VAULT
+          </span>
+          <h1 className="font-righteous text-[48px] sm:text-[68px] font-black uppercase tracking-[-2px] sm:tracking-[-3px] leading-[0.95] text-transparent bg-clip-text bg-gradient-to-r from-white via-white/80 to-gray-500 style-heading">
+            <span className={isLight ? 'text-gray-900' : 'text-white'}>OUR GALLERY</span>
+          </h1>
+          <p className={`font-sans text-base max-w-2xl leading-relaxed ${isLight ? 'text-gray-600' : 'text-brand-muted'}`}>
+            Explore visual records from Sant Longowal Institute of Engineering & Technology's official robotics club. Witness our development iterations, field runs, and national competitions.
+          </p>
         </div>
-    );
+
+        {/* Filter Categories Header */}
+        <div className="flex flex-wrap gap-2 overflow-x-auto pb-4 scrollbar-none justify-center md:justify-start">
+          {categoryLabels.map((cat) => {
+            const IconComponent = cat.icon;
+            const isSelected = activeCategory === cat.value;
+            return (
+              <button
+                key={cat.value}
+                onClick={() => setActiveCategory(cat.value)}
+                className={`relative flex items-center gap-2 px-4 py-2.5 rounded-full border text-xs font-semibold tracking-wide whitespace-nowrap transition-all duration-300
+                  ${isSelected
+                    ? 'bg-brand-accent border-brand-accent text-white shadow-lg shadow-brand-accent/20'
+                    : isLight
+                      ? 'bg-[#f9fafb] border-[#e5e7eb] text-gray-600 hover:border-gray-300 hover:bg-gray-100/50'
+                      : 'bg-white/[0.02] border-white/5 text-brand-muted hover:border-white/20 hover:bg-white/[0.05]'
+                  }`}
+              >
+                <IconComponent className="w-3.5 h-3.5" />
+                <span>{cat.label}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Bento Grid */}
+        <motion.div 
+          layout 
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 auto-rows-[220px] md:auto-rows-[250px]"
+        >
+          <AnimatePresence mode="popLayout">
+            {filteredItems.map((item, index) => {
+              const gridClass = bentoLayouts[index % bentoLayouts.length];
+              const isLarge = gridClass.includes('row-span-2');
+              const isWide = gridClass.includes('col-span-2');
+
+              return (
+                <motion.div
+                  key={item.id}
+                  layout
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                  className={`group relative overflow-hidden rounded-3xl p-2 cursor-pointer flex flex-col justify-between transition-all duration-500
+                    ${gridClass}
+                    ${isLight 
+                      ? 'bg-[#ffffff] border border-[#e5e7eb] shadow-sm hover:shadow-xl hover:border-gray-300' 
+                      : 'bg-[#0d0f17]/90 border border-white/5 shadow-2xl hover:border-white/10'}`}
+                  onClick={() => setSelectedItem({ type: item.type, url: item.url })}
+                >
+                  {/* Media Content */}
+                  <div className="absolute inset-2 overflow-hidden rounded-2xl z-0">
+                    {item.type === 'video' ? (
+                      <video src={item.url} autoPlay loop muted playsInline className="h-full w-full object-cover scale-102 group-hover:scale-105 transition-transform duration-700 pointer-events-none" />
+                    ) : (
+                      <img src={item.url} alt={item.title} className="h-full w-full object-cover scale-102 group-hover:scale-105 transition-transform duration-700 pointer-events-none" />
+                    )}
+
+                    {/* Dark gradient shadow overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent opacity-60 group-hover:opacity-85 transition-opacity duration-300" />
+                  </div>
+
+                  {/* Top Floating Badge */}
+                  <div className="relative z-10 p-4 flex justify-between items-start w-full">
+                    <span className="bg-black/60 border border-white/10 backdrop-blur-md px-3 py-1 rounded-full text-[9px] font-mono tracking-widest font-bold uppercase text-white">
+                      {item.category}
+                    </span>
+                    <div className="bg-black/60 border border-white/10 backdrop-blur-md p-1.5 rounded-full text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <Maximize2 className="w-3.5 h-3.5" />
+                    </div>
+                  </div>
+
+                  {/* Bottom Text Disclosures */}
+                  <div className="relative z-10 p-4 text-left space-y-1 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
+                    <h3 className="font-righteous text-white text-base uppercase tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                      {item.title}
+                    </h3>
+                    
+                    {/* Render description in larger boxes only */}
+                    {(isLarge || isWide) && (
+                      <p className="text-white/70 text-xs font-sans max-w-md line-clamp-2 leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75">
+                        {item.description}
+                      </p>
+                    )}
+                    
+                    <span className="block font-mono text-[8px] tracking-widest text-[#c41515] uppercase font-bold pt-1">
+                      IMG_0{index + 1} // STRUCT_SPEC
+                    </span>
+                  </div>
+
+                </motion.div>
+              );
+            })}
+          </AnimatePresence>
+        </motion.div>
+
+      </div>
+
+      {/* Lightbox Modal */}
+      <AnimatePresence>
+        {selectedItem && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100]"
+          >
+            <ScrollExpandMedia
+              mediaType={selectedItem.type === 'video' ? 'video' : 'image'}
+              mediaSrc={selectedItem.url}
+              bgImageSrc={selectedItem.type === 'image' ? selectedItem.url : 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1920&auto=format&fit=crop'}
+              title="ENDEAVOUR GALLERY"
+              date="Memories"
+              scrollToExpand="Scroll to Expand"
+              onClose={() => setSelectedItem(null)}
+            >
+              <div className="max-w-4xl mx-auto text-center mt-[20vh] md:mt-[30vh] px-4">
+                <h2 className="text-3xl font-bold mb-6 text-white font-bebas tracking-wider uppercase">
+                  About This Memory
+                </h2>
+                <p className="text-lg text-white/80 font-sans leading-relaxed">
+                  Our gallery showcases the journey of Endeavour. 
+                  Every component, every event, and every memory is carefully preserved.
+                  Scroll to fully expand and immerse yourself in the moment.
+                </p>
+              </div>
+            </ScrollExpandMedia>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+    </div>
+  );
 }
