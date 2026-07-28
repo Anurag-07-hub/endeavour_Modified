@@ -16,7 +16,7 @@ const accordionItems = [
   {
     id: 3,
     title: 'UGV',
-    imageUrl: '/ugv.jpeg',
+    imageUrl: '/images/ugv.jpg',
   },
   {
     id: 4,
