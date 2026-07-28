@@ -13,6 +13,7 @@ export function AboutPage() {
   const location = useLocation();
   const fromLetsBegin = location.state?.fromLetsBegin;
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isLight, setIsLight] = useState(false);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -24,6 +25,20 @@ export function AboutPage() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
+    const checkTheme = () => setIsLight(document.documentElement.getAttribute('data-theme') === 'light');
+    checkTheme();
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'data-theme') {
+          checkTheme();
+        }
+      });
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -173,7 +188,7 @@ export function AboutPage() {
           </div>
           
           <div className="mt-20 border-t border-white/10 pt-20">
-            <FAQ />
+            <FAQ theme={isLight ? 'light' : 'dark'} />
           </div>
         </motion.div>
       </div>

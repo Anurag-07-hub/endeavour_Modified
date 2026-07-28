@@ -11,7 +11,7 @@ interface FAQItem {
   category: 'general' | 'joining' | 'competitions' | 'membership' | 'safety';
 }
 
-export function FAQ() {
+export function FAQ({ theme = 'dark' }: { theme?: 'light' | 'dark' }) {
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [expandedId, setExpandedId] = useState<number | null>(null);
@@ -242,11 +242,7 @@ export function FAQ() {
   };
 
   return (
-    <section id="faq" className="py-[80px] md:py-[120px] bg-white/[0.01] border-t border-white/10 w-full relative overflow-hidden">
-      {/* Decorative gradients */}
-      <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-brand-accent/5 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[450px] h-[450px] bg-brand-accent/3 rounded-full blur-[120px] pointer-events-none" />
-
+    <section className={`py-20 md:py-32 w-full relative z-10 ${theme === 'light' ? 'bg-[#ffffff] text-[#111827]' : 'bg-brand-bg text-white'}`}>
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 md:px-[60px]">
         
         {/* Header */}
@@ -258,7 +254,7 @@ export function FAQ() {
           </FadeIn>
           <AnimatedText
             text="FREQUENTLY ASKED QUESTIONS"
-            className="text-[28px] min-[390px]:text-[34px] sm:text-[46px] md:text-[56px] font-sans font-black tracking-[-2px] text-white leading-[0.95]"
+            className={`text-[28px] min-[390px]:text-[34px] sm:text-[46px] md:text-[56px] font-sans font-black tracking-[-2px] leading-[0.95] ${theme === 'light' ? 'text-[#111827]' : 'text-white'}`}
           />
         </div>
 
@@ -275,9 +271,13 @@ export function FAQ() {
                 placeholder="Search FAQs..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-white/[0.03] border border-white/10 rounded-lg py-3 pl-10 pr-4 text-sm text-white placeholder-white/30 focus:outline-none focus:border-brand-accent/50 focus:bg-white/[0.05] transition-all duration-300 font-sans"
+                className={`w-full border rounded-lg py-3 pl-10 pr-4 text-sm focus:outline-none focus:border-brand-accent/50 transition-all duration-300 font-sans
+                  ${theme === 'light'
+                    ? 'bg-[#f9fafb] border-[#e5e7eb] text-[#111827] placeholder-gray-400 focus:bg-[#ffffff]'
+                    : 'bg-white/[0.03] border border-white/10 text-white placeholder-white/30 focus:bg-white/[0.05]'
+                  }`}
               />
-              <Search className="absolute left-3.5 top-3.5 w-4.5 h-4.5 text-white/30" />
+              <Search className={`absolute left-3.5 top-3.5 w-4.5 h-4.5 ${theme === 'light' ? 'text-gray-400' : 'text-white/30'}`} />
             </div>
 
             {/* Category selection */}
@@ -291,8 +291,10 @@ export function FAQ() {
                   }}
                   className={`flex items-center gap-3 px-4 py-3 rounded-lg border text-sm font-semibold tracking-wide whitespace-nowrap transition-all duration-300 snap-start
                     ${activeCategory === cat.id
-                      ? 'bg-brand-accent border-brand-accent text-white shadow-lg shadow-brand-accent/20'
-                      : 'bg-white/[0.02] border-white/5 text-brand-muted hover:border-white/20 hover:bg-white/[0.05]'
+                      ? 'bg-brand-accent border-brand-accent text-[#ffffff] shadow-lg shadow-brand-accent/20'
+                      : theme === 'light'
+                        ? 'bg-[#f9fafb] border-[#e5e7eb] text-[#374151] hover:border-gray-300 hover:bg-gray-100/50'
+                        : 'bg-white/[0.02] border-white/5 text-brand-muted hover:border-white/20 hover:bg-white/[0.05]'
                     }`}
                 >
                   {cat.icon}
@@ -318,8 +320,12 @@ export function FAQ() {
                       transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                       className={`border rounded-xl transition-all duration-500 overflow-hidden backdrop-blur-sm
                         ${isExpanded 
-                          ? 'border-brand-accent/50 bg-white/[0.04]' 
-                          : 'border-white/5 bg-white/[0.01] hover:border-white/15'
+                          ? theme === 'light'
+                            ? 'border-[#c41515]/30 bg-[#f9fafb] shadow-md shadow-[#c41515]/5'
+                            : 'border-brand-accent/50 bg-white/[0.04]' 
+                          : theme === 'light'
+                            ? 'border-[#e5e7eb] bg-[#ffffff] shadow-sm hover:border-gray-300'
+                            : 'border-white/5 bg-white/[0.01] hover:border-white/15'
                         }`}
                     >
                       <button
@@ -327,7 +333,7 @@ export function FAQ() {
                         className="w-full text-left p-5 md:p-6 flex items-center justify-between gap-4 focus:outline-none"
                       >
                         <h3 className={`font-sans font-bold text-[15px] sm:text-[18px] tracking-tight transition-colors duration-300
-                          ${isExpanded ? 'text-brand-accent' : 'text-white'}`}
+                          ${isExpanded ? 'text-brand-accent' : theme === 'light' ? 'text-[#1f2937]' : 'text-white'}`}
                         >
                           {faq.question}
                         </h3>
@@ -335,7 +341,11 @@ export function FAQ() {
                           animate={{ rotate: isExpanded ? 180 : 0 }}
                           transition={{ duration: 0.3, ease: 'easeInOut' }}
                           className={`flex-shrink-0 border p-1 rounded-full 
-                            ${isExpanded ? 'border-brand-accent/30 text-brand-accent bg-brand-accent/5' : 'border-white/10 text-white/50'}`}
+                            ${isExpanded 
+                              ? 'border-brand-accent/30 text-brand-accent bg-brand-accent/5' 
+                              : theme === 'light'
+                                ? 'border-[#e5e7eb] text-gray-400 bg-[#f9fafb]'
+                                : 'border-white/10 text-white/50'}`}
                         >
                           <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5" />
                         </motion.div>
@@ -349,7 +359,7 @@ export function FAQ() {
                             exit={{ height: 0, opacity: 0 }}
                             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                           >
-                            <div className="px-5 pb-6 md:px-6 md:pb-8 pt-0 text-sm sm:text-base border-t border-white/[0.03]">
+                            <div className={`px-5 pb-6 md:px-6 md:pb-8 pt-0 text-sm sm:text-base border-t ${theme === 'light' ? 'border-[#e5e7eb]/80 text-[#374151]' : 'border-white/[0.03]'}`}>
                               {faq.answer}
                             </div>
                           </motion.div>
@@ -363,11 +373,15 @@ export function FAQ() {
                   layout
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="flex flex-col items-center justify-center py-12 text-center text-white/40 font-sans border border-dashed border-white/10 rounded-xl bg-white/[0.005]"
+                  className={`flex flex-col items-center justify-center py-12 text-center font-sans border border-dashed rounded-xl
+                    ${theme === 'light'
+                      ? 'text-gray-400 border-[#e5e7eb] bg-[#f9fafb]'
+                      : 'text-white/40 border-white/10 bg-white/[0.005]'
+                    }`}
                 >
                   <Search className="w-8 h-8 mb-3 opacity-30" />
                   <p className="text-sm font-semibold">No questions found</p>
-                  <p className="text-xs text-white/30 mt-1">Try matching another keyword or selecting a different category</p>
+                  <p className={`text-xs mt-1 ${theme === 'light' ? 'text-gray-400/80' : 'text-white/30'}`}>Try matching another keyword or selecting a different category</p>
                 </motion.div>
               )}
             </AnimatePresence>

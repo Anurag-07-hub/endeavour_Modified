@@ -9,13 +9,15 @@ import {
   ShieldAlert,
   Eye,
   Layers,
+  ChevronRight,
+  Database,
+  Radio,
+  Activity
 } from 'lucide-react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { useGLTF, Environment } from '@react-three/drei';
 import { useCMS } from '../context/CMSContext';
 import { FAQ } from '../components/FAQ';
-
-// --- 3D Model Renderer (no particle background) ---
 
 // --- 3D Model Renderer ---
 
@@ -30,7 +32,7 @@ class ModelErrorBoundary extends React.Component<{ children: React.ReactNode }, 
   render() {
     if (this.state.hasError) {
       return (
-        <div className="w-full h-full bg-[#161a22] text-[#c41515]/90 p-4 rounded-3xl flex flex-col items-center justify-center text-center border border-white/5 shadow-xl backdrop-blur-md">
+        <div className="w-full h-full bg-white/5 text-red-600 p-4 rounded-3xl flex flex-col items-center justify-center text-center border border-white/10 shadow-sm">
           <span className="font-righteous text-lg mb-1 tracking-wider">3D ENGINE OFFLINE</span>
           <p className="text-[10px] font-mono opacity-60">{this.state.error?.message || 'Render failure'}</p>
         </div>
@@ -44,7 +46,6 @@ function ModelWrapper({ scene }: { scene: any }) {
   const modelRef = useRef<any>(null);
   useFrame((state) => {
     if (modelRef.current) {
-      // Smooth slow rotation on y-axis
       modelRef.current.rotation.y = state.clock.getElapsedTime() * 0.15;
     }
   });
@@ -99,51 +100,6 @@ function SlideInText({ children, className = '' }: { children: React.ReactNode; 
   );
 }
 
-
-
-// --- Dust Particles Animation ---
-function DustParticles() {
-  const [particles, setParticles] = useState<{ id: number; left: number; size: number; delay: number; duration: number; xOffset: number; maxOpacity: number }[]>([]);
-  useEffect(() => {
-    const newParticles = Array.from({ length: 80 }).map((_, i) => {
-      const duration = Math.random() * 20 + 15;
-      return {
-        id: i,
-        left: Math.random() * 100,
-        size: Math.random() * 4 + 1.5,
-        delay: Math.random() * duration,
-        duration: duration,
-        xOffset: (Math.random() - 0.5) * 15,
-        maxOpacity: Math.random() * 0.4 + 0.2,
-      };
-    });
-    setParticles(newParticles);
-  }, []);
-
-  return (
-    <div className="absolute inset-0 z-[1] overflow-hidden pointer-events-none mix-blend-screen">
-      {particles.map((p) => (
-        <div
-          key={p.id}
-          className="absolute rounded-full bg-[#FF4500]"
-          style={{
-            width: `${p.size}px`,
-            height: `${p.size}px`,
-            left: `${p.left}%`,
-            bottom: '-5%',
-            opacity: 0,
-            animation: `dust-float ${p.duration}s linear infinite`,
-            animationDelay: `-${p.delay}s`,
-            WebkitAnimationDelay: `-${p.delay}s`,
-            '--x-offset': `${p.xOffset}vw`,
-            '--max-opacity': p.maxOpacity,
-          } as React.CSSProperties}
-        />
-      ))}
-    </div>
-  );
-}
-
 // --- Parallax Stacking Section ---
 
 interface StackingSectionProps {
@@ -152,21 +108,24 @@ interface StackingSectionProps {
   total: number;
   sectionRef: React.RefObject<HTMLDivElement>;
   children: React.ReactNode;
+  isMobile?: boolean;
 }
 
-function StackingSection({ index, total, sectionRef, children }: StackingSectionProps) {
+function StackingSection({ index, total, sectionRef, children, isMobile = false }: StackingSectionProps) {
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end start'] });
   const smoothedProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
   const isLast = index === total - 1;
-  const scale = useTransform(smoothedProgress, [0, 1], isLast ? [1, 1] : [1, 0.93]);
-  const opacity = useTransform(smoothedProgress, [0, 1], isLast ? [1, 1] : [1, 0.45]);
-  const y = useTransform(smoothedProgress, [0, 1], isLast ? [0, 0] : [0, -50]);
+  const scale = useTransform(smoothedProgress, [0, 1], isMobile || isLast ? [1, 1] : [1, 0.93]);
+  const opacity = useTransform(smoothedProgress, [0, 1], isMobile || isLast ? [1, 1] : [1, 0.45]);
+  const y = useTransform(smoothedProgress, [0, 1], isMobile || isLast ? [0, 0] : [0, -50]);
 
   return (
     <motion.div
       ref={sectionRef}
       style={{ zIndex: index + 10, scale, opacity, y }}
-      className="sticky top-0 h-screen w-full bg-brand-bg overflow-hidden border-t border-white/5 shadow-[0_-20px_60px_rgba(0,0,0,0.8)] flex flex-col justify-center origin-top"
+      className={`w-full bg-brand-bg border-t border-white/5 flex flex-col justify-center origin-top
+        ${isMobile ? 'relative h-auto py-16' : 'sticky top-0 h-screen overflow-hidden shadow-[0_-20px_60px_rgba(0,0,0,0.015)]'}
+      `}
     >
       {children}
     </motion.div>
@@ -217,24 +176,10 @@ const sections: SectionData[] = [
     projects: [
       {
         title: 'Autonomous Aerial Systems',
-        subtitle: 'Multirotor Platform',
-        description: 'UAVs equipped with advanced flight controllers and thermal imaging systems to automate surveillance paths.',
+        subtitle: 'Model V10 Quad',
+        description: 'UAVs equipped with thermal imagery mapping systems to automate rescue tasks.',
         icon: ShieldAlert,
         techSpecs: ['Autonomous Flight Loops', 'Thermal Camera Feed', 'Fail-Safe RTL Mode'],
-      },
-      {
-        title: 'Custom Flight Firmware',
-        subtitle: 'Flight stabilization control',
-        description: 'Design and implementation of PID loops on STM32 microprocessors, optimizing response timings and sensor fusion.',
-        icon: Cpu,
-        techSpecs: ['PID Loops & Tuning', 'High-RPM Coreless Drives', 'Telemetry Linkage'],
-      },
-      {
-        title: 'IDRL Competitive Quadcopters',
-        subtitle: 'FPV High-Speed Racing',
-        description: 'Highly maneuverable carbon fiber multirotors built for national speed-trial leagues.',
-        icon: Compass,
-        techSpecs: ['Carbon Fiber Chassis', '150+ km/h Max Speed', 'Analog Low-Latency FPV'],
       },
     ],
     coverImage: 'https://images.unsplash.com/photo-1473968512647-3e447244af8f?q=80&w=1200&auto=format&fit=crop',
@@ -247,7 +192,7 @@ const sections: SectionData[] = [
     description:
       'Our Unmanned Ground Vehicles are built to conquer any terrain. Featuring robust suspension systems, LiDAR-based SLAM navigation, and modular manipulator arms, they are designed for exploration, search and rescue, and hazardous environment mapping.',
     accent: '#00cc66',
-    shimmerClass: 'from-[#00cc66] via-[#aaffaa] to-[#00cc66]',
+    shimmerClass: 'from-[#00cc66] via-[#22c55e] to-[#00cc66]',
     glowClass: 'shadow-[#00cc66]/30 border-[#00cc66]/25',
     stats: [
       { value: 'SLAM NAV', label: 'LiDAR Navigation' },
@@ -257,24 +202,10 @@ const sections: SectionData[] = [
     projects: [
       {
         title: 'All-Terrain Navigation',
-        subtitle: 'LiDAR SLAM Mapping',
+        subtitle: 'SLAM Point-Cloud Mapping',
         description: 'Intelligent path planning and map building inside unknown, hazardous structures using laser sensor feeds.',
         icon: Layers,
         techSpecs: ['SLAM Point-Cloud Mapping', 'Obstacle Avoidance Logic', 'Autonomous Path Routing'],
-      },
-      {
-        title: 'Heavy Duty Chassis',
-        subtitle: 'Torsion Bar Mechanics',
-        description: 'Modular ground platform with high-torque hub motor drives, designed for search and rescue operations.',
-        icon: Compass,
-        techSpecs: ['Torsion Bar Suspension', 'High-Torque Hub Drives', 'Hazard-Avoidance Mapping'],
-      },
-      {
-        title: 'High-Speed PID Liners',
-        subtitle: 'Micro-Robotics Engineering',
-        description: 'Highly responsive miniature rovers utilizing high-resolution sensor arrays and fine-tuned PID control algorithms for track navigation.',
-        icon: Cpu,
-        techSpecs: ['8-Channel Sensor Arrays', 'PID Loop Tuning', 'High-RPM Coreless Motors'],
       },
     ],
     modelUrl: '/ugv_model.glb',
@@ -287,7 +218,7 @@ const sections: SectionData[] = [
     description:
       'At the bleeding edge of robotics, our Research division explores novel actuation mechanisms, soft robotics, and AI-driven control theory. We focus on publishing groundbreaking papers and developing prototypes that push the boundaries of current engineering.',
     accent: '#9333ea',
-    shimmerClass: 'from-[#9333ea] via-[#e879f9] to-[#9333ea]',
+    shimmerClass: 'from-[#9333ea] via-[#c084fc] to-[#9333ea]',
     glowClass: 'shadow-[#9333ea]/30 border-[#9333ea]/25',
     stats: [
       { value: 'AI THEORY', label: 'Control Systems' },
@@ -302,106 +233,42 @@ const sections: SectionData[] = [
         icon: Eye,
         techSpecs: ['State-Space Kinematics', 'Reinforcement Learning', 'Real-Time Path Calibrations'],
       },
-      {
-        title: 'Soft Robotics & Actuation',
-        subtitle: 'Biomimetic compliance',
-        description: 'Explorations into flexible pneumatic grippers and responsive composite shells for delicate object manipulation.',
-        icon: Atom,
-        techSpecs: ['Flexible Elastomer Shells', 'Pneumatic Pressure Control', 'Compliant Object Gripping'],
-      },
-      {
-        title: 'Scientific Publications',
-        subtitle: 'IEEE Academic Output',
-        description: 'Authoring and presenting research papers detailing novel joint mechanisms and swarm algorithms at international conferences.',
-        icon: FileText,
-        techSpecs: ['IEEE / Springer Papers', 'Patent Filing Support', 'IIT Joint Collaborations'],
-      },
     ],
     coverImage: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1200&auto=format&fit=crop',
   },
 ];
 
-// --- Parallax Floating Card ---
-
-interface ParallaxCardProps {
-  proj: ProjectCard;
-  index: number;
-  parentScrollYProgress: any;
-}
-
-function ParallaxCard({ proj, index, parentScrollYProgress }: ParallaxCardProps) {
-  const speed = 1.2;
-  const initialOffset = -50;
-  const y = useTransform(parentScrollYProgress, [0, 1], [initialOffset, -240 * speed + initialOffset]);
-  const opacity = useTransform(parentScrollYProgress, [0, 0.18, 0.82, 1], [0.35, 1, 1, 0]);
-  const scale = useTransform(parentScrollYProgress, [0, 0.15, 0.85, 1], [0.93, 1, 1, 0.94]);
-  const Icon = proj.icon;
-
-  return (
-    <motion.div
-      style={{ y, opacity, scale }}
-      className="group bg-brand-bg border border-white/10 p-6 rounded-3xl hover:border-white/25 transition-colors duration-300 flex flex-col justify-between hover:shadow-[0_20px_50px_rgba(0,0,0,0.7)]"
-    >
-      <div className="space-y-4">
-        <div className="w-12 h-12 rounded-2xl bg-white/5 text-[#c41515] border border-white/10 flex items-center justify-center shadow-lg group-hover:bg-[#c41515] group-hover:text-white group-hover:border-[#c41515] transition-all duration-300">
-          <Icon className="w-5 h-5" />
-        </div>
-        <div>
-          <span className="text-[10px] font-mono font-bold tracking-wider text-brand-muted uppercase">{proj.subtitle}</span>
-          <h4 className="font-righteous text-lg text-white mt-1 group-hover:text-[#c41515] transition-colors duration-300">{proj.title}</h4>
-        </div>
-        <p className="text-brand-muted text-xs leading-relaxed font-sans font-medium">{proj.description}</p>
-      </div>
-      <div className="mt-6 pt-4 border-t border-white/5 space-y-2">
-        {proj.techSpecs.map((spec, sIdx) => (
-          <div key={sIdx} className="flex items-start gap-2.5">
-            <CheckCircle2 className="w-4 h-4 mt-0.5 shrink-0 text-[#c41515]" />
-            <span className="font-mono text-[10px] text-brand-muted leading-tight font-medium">{spec}</span>
-          </div>
-        ))}
-      </div>
-    </motion.div>
-  );
-}
-
-// --- Project Portfolio Section ---
-
-function ProjectPortfolioSection() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: containerRef, offset: ['start end', 'end start'] });
-
-  return (
-    <section ref={containerRef} data-cursor-hidden="false" className="relative py-36 bg-brand-bg border-t border-white/5 z-20 overflow-hidden animate-opacity">
-      <div className="max-w-6xl mx-auto px-6 relative min-h-[900px]">
-        <div className="mb-20 text-center md:text-left relative z-30 pointer-events-none">
-          <span className="font-mono text-xs uppercase tracking-widest text-[#c41515] font-bold drop-shadow-md">PROJECT PORTFOLIO</span>
-          <h3 className="font-righteous text-4xl md:text-5xl text-white tracking-tight mt-2 uppercase bg-gradient-to-r from-white via-[#d1d5db] to-white bg-clip-text text-transparent animate-text-shimmer drop-shadow-lg">
-            Updated Technical Cards
-          </h3>
-          <p className="text-brand-muted text-sm max-w-lg mt-2 drop-shadow-md font-medium">
-            Select key initiatives mapping directly to the UAV, UGV, and Research Divisions.
-          </p>
-        </div>
-        <div className="pt-24 relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
-          {sections.flatMap((sec) => sec.projects).map((proj, idx) => (
-            <ParallaxCard key={idx} proj={proj} index={idx} parentScrollYProgress={scrollYProgress} />
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 // --- Main Page Component ---
 
 export function DomainsPage() {
   const { domainsConfig, heroLayout } = useCMS();
-
   const localLayout = heroLayout;
 
-  const [activeSection, setActiveSection] = useState('uav');
+  const [isMobile, setIsMobile] = useState(false);
+  const [isLight, setIsLight] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const exploreRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  useEffect(() => {
+    const checkTheme = () => setIsLight(document.documentElement.getAttribute('data-theme') === 'light');
+    checkTheme();
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'data-theme') {
+          checkTheme();
+        }
+      });
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    return () => observer.disconnect();
+  }, []);
   
   const { scrollYProgress: exploreProgress } = useScroll({
     target: exploreRef,
@@ -412,7 +279,10 @@ export function DomainsPage() {
     damping: 25,
     restDelta: 0.001
   });
-  const exploreTextY = useTransform(smoothedExploreProgress, [0.08, 0.38], ["100%", "0%"]);
+
+  const scannerY = useTransform(smoothedExploreProgress, [0.1, 0.9], ["0%", "100%"]);
+  const blueprintScale = useTransform(smoothedExploreProgress, [0.0, 0.45], [0.9, 1.05]);
+  const blueprintOpacity = useTransform(smoothedExploreProgress, [0.0, 0.2, 0.8, 1.0], [0.4, 1, 1, 0.3]);
   
   const { scrollYProgress } = useScroll({ 
     target: containerRef, 
@@ -426,46 +296,9 @@ export function DomainsPage() {
   });
 
   const parallaxY = {
-    ourText: useTransform(heroScrollY, [0, 1], [0, -1200]),
-    rksText: useTransform(heroScrollY, [0, 1], [0, -1200]),
-    centerWO: useTransform(heroScrollY, [0, 1], [0, -1200]),
-    statementBox: useTransform(heroScrollY, [0, 1], [0, -800]),
-    categoriesBlock: useTransform(heroScrollY, [0, 1], [0, -800]),
-    phase1: useTransform(heroScrollY, [0, 1], [0, -1200]),
-    phase2: useTransform(heroScrollY, [0, 1], [0, -1200]),
-    phase3: useTransform(heroScrollY, [0, 1], [0, -1200]),
-    phase4: useTransform(heroScrollY, [0, 1], [0, -1200]),
+    statementBox: useTransform(heroScrollY, [0, 1], [0, -600]),
+    blueprintCard: useTransform(heroScrollY, [0, 1], [0, -700]),
   };
-
-  const ourTextScaleY = useTransform(heroScrollY, [0, 1], [1, 1.35]);
-  const rksTextScaleY = useTransform(heroScrollY, [0, 1], [1, 1.35]);
-  const centerWOScaleY = useTransform(heroScrollY, [0, 1], [1, 1.35]);
-
-  // Phase 1 scroll-linked parallax animations (used globally for all phases)
-  const phase1ScaleY = useTransform(heroScrollY, [0.0, 0.025, 0.05, 0.1], [1.0, 0.6, 0.2, 0.2]);
-  const orangeScaleY = useTransform(heroScrollY, [0.0, 0.015, 0.03, 0.05], [1.0, 0.5, 0.1, 0.1]);
-  const phase1TextOpacity = useTransform(heroScrollY, [0.0, 0.025, 0.05, 0.1], [1.0, 0.5, 0.1, 0.1]);
-  const phase1TextY = useTransform(heroScrollY, [0.0, 0.025, 0.05, 0.1], [0, -7.5, -15, -15]);
-  const phase1TopGhostY = useTransform(heroScrollY, [0.0, 0.025, 0.05, 0.1], [0, -15.5, -15, -15]);
-  const phase1BottomGhostY = useTransform(heroScrollY, [0.0, 0.025, 0.05, 0.1], [0, 0.5, -15, -15]);
-
-  // Scroll-linked synchronized horizontal hide transforms for brandText
-  const brandTextX0 = useTransform(heroScrollY, [0.0, 0.03], [0, -80]);
-  const brandTextOpacity0 = useTransform(heroScrollY, [0.0, 0.03], [1, 0]);
-  const brandTextX1 = useTransform(heroScrollY, [0.0, 0.03], [0, -80]);
-  const brandTextOpacity1 = useTransform(heroScrollY, [0.0, 0.03], [1, 0]);
-
-  // Scroll-linked staggered horizontal hide transforms for categoriesBlock lines
-  const catX0 = useTransform(heroScrollY, [0.0, 0.025], [0, -120]);
-  const catOpacity0 = useTransform(heroScrollY, [0.0, 0.025], [1, 0]);
-  const catX1 = useTransform(heroScrollY, [0.008, 0.033], [0, -120]);
-  const catOpacity1 = useTransform(heroScrollY, [0.008, 0.033], [1, 0]);
-  const catX2 = useTransform(heroScrollY, [0.016, 0.041], [0, -120]);
-  const catOpacity2 = useTransform(heroScrollY, [0.016, 0.041], [1, 0]);
-  const catX3 = useTransform(heroScrollY, [0.024, 0.049], [0, -120]);
-  const catOpacity3 = useTransform(heroScrollY, [0.024, 0.049], [1, 0]);
-  const catX4 = useTransform(heroScrollY, [0.032, 0.057], [0, -120]);
-  const catOpacity4 = useTransform(heroScrollY, [0.032, 0.057], [1, 0]);
 
   const sectionRefs = {
     uav: useRef<HTMLDivElement>(null),
@@ -474,6 +307,7 @@ export function DomainsPage() {
   };
 
   useEffect(() => {
+    if (isMobile) return;
     const handleScroll = () => {
       const scrollPos = window.scrollY + window.innerHeight / 2;
       for (const [id, ref] of Object.entries(sectionRefs)) {
@@ -481,7 +315,6 @@ export function DomainsPage() {
           const offsetTop = ref.current.offsetTop;
           const offsetHeight = ref.current.offsetHeight;
           if (scrollPos >= offsetTop && scrollPos < offsetTop + offsetHeight) {
-            setActiveSection(id);
             break;
           }
         }
@@ -489,342 +322,206 @@ export function DomainsPage() {
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const scrollToSection = (id: string) => {
-    const targetRef = sectionRefs[id as keyof typeof sectionRefs];
-    if (targetRef?.current) {
-      targetRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      setActiveSection(id);
-    }
-  };
+  }, [isMobile]);
 
   return (
-    <div ref={containerRef} className="force-dark min-h-screen bg-[#000000] text-white font-montserrat relative select-none">
+    <div ref={containerRef} className="min-h-screen bg-brand-bg text-white font-montserrat relative select-none">
 
-      {/* 1. Hero Block (Framer Design) */}
+      {/* 1. Hero Block */}
       <section 
         data-cursor-system="true"
         data-cursor-hidden="false" 
-        className="relative h-screen w-full overflow-hidden bg-[#000000] select-none z-30"
+        className={`relative w-full overflow-hidden bg-brand-bg select-none z-30 flex items-center border-b border-white/5
+          ${isMobile ? 'h-auto min-h-screen py-24' : 'h-screen'}
+        `}
+        style={{
+          backgroundImage: 'linear-gradient(to right, var(--color-grid-lines) 1px, transparent 1px), linear-gradient(to bottom, var(--color-grid-lines) 1px, transparent 1px)',
+          backgroundSize: '40px 40px'
+        }}
       >
         {/* Grainy Noise Overlay */}
         <div 
-          className="absolute inset-0 z-40 opacity-[0.38] mix-blend-overlay pointer-events-none"
+          className="absolute inset-0 z-40 opacity-[0.03] pointer-events-none"
           style={{ 
             backgroundImage: 'url("data:image/svg+xml,%3Csvg width=%22128%22 height=%22128%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.95%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22128%22 height=%22128%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")',
             backgroundSize: '128px 128px'
           }}
         />
 
-        {/* Dust Mist Animation */}
-        <DustParticles />
+        <div className="max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-20">
+          
+          {/* Left Column: Heading */}
+          <motion.div 
+            style={{ y: isMobile ? 0 : parallaxY.blueprintCard }}
+            className="lg:col-span-7 space-y-6 text-left"
+          >
+            <span className="font-mono text-xs uppercase tracking-[0.25em] text-[#c41515] font-bold block">
+              01 // SCIENTIFIC DIVISIONS
+            </span>
+            <h1 className="font-righteous text-[42px] sm:text-[72px] lg:text-[88px] font-black uppercase tracking-[-2px] sm:tracking-[-3px] leading-[0.85] text-white">
+              OUR <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#c41515] via-[#ef4444] to-[#f97316]">
+                DOMAINS
+              </span>
+            </h1>
+            <p className="text-brand-muted font-sans text-base sm:text-lg max-w-xl leading-relaxed">
+              Discover the engineering pillars of Sant Longowal Institute of Engineering & Technology's official robotics team. We bridge the gap between abstract research and real-world mechanical deployment.
+            </p>
+            <div className="flex flex-wrap gap-3 pt-2">
+              {['uav', 'ugv', 'research'].map((d) => (
+                <div key={d} className="flex items-center gap-2 bg-white/5 border border-white/10 px-4 py-2.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider text-brand-muted">
+                  <span className="w-2 h-2 rounded-full bg-[#c41515]" />
+                  {d} division
+                </div>
+              ))}
+            </div>
+          </motion.div>
 
+          {/* Right Column: Dynamic Diagnostic Box */}
+          <motion.div 
+            style={{ y: isMobile ? 0 : parallaxY.statementBox }}
+            className="lg:col-span-5 bg-black border border-white/10 p-8 sm:p-10 rounded-3xl shadow-xl relative overflow-hidden text-left"
+          >
+            <div className="absolute top-0 right-0 w-32 h-32 rounded-full bg-[#c41515]/5 blur-[60px]" />
+            <div className="flex items-center justify-between pb-6 border-b border-white/5">
+              <span className="font-mono text-[10px] text-gray-400 uppercase tracking-widest font-bold">Diagnostic spec v2.1</span>
+              <div className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
+                <span className="font-mono text-[9px] text-emerald-500 font-bold uppercase">Online</span>
+              </div>
+            </div>
 
+            <div className="mt-6 space-y-4">
+              <p className="font-clash font-bold text-2xl tracking-tight text-white uppercase">
+                {localLayout.statementBox?.line1 || "BUILDING"}
+              </p>
+              <p className="font-clash font-bold text-2xl tracking-tight text-white uppercase leading-[0.9]">
+                {localLayout.statementBox?.line2 || "INTELLIGENT SYSTEMS"}
+              </p>
+              <p className="font-clash font-bold text-2xl tracking-tight text-white uppercase leading-[0.9]">
+                {localLayout.statementBox?.line3 || "FOR THE FUTURE"}
+              </p>
+            </div>
 
-        {/* Large Typography Background */}
-        <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
-          {/* Top Left OUR */}
-          <motion.div style={{ y: parallaxY.ourText, scaleY: ourTextScaleY, transformOrigin: 'top' }} className="absolute inset-0">
-            <motion.div 
-              animate={{ opacity: 1, x: localLayout.ourText?.x || 0, y: localLayout.ourText?.y || 0, scale: localLayout.ourText?.scale || 1 }}
-              transition={{ duration: 0.8 }}
-              className="absolute top-[15%] left-[5%] text-[24vw] leading-[0.8] font-clash font-bold text-hero-accent opacity-100 tracking-tighter whitespace-pre uppercase"
-            >
-              {localLayout.ourText?.text || 'OUR'}
-            </motion.div>
+            <div className="mt-8 flex gap-4 items-stretch">
+              <div className="w-1.5 bg-gradient-to-b from-[#c41515] to-[#f97316] rounded-full shrink-0" />
+              <div className="space-y-1 py-0.5">
+                {localLayout.statementBox?.brandText?.split('\n').map((line, idx) => (
+                  <p key={idx} className="font-clash font-semibold text-sm uppercase text-brand-muted tracking-wide m-0">
+                    {line}
+                  </p>
+                )) || (
+                  <p className="font-clash font-semibold text-sm uppercase text-brand-muted tracking-wide m-0">
+                    ENDEAVOUR ROBOTICS CLUB // SLIET
+                  </p>
+                )}
+              </div>
+            </div>
           </motion.div>
           
-          {/* Bottom Right RKS */}
-          <motion.div style={{ y: parallaxY.rksText, scaleY: rksTextScaleY, transformOrigin: 'bottom' }} className="absolute inset-0">
-            <motion.div 
-              animate={{ opacity: 1, x: localLayout.rksText?.x || 0, y: localLayout.rksText?.y || 0, scale: localLayout.rksText?.scale || 1 }}
-              transition={{ duration: 0.8 }}
-              className="absolute bottom-[5%] right-[5%] text-[24vw] leading-[0.8] font-clash font-bold text-hero-accent opacity-100 tracking-tighter whitespace-pre uppercase"
-            >
-              {localLayout.rksText?.text || 'RKS'}
-            </motion.div>
-          </motion.div>
-
-          {/* Center WO Shadow */}
-          <motion.div style={{ y: parallaxY.centerWO, scaleY: centerWOScaleY, transformOrigin: 'center' }} className="absolute inset-0">
-            <motion.div 
-              animate={{ opacity: 1, x: localLayout.centerWOShadow?.x || 0, y: localLayout.centerWOShadow?.y || 0, scale: localLayout.centerWOShadow?.scale || 1 }}
-              transition={{ duration: 0.8 }}
-              className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 mt-[2vw] ml-[2vw] text-[26vw] leading-none font-clash font-bold text-hero-accent tracking-tighter whitespace-pre uppercase"
-            >
-              {localLayout.centerWOShadow?.text || 'WO'}
-            </motion.div>
-          </motion.div>
-
-          {/* Center WO */}
-          <motion.div style={{ y: parallaxY.centerWO, scaleY: centerWOScaleY, transformOrigin: 'center' }} className="absolute inset-0">
-            <motion.div 
-              animate={{ opacity: 1, x: localLayout.centerWO?.x || 0, y: localLayout.centerWO?.y || 0, scale: localLayout.centerWO?.scale || 1 }}
-              transition={{ duration: 0.8 }}
-              className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 text-[26vw] leading-none font-clash font-bold text-white tracking-tighter whitespace-pre uppercase drop-shadow-2xl"
-            >
-              {localLayout.centerWO?.text || 'WO'}
-            </motion.div>
-          </motion.div>
         </div>
-
-        {/* Statement Box */}
-        <div className="absolute inset-0 z-20 pointer-events-none">
-          <motion.div 
-            animate={{ opacity: 1, x: localLayout.statementBox?.x || 0, y: localLayout.statementBox?.y || 0, scale: localLayout.statementBox?.scale || 1 }}
-            transition={{ duration: 0.8 }}
-            className="absolute top-[15%] right-[5%] flex flex-col items-start text-left max-w-[700px] overflow-hidden"
-          >
-            <div className="flex flex-col gap-[2px]">
-              <div className="relative">
-                {/* Orange Shadow Layer (shifted UP and RIGHT) */}
-                <p className="absolute left-[0.06em] -top-[0.06em] font-clash font-bold text-[2.5rem] md:text-[3.5rem] tracking-[-0.08em] opacity-100 uppercase m-0 leading-[0.9] text-[#FF4500] whitespace-nowrap select-none">
-                  {localLayout.statementBox?.line1}
-                </p>
-                {/* Foreground White Layer */}
-                <p className="relative z-10 font-clash font-bold text-[2.5rem] md:text-[3.5rem] tracking-[-0.08em] opacity-100 uppercase m-0 leading-[0.9] text-white whitespace-nowrap">
-                  {localLayout.statementBox?.line1}
-                </p>
-              </div>
-              <p className="font-clash font-bold text-[2.5rem] md:text-[3.5rem] tracking-[-0.08em] opacity-100 uppercase m-0 leading-[0.9] text-white whitespace-nowrap">{localLayout.statementBox?.line2}</p>
-              <p className="font-clash font-bold text-[2.5rem] md:text-[3.5rem] tracking-[-0.08em] opacity-100 uppercase m-0 leading-[0.9] text-white whitespace-nowrap">{localLayout.statementBox?.line3}</p>
-              
-              <div className="flex items-stretch justify-start gap-3 mt-4 ml-1 relative">
-                <motion.div 
-                  style={{ 
-                    scaleY: orangeScaleY,
-                    opacity: useTransform(orangeScaleY, [0.1, 1.0], [0.25, 1.0]),
-                    transformOrigin: 'top'
-                  }}
-                  className="w-2 bg-gradient-to-b from-[#AE0605] to-[#E31837] shrink-0 self-stretch" 
-                />
-                <div className="flex flex-col">
-                  {localLayout.statementBox?.brandText?.split('\n').map((line, idx) => {
-                    const x = idx === 0 ? brandTextX0 : brandTextX1;
-                    const opacity = idx === 0 ? brandTextOpacity0 : brandTextOpacity1;
-                    const textColorClass = idx === 0 
-                      ? 'text-transparent bg-clip-text bg-gradient-to-r from-[#AE0605] to-[#E31837]' 
-                      : 'text-white';
-                    return (
-                      <div key={idx} className="overflow-hidden">
-                        <motion.p
-                          style={{ x, opacity, willChange: "transform, opacity", backfaceVisibility: "hidden" }}
-                          className={`font-clash font-bold text-xl md:text-2xl tracking-tight leading-none uppercase m-0 py-0.5 ${textColorClass}`}
-                        >
-                          {line}
-                        </motion.p>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Categories Block */}
-        <div className="absolute inset-0 z-20 pointer-events-none overflow-hidden">
-          <motion.div 
-            animate={{ opacity: 1, x: localLayout.categoriesBlock?.x || 0, y: localLayout.categoriesBlock?.y || 0, scale: localLayout.categoriesBlock?.scale || 1 }}
-            transition={{ duration: 0.8 }}
-            className="absolute bottom-[10%] left-[10%] flex items-stretch overflow-hidden"
-          >
-            {/* Both line and text share the faster parallax to sync the masking */}
-            <div className="flex items-stretch">
-              <div className="w-2 bg-white/30 mr-4 shrink-0" />
-              <div className="flex flex-col justify-between py-1">
-                {localLayout.categoriesBlock?.text?.split('\n').map((cat, i) => {
-                  let x = catX0;
-                  let opacity = catOpacity0;
-                  if (i === 1) { x = catX1; opacity = catOpacity1; }
-                  else if (i === 2) { x = catX2; opacity = catOpacity2; }
-                  else if (i === 3) { x = catX3; opacity = catOpacity3; }
-                  else if (i === 4) { x = catX4; opacity = catOpacity4; }
-
-                  return (
-                    <div key={i} className="overflow-hidden">
-                      <motion.p 
-                        style={{ x, opacity, willChange: "transform, opacity", backfaceVisibility: "hidden" }}
-                        className="font-clash text-lg md:text-2xl font-bold tracking-tight uppercase text-white m-0 leading-none mb-2 last:mb-0"
-                      >
-                        {cat}
-                      </motion.p>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Timeline Phases */}
-        <div className="absolute inset-0 z-20 pointer-events-none">
-          {[
-            { id: 'phase1', num: '001', defaultLabel: 'PHASE/BREAK', left: '10%', top: '45%' },
-            { id: 'phase2', num: '002', defaultLabel: 'PHASE/THINK', left: '25%', top: '45%' },
-            { id: 'phase3', num: '003', defaultLabel: 'PHASE/BUILD', left: '70%', top: '45%' },
-            { id: 'phase4', num: '004', defaultLabel: 'PHASE/RELEASE', left: '85%', top: '45%' }
-          ].map(({ id, num, defaultLabel, left, top }) => {
-            const phaseKey = id as 'phase1' | 'phase2' | 'phase3' | 'phase4';
-            const layout = localLayout[phaseKey] || { x: 0, y: 0, scale: 1, text: defaultLabel };
-
-            // Choose the correct MotionValues for each phase (all phases behave exactly like Phase 1)
-            const scaleY = phase1ScaleY;
-            const textOpacity = phase1TextOpacity;
-            const textY = phase1TextY;
-            const topGhostY = phase1TopGhostY;
-            const bottomGhostY = phase1BottomGhostY;
-
-            return (
-              <motion.div key={id} style={{ y: parallaxY[phaseKey] }} className="absolute inset-0">
-                <motion.div
-                  animate={{ opacity: 1, x: layout.x, y: layout.y, scale: layout.scale }}
-                  transition={{ duration: 0.8 }}
-                  style={{ left, top }}
-                  className="absolute flex flex-col items-start pointer-events-auto"
-                >
-                  <span className="font-clash font-bold text-xl opacity-100 uppercase text-white mb-2 ml-1">{num}</span>
-                  <motion.div 
-                    style={{ scaleY: scaleY, opacity: useTransform(scaleY, [0.2, 1.0], [0.25, 1.0]), transformOrigin: 'top' }} 
-                    className="w-[1px] h-[100px] bg-white ml-3" 
-                  />
-                  <div className="relative mt-2 h-5 w-full pointer-events-none">
-                    {/* Top Ghost */}
-                    <motion.span
-                      style={{ y: topGhostY, opacity: useTransform(textOpacity, o => o * 0.25), willChange: "transform, opacity", backfaceVisibility: "hidden" }}
-                      className="absolute left-0 top-0 font-clash text-[10px] md:text-[12px] font-bold tracking-widest whitespace-nowrap uppercase text-[#7F0303]"
-                    >
-                      {(() => {
-                        const val = layout.text || defaultLabel;
-                        if (val.includes('/')) {
-                          const [p1, p2] = val.split('/');
-                          return <>{p1}/<span className="text-[#FF4500]/40">{p2}</span></>;
-                        }
-                        return val;
-                      })()}
-                    </motion.span>
-                    
-                    {/* Main Text */}
-                    <motion.span
-                      style={{ y: textY, opacity: textOpacity, willChange: "transform, opacity", backfaceVisibility: "hidden" }}
-                      className="absolute left-0 top-0 font-clash text-[10px] md:text-[12px] font-bold tracking-widest whitespace-nowrap uppercase text-white"
-                    >
-                      {(() => {
-                        const val = layout.text || defaultLabel;
-                        if (val.includes('/')) {
-                          const [p1, p2] = val.split('/');
-                          return <>{p1}/<span className="text-[#FF4500]">{p2}</span></>;
-                        }
-                        return val;
-                      })()}
-                    </motion.span>
-
-                    {/* Bottom Ghost */}
-                    <motion.span
-                      style={{ y: bottomGhostY, opacity: useTransform(textOpacity, o => o * 0.25), willChange: "transform, opacity", backfaceVisibility: "hidden" }}
-                      className="absolute left-0 top-0 font-clash text-[10px] md:text-[12px] font-bold tracking-widest whitespace-nowrap uppercase text-[#7F0303]"
-                    >
-                      {(() => {
-                        const val = layout.text || defaultLabel;
-                        if (val.includes('/')) {
-                          const [p1, p2] = val.split('/');
-                          return <>{p1}/<span className="text-[#FF4500]/40">{p2}</span></>;
-                        }
-                        return val;
-                      })()}
-                    </motion.span>
-                  </div>
-                  <div className="flex items-center gap-[2px] mt-1.5 ml-1">
-                    <div className="w-[8px] h-[6px] bg-[#FF4500] animate-blink" />
-                    <div className="w-[3px] h-[6px] bg-white/20" />
-                    <div className="w-[3px] h-[6px] bg-white/20" />
-                    <div className="w-[3px] h-[6px] bg-white/20" />
-                  </div>
-                </motion.div>
-              </motion.div>
-            );
-          })}
-        </div>
-
       </section>
 
-      {/* Explore Parallax Transition Screen */}
-      <div
+      {/* 2. Explore Section */}
+      <section
         id="explore-section"
         ref={exploreRef}
         data-cursor-system="true"
-        className="relative h-[180vh] w-full bg-[#080808] z-10"
+        className="relative h-[160vh] w-full bg-brand-bg z-10 border-b border-white/5 flex flex-col justify-start"
       >
-        <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
-        {/* Grainy Noise Overlay */}
-        <div 
-          className="absolute inset-0 z-20 opacity-[0.38] mix-blend-overlay pointer-events-none"
-          style={{ 
-            backgroundImage: 'url("data:image/svg+xml,%3Csvg width=%22128%22 height=%22128%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.95%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22128%22 height=%22128%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")',
-            backgroundSize: '128px 128px'
-          }}
-        />
+        <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-center overflow-hidden px-6">
+          {/* Subtle Vector Background Grid */}
+          <div className="absolute inset-0 z-0 bg-[radial-gradient(var(--color-grid-lines)_1.2px,transparent_1.2px)] [background-size:24px_24px] opacity-60" />
+          
+          {/* Diagnostic Stats Header */}
+          <div className="relative z-10 text-center max-w-2xl mb-8 sm:mb-12 pointer-events-none">
+            <span className="font-mono text-xs uppercase tracking-[0.3em] text-[#c41515] font-bold">LIDAR ENVIRONMENT SCANNER</span>
+            <h2 className="font-righteous text-2xl sm:text-4xl text-white tracking-tight mt-2 uppercase">
+              BLUEPRINT DISCOVERY PHASE
+            </h2>
+            <p className="text-brand-muted text-xs sm:text-sm mt-2 font-medium">
+              Real-time vector structural scans of our technical architecture payload modules.
+            </p>
+          </div>
 
-        {/* Diagonal Photo Mask Section */}
-        <div className="absolute top-0 right-0 w-[55%] h-full pointer-events-none z-[5] overflow-hidden">
-          <img 
-            src="https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=1200&auto=format&fit=crop" 
-            alt="Editorial Portrait"
-            className="w-full h-full object-cover opacity-45"
-            style={{
-              clipPath: "polygon(25% 0%, 100% 0%, 100% 100%, 0% 100%)"
-            }}
-          />
-        </div>
-
-        {/* Giant "explore" text with masking-up reveal */}
-        <div className="relative overflow-hidden w-full h-[30vh] flex items-center justify-center z-[15]">
-          <motion.span
-            style={{
-              y: exploreTextY
-            }}
-            className="block font-clash font-bold uppercase select-none whitespace-nowrap text-[#1a1a1a] text-[17vw] leading-none tracking-[-0.04em] [text-shadow:0_0_1px_rgba(255,255,255,0.1)]"
-          >
-            explore
-          </motion.span>
-        </div>
-
-        {/* Marquee Ticker (Continuous Line shifted to Explore page) */}
-        <div className="absolute bottom-[6%] left-0 w-full z-20 overflow-hidden opacity-70 flex">
+          {/* Scanner Blueprint Board */}
           <motion.div 
-            animate={{ x: ["0%", "-50%"] }}
-            transition={{ repeat: Infinity, ease: "linear", duration: 30 }}
-            className="flex whitespace-nowrap"
+            style={{ scale: blueprintScale, opacity: blueprintOpacity }}
+            className="relative z-10 w-full max-w-4xl h-[360px] sm:h-[480px] bg-black border border-white/10 rounded-[2.5rem] shadow-2xl p-5 sm:p-10 flex flex-col justify-between overflow-hidden"
           >
-            {[1, 2, 3].map((n) => (
-              <div key={n} className="flex">
-                <span className="font-montserrat text-xs font-semibold tracking-[0.2em] uppercase px-4 flex items-center">
-                  PIONEERING ROBOTICS & AEROSPACE <span className="mx-4 text-[#AE0605]">·</span> 
-                  BUILDING INTELLIGENT SYSTEMS <span className="mx-4 text-[#AE0605]">·</span> 
-                  SHAPING FUTURE MOBILITY <span className="mx-4 text-[#AE0605]">·</span> 
-                  INNOVATING BEYOND THE HORIZON <span className="mx-4 text-[#AE0605]">·</span> 
-                  EMPOWERING AUTONOMOUS TECHNOLOGY
-                </span>
+            {/* Blueprint Grid Lines */}
+            <div className="absolute inset-0 border border-dashed border-[#c41515]/10 m-4 rounded-[2rem] pointer-events-none" />
+            <div className="absolute left-1/2 top-0 bottom-0 w-[1px] border-l border-dashed border-white/5 pointer-events-none" />
+            <div className="absolute top-1/2 left-0 right-0 h-[1px] border-t border-dashed border-white/5 pointer-events-none" />
+
+            {/* Sweep Laser Scanner Line */}
+            <motion.div 
+              style={{ y: scannerY }}
+              className="absolute left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#c41515] to-transparent shadow-[0_0_15px_rgba(196,21,21,0.8)] z-20 pointer-events-none"
+            />
+
+            {/* Top Diagnostic Labels */}
+            <div className="relative z-10 flex justify-between items-center font-mono text-[8px] sm:text-[10px] text-gray-400 font-bold uppercase tracking-wider">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <Activity className="w-3.5 h-3.5 text-[#c41515]" />
+                <span>CHASSIS_SCAN: INITIALIZED</span>
               </div>
-            ))}
+              <div>COORD: 30.21N // 75.70E</div>
+            </div>
+
+            {/* Central Schematic Vector Graphics */}
+            <div className="flex-1 flex items-center justify-center relative my-6">
+              {/* Spinning Vector Circle */}
+              <motion.div 
+                animate={{ rotate: 360 }}
+                transition={{ repeat: Infinity, duration: 18, ease: "linear" }}
+                className="w-40 h-40 sm:w-60 sm:h-60 rounded-full border border-dashed border-[#c41515]/25 flex items-center justify-center"
+              >
+                <div className="w-28 h-28 sm:w-44 sm:h-44 rounded-full border border-white/5 flex items-center justify-center">
+                  <div className="w-16 h-16 sm:w-28 sm:h-28 rounded-full border border-dashed border-white/10 flex items-center justify-center">
+                    <span className="w-3 h-3 rounded-full bg-[#c41515] shadow-lg shadow-[#c41515]/40" />
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Floating Blueprint Markers */}
+              <div className="absolute top-2 left-2 sm:top-12 sm:left-28 font-mono text-[8px] sm:text-[10px] text-left text-brand-muted bg-brand-bg border border-white/10 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg shadow-sm max-w-[150px] sm:max-w-none">
+                <p className="font-bold text-[#c41515]">// UAV_MOD_v10</p>
+                <p className="hidden sm:block">PROPELLER COMPLIANCE: 98.4%</p>
+              </div>
+
+              <div className="absolute bottom-2 right-2 sm:bottom-8 sm:right-28 font-mono text-[8px] sm:text-[10px] text-left text-brand-muted bg-brand-bg border border-white/10 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg shadow-sm max-w-[150px] sm:max-w-none">
+                <p className="font-bold text-[#00cc66]">// UGV_DRIVE_SYSTEM</p>
+                <p className="hidden sm:block">HUB MOTOR CONTROLLERS: ACTIVE</p>
+              </div>
+            </div>
+
+            {/* Bottom Diagnostic Labels */}
+            <div className="relative z-10 flex justify-between items-end font-mono text-[8px] sm:text-[10px] text-gray-400 font-bold uppercase tracking-wider">
+              <div className="space-y-0.5 sm:space-y-1 text-left">
+                <p>TELEM_LINK: STABLE [92.1 kB/s]</p>
+                <p className="text-gray-300">RSSI_DBM: -45 DB</p>
+              </div>
+              <div className="flex gap-4">
+                <span className="text-[#c41515]">SCROLL TO EXPLORE</span>
+              </div>
+            </div>
+
           </motion.div>
         </div>
+      </section>
 
-      </div>
-    </div>
-
-      {/* 2. Stacking Sections */}
+      {/* 3. Stacking Sections */}
       <div 
         data-cursor-hidden="false" 
-        className="relative bg-brand-bg z-20 shadow-[0_-20px_60px_rgba(0,0,0,0.95)]"
+        className="relative bg-brand-bg z-20 shadow-[0_-20px_60px_rgba(0,0,0,0.015)]"
       >
         {sections.map((domain, index) => {
           const sectionRef = sectionRefs[domain.id as keyof typeof sectionRefs];
           const cfg = domainsConfig[domain.id as keyof typeof domainsConfig];
 
           return (
-            <StackingSection key={domain.id} domain={domain} index={index} total={sections.length} sectionRef={sectionRef}>
+            <StackingSection key={domain.id} domain={domain} index={index} total={sections.length} sectionRef={sectionRef} isMobile={isMobile}>
 
               {/* Static watermark background text */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0 overflow-hidden select-none">
@@ -832,7 +529,7 @@ export function DomainsPage() {
                   <h2
                     style={{
                       transform: `translate(${cfg?.part2X ?? 0}px, ${cfg?.part2Y ?? 0}px)`,
-                      opacity: cfg?.opacity ?? 0.10,
+                      opacity: cfg?.opacity ?? 0.04,
                     }}
                     className="absolute font-righteous text-[11vw] leading-none tracking-tighter uppercase whitespace-nowrap text-white select-none"
                   >
@@ -845,49 +542,49 @@ export function DomainsPage() {
               <div data-cursor-hidden="false" className="max-w-6xl mx-auto px-6 relative z-10 w-full grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 items-center">
 
                 {/* Left Column */}
-                <div className="lg:col-span-6 space-y-6 text-left">
+                <div className="lg:col-span-6 space-y-4 sm:space-y-6 text-left">
                   <div className="flex items-center gap-3">
-                    <span className="font-mono text-xs font-bold text-white/40">0{index + 1} // SECTION</span>
+                    <span className="font-mono text-xs font-bold text-gray-400">0{index + 1} // SECTION</span>
                     <span className="font-mono text-xs uppercase tracking-widest font-bold" style={{ color: domain.accent }}>
                       {domain.id}
                     </span>
                   </div>
 
-                  <h3 className={`font-righteous text-4xl md:text-5xl lg:text-6xl tracking-tight leading-none uppercase bg-gradient-to-r ${domain.shimmerClass} bg-clip-text text-transparent animate-text-shimmer`}>
+                  <h3 className={`font-righteous text-3xl sm:text-5xl lg:text-6xl tracking-tight leading-none uppercase bg-gradient-to-r ${domain.shimmerClass} bg-clip-text text-transparent animate-text-shimmer`}>
                     {domain.title}
                   </h3>
 
-                  <div className="h-10">
-                    <TypewriterHeading text={domain.subTitle} className="text-brand-muted font-playfair font-bold text-lg md:text-xl" />
+                  <div className="h-6 sm:h-10">
+                    <TypewriterHeading text={domain.subTitle} className="text-brand-muted font-playfair font-bold text-base sm:text-xl" />
                   </div>
 
                   <SlideInText>
                     <p className="text-brand-muted text-sm md:text-base leading-relaxed max-w-lg">{domain.description}</p>
                   </SlideInText>
 
-                  <div className="flex flex-wrap gap-4 pt-4">
+                  <div className="flex flex-wrap gap-3 sm:gap-4 pt-2 sm:pt-4">
                     {domain.stats.map((stat, sIdx) => (
-                      <div key={sIdx} className="bg-white/5 border border-white/10 px-4 py-3 rounded-2xl flex flex-col justify-center min-w-[140px]">
-                        <span className="font-righteous text-base md:text-lg tracking-wider" style={{ color: domain.accent }}>{stat.value}</span>
-                        <span className="text-[9px] tracking-wide uppercase font-bold text-brand-muted">{stat.label}</span>
+                      <div key={sIdx} className="bg-white/5 border border-white/10 px-4 py-3 rounded-2xl flex flex-col justify-center min-w-[125px] sm:min-w-[140px]">
+                        <span className="font-righteous text-sm sm:text-lg tracking-wider" style={{ color: domain.accent }}>{stat.value}</span>
+                        <span className="text-[8px] sm:text-[9px] tracking-wide uppercase font-bold text-brand-muted">{stat.label}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
                 {/* Right Column */}
-                <div className="lg:col-span-6 flex flex-col justify-center relative">
+                <div className="lg:col-span-6 flex flex-col justify-center relative mt-6 lg:mt-0">
 
                   <motion.div
                     initial={{ opacity: 0, scale: 0.96 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-                    className="relative w-full h-[360px] md:h-[400px] bg-brand-bg border border-white/15 rounded-[2.5rem] p-4 flex flex-col overflow-hidden shadow-2xl hover:border-white/20 transition-colors duration-500"
+                    className="relative w-full h-[280px] sm:h-[400px] bg-black border border-white/15 rounded-[2.5rem] p-4 flex flex-col overflow-hidden shadow-2xl hover:border-white/20 transition-colors duration-500"
                   >
-                    <div className="absolute top-0 right-0 w-48 h-48 rounded-full blur-[80px] opacity-20" style={{ backgroundColor: domain.accent }} />
+                    <div className="absolute top-0 right-0 w-48 h-48 rounded-full blur-[80px] opacity-5" style={{ backgroundColor: domain.accent }} />
                     <div className="relative z-10 flex justify-between items-center p-3 border-b border-white/5">
-                      <span className="font-mono text-[9px] text-brand-muted tracking-[0.2em] uppercase font-bold">Showcase Specimen V1</span>
+                      <span className="font-mono text-[9px] text-gray-400 tracking-[0.2em] uppercase font-bold">Showcase Specimen V1</span>
                       <span className="w-2 h-2 rounded-full animate-ping" style={{ backgroundColor: domain.accent }} />
                     </div>
                     <div className="flex-1 w-full relative min-h-0 flex items-center justify-center p-4">
@@ -895,7 +592,7 @@ export function DomainsPage() {
                         <div className="w-full h-full relative z-20">
                           <ModelErrorBoundary>
                             <Suspense fallback={
-                              <div className="w-full h-full flex items-center justify-center text-brand-muted font-mono text-xs bg-white/5 backdrop-blur-md rounded-2xl border border-white/10">
+                              <div className="w-full h-full flex items-center justify-center text-brand-muted font-mono text-xs bg-white/5 rounded-2xl border border-white/10">
                                 Launching Interactive WebGL...
                               </div>
                             }>
@@ -918,11 +615,8 @@ export function DomainsPage() {
         })}
       </div>
 
-      {/* 3. Sub-projects Showcase Grid */}
-      <ProjectPortfolioSection />
-
-      <div className="mt-20 border-t border-white/10 pt-20 relative z-30">
-        <FAQ />
+      <div className="mt-20 border-t border-white/5 pt-20 relative z-30">
+        <FAQ theme={isLight ? 'light' : 'dark'} />
       </div>
 
     </div>
