@@ -222,10 +222,10 @@ export function Hero() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, delay: 1.2, ease: "easeOut" }}
-          className="text-center mt-2 sm:mt-2"
+          className="text-center mt-2 sm:mt-2 px-4 whitespace-nowrap overflow-visible"
         >
-          <span className="font-display font-black text-[10px] sm:text-[18px] md:text-[20px] tracking-[0.45em] sm:tracking-[0.55em] text-brand-muted uppercase select-none drop-shadow-[0_1px_2px_rgba(0,0,0,0.05)] transition-colors duration-500">
-            S T R I V E &nbsp; T O &nbsp; C R E A T E &nbsp; D I F F E R E N C E
+          <span className="font-display font-black text-[2.2vw] sm:text-[15px] md:text-[18px] tracking-[0.22em] sm:tracking-[0.38em] md:tracking-[0.45em] text-brand-muted uppercase select-none drop-shadow-[0_1px_2px_rgba(0,0,0,0.05)] transition-colors duration-500 whitespace-nowrap inline-block">
+           S T R I V E &nbsp;  T O &nbsp;  C R E A T E &nbsp;  D I F F E R E N C E
           </span>
         </motion.div>
 
