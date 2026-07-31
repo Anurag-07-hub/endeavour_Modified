@@ -1,6 +1,60 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 
+interface MovingLetterProps {
+  letter: string;
+  scrollYProgress: any;
+  staggerOffset: number;
+}
+
+function MovingLetter({ letter, scrollYProgress, staggerOffset }: MovingLetterProps) {
+  const individualOpacity = useTransform(scrollYProgress, [0.4 + staggerOffset, 0.6 + staggerOffset], [1, 0]);
+  const individualY = useTransform(scrollYProgress, [0.4 + staggerOffset, 0.6 + staggerOffset], [0, -40]);
+
+  return (
+    <motion.span
+      style={{ opacity: individualOpacity, y: individualY }}
+      className="bg-letters text-[12vw] sm:text-[14vw] font-sans font-medium tracking-[-0.03em] leading-[0.8] select-none"
+    >
+      {letter}
+    </motion.span>
+  );
+}
+
+interface MovingRowProps {
+  row: { id: number; moveX: number };
+  rowIndex: number;
+  scrollYProgress: any;
+  letters: string[];
+}
+
+function MovingRow({ row, rowIndex, scrollYProgress, letters }: MovingRowProps) {
+  const dynamicX = useTransform(scrollYProgress, [0, 1], [0, row.moveX]);
+
+  return (
+    <motion.div
+      style={{ x: dynamicX }}
+      className="flex flex-row overflow-visible whitespace-nowrap"
+    >
+      {[0, 1, 2].map((blockIndex) => (
+        <div key={`block-${blockIndex}`} className="flex">
+          {letters.map((letter, i) => {
+            const staggerOffset = (i % 5) * 0.02 + (rowIndex % 3) * 0.05;
+            return (
+              <MovingLetter
+                key={`letter-${i}`}
+                letter={letter}
+                scrollYProgress={scrollYProgress}
+                staggerOffset={staggerOffset}
+              />
+            );
+          })}
+        </div>
+      ))}
+    </motion.div>
+  );
+}
+
 export function EndeavourScene() {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -63,44 +117,15 @@ export function EndeavourScene() {
           style={{ scale: groupScale }}
           className="flex flex-col items-center justify-center space-y-[-1vw] absolute inset-0"
         >
-          {rows.map((row, rowIndex) => {
-            // Calculate dynamic X movement based on scroll
-            // eslint-disable-next-line react-hooks/rules-of-hooks
-            const dynamicX = useTransform(scrollYProgress, [0, 1], [0, row.moveX]);
-
-            return (
-              <motion.div
-                key={`row-${row.id}`}
-                style={{ x: dynamicX }}
-                className="flex flex-row overflow-visible whitespace-nowrap"
-              >
-                {/* 3 blocks of text per row */}
-                {[0, 1, 2].map((blockIndex) => (
-                  <div key={`block-${blockIndex}`} className="flex">
-                    {letters.map((letter, i) => {
-                      // Stagger the fade out slightly based on letter position
-                      const staggerOffset = (i % 5) * 0.02 + (rowIndex % 3) * 0.05;
-                      // Increased opacity from [1, 0] to start brighter (100% white)
-                      // eslint-disable-next-line react-hooks/rules-of-hooks
-                      const individualOpacity = useTransform(scrollYProgress, [0.4 + staggerOffset, 0.6 + staggerOffset], [1, 0]);
-                      // eslint-disable-next-line react-hooks/rules-of-hooks
-                      const individualY = useTransform(scrollYProgress, [0.4 + staggerOffset, 0.6 + staggerOffset], [0, -40]);
-
-                      return (
-                        <motion.span
-                          key={`letter-${i}`}
-                          style={{ opacity: individualOpacity, y: individualY }}
-                          className="bg-letters text-[12vw] sm:text-[14vw] font-sans font-medium tracking-[-0.03em] leading-[0.8] select-none"
-                        >
-                          {letter}
-                        </motion.span>
-                      );
-                    })}
-                  </div>
-                ))}
-              </motion.div>
-            );
-          })}
+          {rows.map((row, rowIndex) => (
+            <MovingRow
+              key={`row-${row.id}`}
+              row={row}
+              rowIndex={rowIndex}
+              scrollYProgress={scrollYProgress}
+              letters={letters}
+            />
+          ))}
         </motion.div>
 
         {/* The Final Centered "Endeavour" Text with Original Logo Styling */}

@@ -521,7 +521,7 @@ export const teamMembers = [
       {
         "name": "Aashita Saran",
         "position": "Engineer at JSW Steel",
-        "image": "/images/profile21/AASHITA SARAN1.png",
+        "image": "/images/profile21/AASHITA SARAN1.jpg",
         "email": "aashita.saran@gmail.com",
         "linkedin": "https://www.linkedin.com/in/aashita-saran-7a62011b8"
       },

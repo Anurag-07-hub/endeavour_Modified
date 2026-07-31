@@ -50,11 +50,35 @@ export function Navbar() {
   const [isHidden, setIsHidden] = useState(false);
 
   useEffect(() => {
+    const isIntersectingMap = {
+      'endeavour-banner': false,
+      'endeavour-scene': false,
+      'explore-section': false,
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.target.id in isIntersectingMap) {
+          isIntersectingMap[entry.target.id as keyof typeof isIntersectingMap] = entry.isIntersecting;
+        }
+      });
+      handleScroll();
+    }, {
+      rootMargin: '-1px 0px -1px 0px'
+    });
+
+    const ids = ['endeavour-banner', 'endeavour-scene', 'explore-section'];
+
+    const observeElements = () => {
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) observer.observe(el);
+      });
+    };
+
+    observeElements();
+
     const handleScroll = () => {
-      const banner = document.getElementById('endeavour-banner');
-      const scene = document.getElementById('endeavour-scene');
-      const explore = document.getElementById('explore-section');
-      
       let shouldHide = false;
       const vh = window.innerHeight;
       const scrollY = window.scrollY;
@@ -73,35 +97,27 @@ export function Navbar() {
         }
       }
 
-      if (banner) {
-        const rect = banner.getBoundingClientRect();
-        if (rect.top < vh * 0.99 && rect.bottom > vh * 0.01) {
-          shouldHide = true;
-        }
-      }
-
-      if (scene) {
-        const rect = scene.getBoundingClientRect();
-        if (rect.top < vh * 0.99 && rect.bottom > vh * 0.01) {
-          shouldHide = true;
-        }
-      }
-
-      if (explore) {
-        const rect = explore.getBoundingClientRect();
-        if (rect.top < vh * 0.99 && rect.bottom > vh * 0.01) {
-          shouldHide = true;
-        }
+      if (isIntersectingMap['endeavour-banner'] || 
+          isIntersectingMap['endeavour-scene'] || 
+          isIntersectingMap['explore-section']) {
+        shouldHide = true;
       }
 
       setIsHidden(shouldHide);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
+    
+    // Slight delay to ensure elements are mounted and can be observed
+    const timer = setTimeout(() => {
+      observeElements();
+      handleScroll();
+    }, 100);
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      observer.disconnect();
+      clearTimeout(timer);
     };
   }, [location.pathname]);
 

@@ -1,5 +1,6 @@
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import React, { useRef, useState, useEffect, Suspense } from 'react';
+import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 import {
   CheckCircle2,
   Cpu,
@@ -54,13 +55,23 @@ function ModelWrapper({ scene }: { scene: any }) {
 
 function UGVModel({ url }: { url: string }) {
   const { scene } = useGLTF(url);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const intersectionEntry = useIntersectionObserver(containerRef, { threshold: 0 });
+  const isInViewport = intersectionEntry ? intersectionEntry.isIntersecting : true;
+
   return (
-    <Canvas camera={{ position: [0, 0, 7.5], fov: 45 }} className="w-full h-full">
-      <ambientLight intensity={0.6} />
-      <directionalLight position={[5, 10, 5]} intensity={1.8} />
-      <Environment preset="city" />
-      <ModelWrapper scene={scene} />
-    </Canvas>
+    <div ref={containerRef} className="w-full h-full">
+      <Canvas 
+        frameloop={isInViewport ? "always" : "never"}
+        camera={{ position: [0, 0, 7.5], fov: 45 }} 
+        className="w-full h-full"
+      >
+        <ambientLight intensity={0.6} />
+        <directionalLight position={[5, 10, 5]} intensity={1.8} />
+        <Environment preset="city" />
+        <ModelWrapper scene={scene} />
+      </Canvas>
+    </div>
   );
 }
 
@@ -306,23 +317,7 @@ export function DomainsPage() {
     research: useRef<HTMLDivElement>(null),
   };
 
-  useEffect(() => {
-    if (isMobile) return;
-    const handleScroll = () => {
-      const scrollPos = window.scrollY + window.innerHeight / 2;
-      for (const [id, ref] of Object.entries(sectionRefs)) {
-        if (ref.current) {
-          const offsetTop = ref.current.offsetTop;
-          const offsetHeight = ref.current.offsetHeight;
-          if (scrollPos >= offsetTop && scrollPos < offsetTop + offsetHeight) {
-            break;
-          }
-        }
-      }
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [isMobile]);
+
 
   return (
     <div ref={containerRef} className="min-h-screen bg-brand-bg text-white font-montserrat relative select-none">

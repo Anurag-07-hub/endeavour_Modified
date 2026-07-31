@@ -54,6 +54,7 @@ function AccordionItem({ item, isActive, onMouseEnter }: AccordionItemProps) {
       <img
         src={item.imageUrl}
         alt={item.title}
+        loading="lazy"
         className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none brightness-95 contrast-105 saturate-100"
         onError={(e: any) => { 
           e.target.onerror = null; 

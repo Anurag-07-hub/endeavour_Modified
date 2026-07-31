@@ -55,9 +55,8 @@ export function CustomCursor() {
   }, []);
 
   useEffect(() => {
-    const updateCursorState = (clientX: number, clientY: number) => {
+    const updateCursorState = (clientX: number, clientY: number, target: HTMLElement | null) => {
       if (clientX < 0 || clientY < 0) return;
-      const target = document.elementFromPoint(clientX, clientY) as HTMLElement;
       if (!target || !target.matches) return;
       
       const endeavourBanner = target.closest('#endeavour-banner');
@@ -95,8 +94,7 @@ export function CustomCursor() {
         newMode = 'enroll';
       } else {
         if (endeavourBanner) {
-           const rect = endeavourBanner.getBoundingClientRect();
-           const isHoveringRightSide = clientX > rect.left + rect.width * 0.4;
+           const isHoveringRightSide = clientX > window.innerWidth * 0.4;
            if (isHoveringRightSide) {
              // Over the #27151B side
              newMode = 'red';
@@ -113,19 +111,13 @@ export function CustomCursor() {
     const moveCursor = (e: MouseEvent) => {
       cursorX.set(e.clientX);
       cursorY.set(e.clientY);
-      updateCursorState(e.clientX, e.clientY);
-    };
-
-    const handleScroll = () => {
-      updateCursorState(cursorX.get(), cursorY.get());
+      updateCursorState(e.clientX, e.clientY, e.target as HTMLElement);
     };
 
     window.addEventListener('mousemove', moveCursor);
-    window.addEventListener('scroll', handleScroll, { passive: true });
 
     return () => {
       window.removeEventListener('mousemove', moveCursor);
-      window.removeEventListener('scroll', handleScroll);
     };
   }, [cursorX, cursorY]);
 

@@ -1,5 +1,6 @@
 import React, { useRef, Suspense, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform, useMotionValue, useSpring, useMotionTemplate } from 'framer-motion';
+import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { useGLTF, Environment, OrbitControls } from '@react-three/drei';
 import { useCMS } from '../context/CMSContext';
@@ -252,6 +253,8 @@ export function EndeavourBanner() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const intersectionEntry = useIntersectionObserver(containerRef, { threshold: 0 });
+  const isInViewport = intersectionEntry ? intersectionEntry.isIntersecting : true;
 
   // Spotlight mouse tracking with motion value springs
   const [isHovered, setIsHovered] = useState(false);
@@ -409,7 +412,11 @@ export function EndeavourBanner() {
             {/* Scroll Zone Overlay: Prevents the right thumb edge from rotating the car, allowing normal page scrolling */}
             <div className="absolute right-0 top-0 w-[40%] md:w-[20%] h-full z-25" style={{ touchAction: "pan-y" }} />
             
-            <Canvas camera={{ position: [0, 2, 10], fov: 45 }} style={{ width: '100%', height: '100%', background: 'transparent' }}>
+            <Canvas 
+              frameloop={isInViewport ? "always" : "never"}
+              camera={{ position: [0, 2, 10], fov: 45 }} 
+              style={{ width: '100%', height: '100%', background: 'transparent' }}
+            >
               <Suspense fallback={null}>
                 <ambientLight intensity={0.65} />
                 <directionalLight position={[10, 10, 5]} intensity={1.8} color="#ffffff" />
