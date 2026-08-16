@@ -116,7 +116,7 @@ export function PhaseCurrent() {
                 </p>
               </div>
 
-              <ul className="font-roboto text-gray-300 font-medium text-sm space-y-3 border-l-2 border-brand-accent/30 pl-6 py-1">
+              <ul className="font-roboto text-brand-muted font-medium text-sm space-y-3 border-l-2 border-brand-accent/30 pl-6 py-1">
                 <li><span className="text-brand-accent font-bold">1ST PLACE</span> // Robowar (Combat category)</li>
                 <li><span className="text-brand-accent font-bold">1ST PLACE</span> // Hurdlemania (Maneuver challenge)</li>
                 <li><span className="text-brand-accent font-bold">2ND PLACE</span> // Maze Solver (Autonomous navigation)</li>
@@ -145,7 +145,7 @@ export function PhaseCurrent() {
                 </p>
               </div>
 
-              <ul className="font-roboto text-gray-300 font-medium text-sm space-y-3 border-l-2 border-[#00a2ff]/30 pl-6 py-1">
+              <ul className="font-roboto text-brand-muted font-medium text-sm space-y-3 border-l-2 border-[#00a2ff]/30 pl-6 py-1">
                 <li><span className="text-[#00a2ff] font-bold">1ST PLACE</span> // Armageddon Robowar at Cognizance'24 (IIT Roorkee)</li>
                 <li><span className="text-[#00a2ff] font-bold">1ST PLACE</span> // UAV Drone Racing at Cognizance'24 (IIT Roorkee)</li>
                 <li><span className="text-white font-bold">35+ Podium Positions</span> // techFEST'24 & techFEST'25</li>

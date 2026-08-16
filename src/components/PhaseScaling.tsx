@@ -116,31 +116,31 @@ export function PhaseScaling() {
           <motion.div variants={itemVariants} className="border-t-2 border-white/20 pt-4">
             <h5 className="font-syncopate text-[#00a2ff] text-sm sm:text-base md:text-lg font-black mb-1.5 uppercase">Avishkar'18 (MNNIT)</h5>
             <div className="font-mono text-xs text-brand-accent font-bold mb-2">1ST PLACE (X3) & 3RD PLACE</div>
-            <p className="font-roboto text-gray-300 text-sm leading-relaxed">Secured first place in Aerial Vehicle Challenge, Any Terrain Vehicle, & Pump it Up, and third in Infinity Crusade.</p>
+            <p className="font-roboto text-brand-muted text-sm leading-relaxed">Secured first place in Aerial Vehicle Challenge, Any Terrain Vehicle, & Pump it Up, and third in Infinity Crusade.</p>
           </motion.div>
           
           <motion.div variants={itemVariants} className="border-t-2 border-white/20 pt-4">
             <h5 className="font-syncopate text-white text-sm sm:text-base md:text-lg font-black mb-1.5 uppercase">Apogee'17 BITS</h5>
             <div className="font-mono text-xs text-brand-accent font-bold mb-2">WINNER</div>
-            <p className="font-roboto text-gray-300 text-sm leading-relaxed">Won first prize in the Robowar and Arduino Challenge events at BITS Pilani.</p>
+            <p className="font-roboto text-brand-muted text-sm leading-relaxed">Won first prize in the Robowar and Arduino Challenge events at BITS Pilani.</p>
           </motion.div>
 
           <motion.div variants={itemVariants} className="border-t-2 border-[#00a2ff]/50 pt-4">
             <h5 className="font-syncopate text-[#00a2ff] text-sm sm:text-base md:text-lg font-black mb-1.5 uppercase">Techinvent'19</h5>
             <div className="font-mono text-xs text-brand-accent font-bold mb-2">1ST, 2ND & 3RD PLACE</div>
-            <p className="font-roboto text-gray-300 text-sm leading-relaxed">Secured first place in Drone for Defense, second in Quadcopter Race, and third in Acrobatic Flyer.</p>
+            <p className="font-roboto text-brand-muted text-sm leading-relaxed">Secured first place in Drone for Defense, second in Quadcopter Race, and third in Acrobatic Flyer.</p>
           </motion.div>
 
           <motion.div variants={itemVariants} className="border-t-2 border-brand-accent/50 pt-4">
             <h5 className="font-syncopate text-brand-accent text-sm sm:text-base md:text-lg font-black mb-1.5 uppercase">Technex'18</h5>
             <div className="font-mono text-xs text-brand-accent font-bold mb-2">2ND PLACE & 3RD PLACE (X2)</div>
-            <p className="font-roboto text-gray-300 text-sm leading-relaxed">Secured second prize in Hydracs, and third prize in both Momentum and D'Aero-Glisseur events.</p>
+            <p className="font-roboto text-brand-muted text-sm leading-relaxed">Secured second prize in Hydracs, and third prize in both Momentum and D'Aero-Glisseur events.</p>
           </motion.div>
 
           <motion.div variants={itemVariants} className="border-t-2 border-brand-accent/50 pt-4">
             <h5 className="font-syncopate text-brand-accent text-sm sm:text-base md:text-lg font-black mb-1.5 uppercase">Technex'19</h5>
             <div className="font-mono text-xs text-brand-accent font-bold mb-2">4TH PLACE (X2)</div>
-            <p className="font-roboto text-gray-300 text-sm leading-relaxed">Secured fourth position in the Axelarate and Hydracs events at IIT BHU.</p>
+            <p className="font-roboto text-brand-muted text-sm leading-relaxed">Secured fourth position in the Axelarate and Hydracs events at IIT BHU.</p>
           </motion.div>
         </motion.div>
 

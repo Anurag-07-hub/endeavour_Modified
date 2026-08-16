@@ -116,7 +116,7 @@ export function PhaseLegacy() {
                 </p>
               </div>
 
-              <ul className="font-roboto text-gray-300 font-medium text-sm space-y-3 border-l-2 border-brand-accent/30 pl-6 py-1">
+              <ul className="font-roboto text-brand-muted font-medium text-sm space-y-3 border-l-2 border-brand-accent/30 pl-6 py-1">
                 <li><span className="text-brand-accent font-bold">1ST PLACE</span> // Build It (Robotics Challenge)</li>
                 <li><span className="text-brand-accent font-bold">1ST PLACE</span> // Momentum (Line Follower Challenge)</li>
                 <li><span className="text-brand-accent font-bold">1ST PLACE</span> // Bridge The Gap (Structural Challenge)</li>
@@ -147,7 +147,7 @@ export function PhaseLegacy() {
                 </p>
               </div>
 
-              <ul className="font-roboto text-gray-300 font-medium text-sm space-y-3 border-l-2 border-[#00a2ff]/30 pl-6 py-1">
+              <ul className="font-roboto text-brand-muted font-medium text-sm space-y-3 border-l-2 border-[#00a2ff]/30 pl-6 py-1">
                 <li><span className="text-[#00a2ff] font-bold">21 POSITIONS WON</span> // techFEST'22</li>
                 <li><span className="text-[#00a2ff] font-bold">13 POSITIONS WON</span> // techFEST'23</li>
               </ul>

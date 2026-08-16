@@ -34,7 +34,7 @@ export function PhasePandemic() {
              initial={{ opacity: 0 }}
              animate={isInView ? { opacity: 1 } : { opacity: 0 }}
              transition={{ delay: 0.2 }}
-             className="font-roboto text-gray-300 mt-4 max-w-2xl mx-auto"
+             className="font-roboto text-brand-muted mt-4 max-w-2xl mx-auto"
           >
             When the world stalled, progress didn't. Transitioning from hardware to heavy software simulation, the team kept building.
           </motion.p>
@@ -54,7 +54,7 @@ export function PhasePandemic() {
               <div className="absolute -left-[5px] top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#00ff66] shadow-[0_0_10px_#00ff66]"></div>
               <div className="font-mono text-xs text-[#00ff66] font-bold mb-1">5TH RANK // NATIONAL FINALISTS</div>
               <h3 className="font-space text-2xl font-bold text-[#ffffff] mb-2 group-hover:text-[#00ff66] transition-colors">E-yantra 2020 (IIT Bombay / MHRD)</h3>
-              <p className="font-roboto text-gray-400 text-sm leading-relaxed">
+              <p className="font-roboto text-brand-muted text-sm leading-relaxed">
                 Secured 5th rank in the final round of the EYRC robotics competition, excelling in system design and remote software simulations.
               </p>
             </motion.div>
@@ -68,7 +68,7 @@ export function PhasePandemic() {
               <div className="absolute -left-[5px] top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-brand-accent shadow-[0_0_10px_#a40505]"></div>
               <div className="font-mono text-xs text-brand-accent font-bold mb-1">21 PODIUM POSITIONS</div>
               <h3 className="font-space text-2xl font-bold text-[#ffffff] mb-2 group-hover:text-brand-accent transition-colors">Techfest'21 SLIET</h3>
-              <p className="font-roboto text-gray-400 text-sm leading-relaxed">
+              <p className="font-roboto text-brand-muted text-sm leading-relaxed">
                 Dominated the virtual fests by winning a record-breaking 21 podium positions across all major robotic and circuital events.
               </p>
             </motion.div>
@@ -82,7 +82,7 @@ export function PhasePandemic() {
               <div className="absolute -left-[5px] top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#00a2ff] shadow-[0_0_10px_#00a2ff]"></div>
               <div className="font-mono text-xs text-[#00a2ff] font-bold mb-1">1ST, 2ND & 3RD PLACE</div>
               <h3 className="font-space text-2xl font-bold text-[#ffffff] mb-2 group-hover:text-[#00a2ff] transition-colors">Technex'20 (IIT BHU) & Advitiya'20 (IIT Ropar)</h3>
-              <p className="font-roboto text-gray-400 text-sm leading-relaxed">
+              <p className="font-roboto text-brand-muted text-sm leading-relaxed">
                 Secured 1st place in Axelerate & Hydrac, and 3rd in Momentum at Technex'20. Secured 2nd place in Aqua Rocket, and 4th place in Off Road Asphalt at Advitiya'20.
               </p>
             </motion.div>
