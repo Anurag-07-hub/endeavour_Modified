@@ -143,14 +143,6 @@ export function Footer() {
                   <li><Link to="/gallery" className="hover:text-[#ffffff]/80 transition-colors">Our Gallery</Link></li>
                 </ul>
               </div>
-
-              <div>
-                <h4 className="font-mono text-[12px] md:text-[13px] text-[#ffffff]/60 tracking-widest uppercase mb-3 md:mb-4 font-extrabold">LEGAL</h4>
-                <div className="flex flex-col gap-2.5 md:gap-3 text-[14px] md:text-[15px] text-[#ffffff]/90 uppercase tracking-wider font-bold">
-                  <Link to="/privacy-policy" className="hover:text-[#ffffff] transition-colors">Privacy Policy</Link>
-                  <Link to="/terms-of-service" className="hover:text-[#ffffff] transition-colors">Terms of Service</Link>
-                </div>
-              </div>
             </div>
           </div>
 
@@ -339,9 +331,9 @@ export function Footer() {
             </div>
           </div>
 
-          {/* 4. Explore & Legal Details section */}
-          <div className="flex justify-between py-2 border-t border-b border-white/10 my-1 px-1">
-            <div>
+          {/* 4. Explore Details section */}
+          <div className="flex justify-center py-2 border-t border-b border-white/10 my-1 px-1">
+            <div className="text-center">
               <h4 className="font-mono text-[9px] text-[#ffffff]/50 tracking-widest uppercase mb-1.5 font-extrabold">EXPLORE</h4>
               <ul className="space-y-1.5 font-sans font-bold text-[11px] text-[#ffffff] uppercase tracking-wider">
                 <li><Link to="/about" className="hover:text-[#ffffff]/80 transition-colors">About Us</Link></li>
@@ -349,14 +341,6 @@ export function Footer() {
                 <li><a href="#events" className="hover:text-[#ffffff]/80 transition-colors">Competitions</a></li>
                 <li><Link to="/gallery" className="hover:text-[#ffffff]/80 transition-colors">Our Gallery</Link></li>
               </ul>
-            </div>
-
-            <div className="text-right">
-              <h4 className="font-mono text-[9px] text-[#ffffff]/50 tracking-widest uppercase mb-1.5 font-extrabold">LEGAL</h4>
-              <div className="flex flex-col gap-1.5 text-[11px] text-[#ffffff]/90 uppercase tracking-wider font-bold">
-                <Link to="/privacy-policy" className="hover:text-[#ffffff] transition-colors">Privacy Policy</Link>
-                <Link to="/terms-of-service" className="hover:text-[#ffffff] transition-colors">Terms of Service</Link>
-              </div>
             </div>
           </div>
 
