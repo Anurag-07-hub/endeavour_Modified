@@ -81,7 +81,7 @@ export function PhaseCurrent() {
                 <div className="absolute bottom-6 left-6">
                   <div className="text-[10px] font-mono text-brand-accent tracking-widest uppercase mb-1">PROG: HORIZON</div>
                   <h3 className="font-space font-bold text-white text-xl">Scaling Innovation</h3>
-                  <p className="font-roboto font-medium text-gray-200 text-sm mt-1">Expanding Technical Horizons & Engineering Excellence</p>
+                  <p className="font-roboto font-medium text-sm mt-1">Expanding Technical Horizons & Engineering Excellence</p>
                 </div>
               </div>
             </div>

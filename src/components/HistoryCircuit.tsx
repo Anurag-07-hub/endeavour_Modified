@@ -37,7 +37,8 @@ export function HistoryCircuit() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="font-syncopate text-[40px] md:text-[60px] font-black uppercase tracking-[-2px] text-white leading-[1]"
+            className="font-syncopate text-[40px] md:text-[60px] font-black uppercase tracking-[-2px] text-[#ffffff] leading-[1]"
+            style={{ color: '#ffffff' }}
           >
             OUR <span className="text-brand-accent">ACHIEVEMENTS !</span>
           </motion.h2>
@@ -45,7 +46,8 @@ export function HistoryCircuit() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="font-roboto text-brand-muted mt-6 max-w-2xl mx-auto uppercase tracking-widest text-sm"
+            className="font-roboto text-[#ffffff]/70 mt-6 max-w-2xl mx-auto uppercase tracking-widest text-sm"
+            style={{ color: 'rgba(255, 255, 255, 0.7)' }}
           >
             Tracking the legacy
           </motion.p>

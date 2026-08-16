@@ -81,7 +81,7 @@ export function PhaseLegacy() {
                 <div className="absolute bottom-6 left-6">
                   <div className="text-[10px] font-mono text-brand-accent tracking-widest uppercase mb-1">PROG: MENTORSHIP</div>
                   <h3 className="font-space font-bold text-white text-xl">Building the Future</h3>
-                  <p className="font-roboto font-medium text-gray-200 text-sm mt-1">Mentorship & Institutional Innovation</p>
+                  <p className="font-roboto font-medium text-sm mt-1">Mentorship & Institutional Innovation</p>
                 </div>
               </div>
             </div>

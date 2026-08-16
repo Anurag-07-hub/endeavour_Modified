@@ -15,10 +15,10 @@ export function PhasePandemic() {
         {/* Phase Header */}
         <div className="mb-12 text-center">
           <motion.h4 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
+            initial={{ opacity: 0, y: -20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
             transition={{ duration: 0.5 }}
-            className="font-syncopate text-[#00ff66] uppercase tracking-[10px] text-sm md:text-base font-bold shadow-[0_0_10px_rgba(0,255,102,0.5)] bg-clip-text text-transparent bg-gradient-to-r from-[#00ff66] to-[#00aa44]"
+            className="font-syncopate text-[#00ff66] uppercase tracking-[10px] text-sm md:text-base font-bold drop-shadow-[0_0_8px_rgba(0,255,102,0.6)]"
           >
             Phase 3 // 2020-2021
           </motion.h4>
@@ -34,7 +34,8 @@ export function PhasePandemic() {
              initial={{ opacity: 0 }}
              animate={isInView ? { opacity: 1 } : { opacity: 0 }}
              transition={{ delay: 0.2 }}
-             className="font-roboto text-brand-muted mt-4 max-w-2xl mx-auto"
+             className="font-roboto text-[#ffffff]/70 mt-4 max-w-2xl mx-auto"
+             style={{ color: 'rgba(255, 255, 255, 0.7)' }}
           >
             When the world stalled, progress didn't. Transitioning from hardware to heavy software simulation, the team kept building.
           </motion.p>
@@ -54,7 +55,7 @@ export function PhasePandemic() {
               <div className="absolute -left-[5px] top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#00ff66] shadow-[0_0_10px_#00ff66]"></div>
               <div className="font-mono text-xs text-[#00ff66] font-bold mb-1">5TH RANK // NATIONAL FINALISTS</div>
               <h3 className="font-space text-2xl font-bold text-[#ffffff] mb-2 group-hover:text-[#00ff66] transition-colors">E-yantra 2020 (IIT Bombay / MHRD)</h3>
-              <p className="font-roboto text-brand-muted text-sm leading-relaxed">
+              <p className="font-roboto text-[#ffffff] text-sm leading-relaxed" style={{ color: '#ffffff' }}>
                 Secured 5th rank in the final round of the EYRC robotics competition, excelling in system design and remote software simulations.
               </p>
             </motion.div>
@@ -68,7 +69,7 @@ export function PhasePandemic() {
               <div className="absolute -left-[5px] top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-brand-accent shadow-[0_0_10px_#a40505]"></div>
               <div className="font-mono text-xs text-brand-accent font-bold mb-1">21 PODIUM POSITIONS</div>
               <h3 className="font-space text-2xl font-bold text-[#ffffff] mb-2 group-hover:text-brand-accent transition-colors">Techfest'21 SLIET</h3>
-              <p className="font-roboto text-brand-muted text-sm leading-relaxed">
+              <p className="font-roboto text-[#ffffff] text-sm leading-relaxed" style={{ color: '#ffffff' }}>
                 Dominated the virtual fests by winning a record-breaking 21 podium positions across all major robotic and circuital events.
               </p>
             </motion.div>
@@ -82,7 +83,7 @@ export function PhasePandemic() {
               <div className="absolute -left-[5px] top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#00a2ff] shadow-[0_0_10px_#00a2ff]"></div>
               <div className="font-mono text-xs text-[#00a2ff] font-bold mb-1">1ST, 2ND & 3RD PLACE</div>
               <h3 className="font-space text-2xl font-bold text-[#ffffff] mb-2 group-hover:text-[#00a2ff] transition-colors">Technex'20 (IIT BHU) & Advitiya'20 (IIT Ropar)</h3>
-              <p className="font-roboto text-brand-muted text-sm leading-relaxed">
+              <p className="font-roboto text-[#ffffff] text-sm leading-relaxed" style={{ color: '#ffffff' }}>
                 Secured 1st place in Axelerate & Hydrac, and 3rd in Momentum at Technex'20. Secured 2nd place in Aqua Rocket, and 4th place in Off Road Asphalt at Advitiya'20.
               </p>
             </motion.div>
