@@ -143,7 +143,7 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       } catch (e) {}
     }
 
-    const storedContact = localStorage.getItem('endeavour_contact');
+    const storedContact = localStorage.getItem('endeavour_contact_v2');
     if (storedContact) {
       try {
         setContactInfoState(JSON.parse(storedContact));
@@ -238,7 +238,7 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const saveContactInfo = (newContact: ContactInfo) => {
     setContactInfoState(newContact);
-    localStorage.setItem('endeavour_contact', JSON.stringify(newContact));
+    localStorage.setItem('endeavour_contact_v2', JSON.stringify(newContact));
   };
 
   const saveDeletedMembers = (newDeleted: DeletedMember[]) => {

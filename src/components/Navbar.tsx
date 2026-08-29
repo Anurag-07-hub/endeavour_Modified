@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Home, Compass, Users, Calendar, Image, UserPlus, Sun, Moon, Menu as MenuIcon, X } from 'lucide-react';
-import { LiquidMorphButton } from './LiquidMorphButton';
+
 import { LetsBeginTransition } from './LetsBeginTransition';
 
 const navItems = [
@@ -180,7 +180,7 @@ export function Navbar() {
                   initial={{ x: -20 }}
                   animate={{ x: 0 }}
                   transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.5 }}
-                  className="font-sans font-black text-[15px] uppercase tracking-[3px] text-brand-accent group-hover:text-black dark:group-hover:text-white transition-colors duration-300 whitespace-nowrap"
+                  className="font-mandatory font-normal text-[15px] uppercase tracking-[2px] text-brand-accent group-hover:text-black dark:group-hover:text-white transition-colors duration-300 whitespace-nowrap"
                 >
                   ENDEAVOUR
                 </motion.span>
@@ -306,9 +306,6 @@ export function Navbar() {
 
           </div>
 
-          {/* Divider */}
-          <div className="w-px h-6 sm:h-8 bg-white/10 shrink-0 hidden sm:block"></div>
-
           {/* Actions */}
           <div className="flex items-center gap-1.5 sm:pl-1 sm:pr-2 shrink-0">
             <div className="flex items-center gap-1.5 mr-1 shrink-0">
@@ -322,8 +319,6 @@ export function Navbar() {
                 {isDarkMode ? <Sun className="w-3 h-3 sm:w-[16px] sm:h-[16px]" /> : <Moon className="w-3 h-3 sm:w-[16px] sm:h-[16px]" />}
               </motion.button>
             </div>
-            
-            <LiquidMorphButton onClick={scrollToTop} />
           </div>
 
         </div>
@@ -345,7 +340,7 @@ export function Navbar() {
             alt="Endeavour" 
             className="w-8 h-auto object-contain filter brightness-110 saturate-110" 
           />
-          <span className="font-sans font-black text-[14px] uppercase tracking-wider text-brand-accent">
+          <span className="font-mandatory font-normal text-[14px] uppercase tracking-[2px] text-brand-accent">
             ENDEAVOUR
           </span>
         </Link>
@@ -403,7 +398,7 @@ export function Navbar() {
                       alt="Endeavour Logo" 
                       className="w-8 h-auto filter brightness-110" 
                     />
-                    <span className="font-sans font-black text-[14px] uppercase tracking-wider text-brand-accent">
+                    <span className="font-mandatory font-normal text-[14px] uppercase tracking-[2px] text-brand-accent">
                       ENDEAVOUR
                     </span>
                   </div>

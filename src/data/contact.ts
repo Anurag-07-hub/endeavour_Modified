@@ -7,11 +7,11 @@ export const defaultContact: ContactInfo = {
   "contacts": [
     {
       "name": "Anmol Ranjan",
-      "phone": "+916201957167"
+      "phone": "+91 62019 57167"
     },
     {
       "name": "Ashutosh Mehta",
-      "phone": "+919027042638"
+      "phone": "+91 90270 42638"
     }
   ]
 };

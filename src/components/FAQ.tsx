@@ -45,10 +45,13 @@ export function FAQ({ theme = 'dark' }: { theme?: 'light' | 'dark' }) {
           <p>We focus on several core technical areas, including:</p>
           <ul className="space-y-2 list-disc pl-5">
             <li>
+              <strong className="text-white">Competitive Robotics:</strong> Combat robots (Robowar), Line Following Robots (LFR), and custom bots built for national challenges.
+            </li>
+            <li>
               <strong className="text-white">UAVs (Unmanned Aerial Vehicles):</strong> Drones and acrobatic flyers.
             </li>
             <li>
-              <strong className="text-white">UGVs (Unmanned Ground Vehicles):</strong> Combat robots (Robowar), Line Following Robots (LFR), and pick-and-place bots.
+              <strong className="text-white">UGVs (Unmanned Ground Vehicles):</strong> Autonomous mobile platforms, pick-and-place bots, and rover platforms.
             </li>
             <li>
               <strong className="text-white">Research & Innovation:</strong> Developing real-world solutions like agricultural drones and specialized harvesters.
@@ -85,7 +88,7 @@ export function FAQ({ theme = 'dark' }: { theme?: 'light' | 'dark' }) {
                 </tr>
                 <tr className="hover:bg-white/[0.02] transition-colors">
                   <td className="p-3 font-semibold text-white">Dual Degree</td>
-                  <td className="p-3">1st, 2nd, and 3rd Year</td>
+                  <td className="p-3">1st and 2nd Year</td>
                 </tr>
               </tbody>
             </table>

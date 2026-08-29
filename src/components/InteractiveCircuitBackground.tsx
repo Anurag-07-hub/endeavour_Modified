@@ -210,8 +210,42 @@ export function InteractiveCircuitBackground() {
       mouseRef.current.active = false;
     };
 
+    const handleTouchMove = (e: TouchEvent) => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      if (e.touches.length > 0) {
+        mouseRef.current = {
+          x: e.touches[0].clientX - rect.left,
+          y: e.touches[0].clientY - rect.top,
+          active: true
+        };
+      }
+    };
+
+    const handleTouchStart = (e: TouchEvent) => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      if (e.touches.length > 0) {
+        mouseRef.current = {
+          x: e.touches[0].clientX - rect.left,
+          y: e.touches[0].clientY - rect.top,
+          active: true
+        };
+      }
+    };
+
+    const handleTouchEnd = () => {
+      mouseRef.current.active = false;
+    };
+
     window.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseleave', handleMouseLeave);
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+    window.addEventListener('touchend', handleTouchEnd, { passive: true });
+    window.addEventListener('touchcancel', handleTouchEnd, { passive: true });
 
     // Initial theme detection and observation
     updateThemeColors();
@@ -224,6 +258,10 @@ export function InteractiveCircuitBackground() {
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseleave', handleMouseLeave);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd);
+      window.removeEventListener('touchcancel', handleTouchEnd);
       observer.disconnect();
     };
   }, []);

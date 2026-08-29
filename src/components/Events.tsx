@@ -36,27 +36,27 @@ function EventCard({ event }: { event: any; key?: React.Key }): any {
 export function Events() {
   const events = [
     {
-      title: 'Techfest',
-      description: 'Our flagship technical festival featuring national-level robotics competitions, hackathons, and guest lectures.',
+      title: 'Techfests',
+      description: 'Participating in major technical festivals and robotics events across leading institutes and universities.',
       icon: <Zap className="w-4 h-4 sm:w-6 sm:h-6 text-brand-accent" />,
       delay: 0.1,
     },
     {
-      title: 'Research and Development',
-      description: 'Fostering innovation by exploring new technologies, publishing research, and developing advanced robotic solutions.',
-      icon: <Calendar className="w-4 h-4 sm:w-6 sm:h-6 text-brand-accent" />,
+      title: 'Hackathons',
+      description: 'Participating in robotics and technology hackathons to develop innovative solutions to real-world challenges.',
+      icon: <Trophy className="w-4 h-4 sm:w-6 sm:h-6 text-brand-accent" />,
       delay: 0.2,
     },
     {
       title: 'Workshops',
-      description: 'Hands-on sessions on IoT, Machine Learning, Embedded Systems, and Robot Operating System (ROS).',
+      description: 'Building hands-on expertise through robotic projects, experimentation, teamwork, and continuous technical learning.',
       icon: <Cpu className="w-4 h-4 sm:w-6 sm:h-6 text-brand-accent" />,
       delay: 0.3,
     },
     {
-      title: 'Competitions',
-      description: 'Representing SLIET at global platforms like IIT Bombay Techfest, e-Yantra, and Smart India Hackathon.',
-      icon: <Trophy className="w-4 h-4 sm:w-6 sm:h-6 text-brand-accent" />,
+      title: 'Exhibitions',
+      description: 'Showcasing our robotic systems, projects, and technical capabilities through exhibitions and live demonstrations.',
+      icon: <Calendar className="w-4 h-4 sm:w-6 sm:h-6 text-brand-accent" />,
       delay: 0.4,
     },
   ];

@@ -151,10 +151,10 @@ export function About() {
           <div className="w-full lg:w-[48%] max-w-xl flex flex-col items-center lg:items-start justify-between text-center lg:text-left text-white">
             <FadeIn direction="up" delay={0.2} className="flex flex-col items-center lg:items-start w-full">
               <p className="text-brand-muted text-[15px] sm:text-[16px] leading-[1.7] mb-5 font-sans w-full">
-                Team Endeavour is the official robotics club of Sant Longowal Institute of Engineering and Technology (SLIET), Longowal. We are a passionate community of engineers, designers, and visionaries dedicated to pushing the boundaries of technology.
+                Team Endeavour is the official robotics team of Sant Longowal Institute of Engineering and Technology (SLIET), Longowal. We are a team of passionate students who design, build, and compete with robotic systems across various national platforms.
               </p>
               <p className="text-brand-muted text-[15px] sm:text-[16px] leading-[1.7] mb-8 font-sans w-full">
-                From organizing the grand Techfest to participating at IIT Bombay, IIT Delhi, and other CFTIs, we foster a culture of hands-on learning, teamwork, and technical excellence.
+                Through practical projects and collaborative learning, we strengthen the technical skills of students while actively participating in Techfests, national robotics competitions, and robotics hackathons at IITs and other leading institutions across India.
               </p>
             </FadeIn>
             
@@ -165,7 +165,7 @@ export function About() {
               className="w-full grid grid-cols-2 gap-4 sm:gap-6 border border-white/10 bg-white/[0.02] backdrop-blur-md p-5 sm:p-6 rounded-2xl hover:border-brand-accent/30 hover:bg-white/[0.04] transition-all duration-500"
             >
               <div className="flex flex-col gap-0.5 sm:gap-1.5 text-left">
-                <h3 className="font-mono text-[22px] sm:text-[28px] font-bold text-brand-accent">15+</h3>
+                <h3 className="font-mono text-[22px] sm:text-[28px] font-bold text-brand-accent">10+</h3>
                 <p className="font-sans text-brand-muted text-[8px] sm:text-[9px] uppercase tracking-[1.5px] font-bold">Years of Legacy</p>
               </div>
               <div className="flex flex-col gap-0.5 sm:gap-1.5 text-left">
@@ -173,11 +173,11 @@ export function About() {
                 <p className="font-sans text-brand-muted text-[8px] sm:text-[9px] uppercase tracking-[1.5px] font-bold">Active Members</p>
               </div>
               <div className="flex flex-col gap-0.5 sm:gap-1.5 text-left">
-                <h3 className="font-mono text-[22px] sm:text-[28px] font-bold text-brand-accent">12</h3>
-                <p className="font-sans text-brand-muted text-[8px] sm:text-[9px] uppercase tracking-[1.5px] font-bold">National Trophies</p>
+                <h3 className="font-mono text-[22px] sm:text-[28px] font-bold text-brand-accent">25+</h3>
+                <p className="font-sans text-brand-muted text-[8px] sm:text-[9px] uppercase tracking-[1.5px] font-bold">Podium Finishes</p>
               </div>
               <div className="flex flex-col gap-0.5 sm:gap-1.5 text-left">
-                <h3 className="font-mono text-[22px] sm:text-[28px] font-bold text-brand-accent">120+</h3>
+                <h3 className="font-mono text-[22px] sm:text-[28px] font-bold text-brand-accent">30+</h3>
                 <p className="font-sans text-brand-muted text-[8px] sm:text-[9px] uppercase tracking-[1.5px] font-bold">Projects Built</p>
               </div>
             </FadeIn>

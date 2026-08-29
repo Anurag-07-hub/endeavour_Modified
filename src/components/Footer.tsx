@@ -83,7 +83,7 @@ export function Footer() {
                   referrerPolicy="no-referrer"
                   className="w-[54px] md:w-[64px] h-auto object-contain brightness-0 invert filter drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]"
                 />
-                <span className="font-sans font-black text-[18px] md:text-[24px] uppercase tracking-[4px] md:tracking-[5px] text-[#ffffff]">
+                <span className="font-mandatory font-normal text-[18px] md:text-[24px] uppercase tracking-[2px] text-[#ffffff]">
                   ENDEAVOUR
                 </span>
               </div>
@@ -97,7 +97,7 @@ export function Footer() {
 
             <div>
               <p className="font-sans text-[#ffffff]/70 text-[13px] md:text-[14px] leading-[1.6] max-w-[360px] mb-6 md:mb-8">
-                The official robotics club of Sant Longowal Institute of Engineering and Technology. Building the future, one robot at a time.
+                The official robotics club of Sant Longowal Institute of Engineering and Technology. Building the future.
               </p>
               
 
@@ -147,12 +147,12 @@ export function Footer() {
           </div>
 
           {/* Right Column: Clean glassmorphic contact list with 3D TiltCard and white glare/blur shadow - Spans 4 columns */}
-          <div className="md:col-span-4 flex flex-col gap-1.5 md:gap-4">
+          <div className="md:col-span-4 flex flex-col gap-1.5 md:gap-4 relative overflow-visible">
             
             {/* Address */}
             <TiltCard 
               onClick={() => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contactInfo.address)}`, '_blank')}
-              className="p-2 sm:p-5 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.12)] hover:bg-white/15 hover:border-white/40 hover:shadow-[0_0_35px_rgba(255,255,255,0.22)] transition-all duration-300 flex items-start gap-2.5 sm:gap-4 cursor-pointer"
+              className="p-2 sm:p-5 rounded-xl bg-white/[0.07] backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.2)] hover:bg-white/[0.12] hover:border-white/40 hover:shadow-[0_12px_40px_0_rgba(0,0,0,0.3)] transition-all duration-300 flex items-start gap-2.5 sm:gap-4 cursor-pointer relative z-10"
             >
               <div className="w-6 h-6 sm:w-9 sm:h-9 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
                 <MapPin className="w-3 h-3 sm:w-5 sm:h-5 text-[#ffffff]" />
@@ -168,7 +168,7 @@ export function Footer() {
             {/* Email */}
             <TiltCard 
               onClick={() => window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${contactInfo.email}`, '_blank')}
-              className="p-2 sm:p-5 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.12)] hover:bg-white/15 hover:border-white/40 hover:shadow-[0_0_35px_rgba(255,255,255,0.22)] transition-all duration-300 flex items-center gap-2.5 sm:gap-4 cursor-pointer"
+              className="p-2 sm:p-5 rounded-xl bg-white/[0.07] backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.2)] hover:bg-white/[0.12] hover:border-white/40 hover:shadow-[0_12px_40px_0_rgba(0,0,0,0.3)] transition-all duration-300 flex items-center gap-2.5 sm:gap-4 cursor-pointer relative z-10"
             >
               <div className="w-6 h-6 sm:w-9 sm:h-9 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
                 <Mail className="w-3 h-3 sm:w-5 sm:h-5 text-[#ffffff]" />
@@ -188,15 +188,15 @@ export function Footer() {
             </TiltCard>
 
             {/* Phone & Secondary Contacts - Side-by-side grid on mobile to save 50% vertical height */}
-            <div className="grid grid-cols-2 gap-1.5 md:flex md:flex-col md:gap-3">
+            <div className="grid grid-cols-2 gap-1.5 md:flex md:flex-col md:gap-3 relative z-10">
               {contactInfo.phone && (
-                <TiltCard className="p-2 sm:p-5 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.12)] hover:bg-white/15 hover:border-white/40 hover:shadow-[0_0_35px_rgba(255,255,255,0.22)] transition-all duration-300 flex items-center gap-2 sm:gap-4 cursor-pointer">
+                <TiltCard className="p-2 sm:p-5 rounded-xl bg-white/[0.07] backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.2)] hover:bg-white/[0.12] hover:border-white/40 hover:shadow-[0_12px_40px_0_rgba(0,0,0,0.3)] transition-all duration-300 flex items-center gap-2 sm:gap-4 cursor-pointer relative z-10">
                   <div className="w-6 h-6 sm:w-9 sm:h-9 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
                     <Phone className="w-3 h-3 sm:w-5 sm:h-5 text-[#ffffff]" />
                   </div>
                   <div className="min-w-0">
                     <div className="text-[8.5px] sm:text-[11px] font-extrabold uppercase tracking-widest text-[#ffffff]/70 mb-0 sm:mb-1 truncate">Phone</div>
-                    <a href={`tel:${contactInfo.phone}`} className="font-sans text-[10px] sm:text-[15px] font-semibold text-[#ffffff] hover:underline block truncate">
+                    <a href={`tel:${contactInfo.phone.replace(/\s+/g, '')}`} className="font-sans text-[10px] sm:text-[15px] font-semibold text-[#ffffff] hover:underline block truncate">
                       {contactInfo.phone}
                     </a>
                   </div>
@@ -205,7 +205,7 @@ export function Footer() {
 
               {contactInfo.contacts?.map((contact, idx) => (
                 contact.name && contact.phone ? (
-                  <TiltCard key={idx} className="p-2 sm:p-5 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_25px_rgba(255,255,255,0.12)] hover:bg-white/15 hover:border-white/40 hover:shadow-[0_0_35px_rgba(255,255,255,0.22)] transition-all duration-300 flex items-center gap-2.5 sm:gap-4 cursor-pointer">
+                  <TiltCard key={idx} className="p-2 sm:p-5 rounded-xl bg-white/[0.07] backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.2)] hover:bg-white/[0.12] hover:border-white/40 hover:shadow-[0_12px_40px_0_rgba(0,0,0,0.3)] transition-all duration-300 flex items-center gap-2.5 sm:gap-4 cursor-pointer relative z-10">
                     <div className="w-6 h-6 sm:w-9 sm:h-9 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
                       <Phone className="w-3 h-3 sm:w-5 sm:h-5 text-[#ffffff]" />
                     </div>
@@ -213,7 +213,7 @@ export function Footer() {
                       <div className="text-[8.5px] sm:text-[11px] font-extrabold uppercase tracking-widest text-[#ffffff]/70 mb-0 sm:mb-1 truncate">
                         {contact.name}
                       </div>
-                      <a href={`tel:${contact.phone}`} className="font-sans text-[10px] sm:text-[15px] font-semibold text-[#ffffff] hover:underline block truncate">
+                      <a href={`tel:${contact.phone.replace(/\s+/g, '')}`} className="font-sans text-[10px] sm:text-[15px] font-semibold text-[#ffffff] hover:underline block truncate">
                         {contact.phone}
                       </a>
                     </div>
@@ -238,7 +238,7 @@ export function Footer() {
                 referrerPolicy="no-referrer"
                 className="w-[42px] h-auto object-contain brightness-0 invert filter drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]"
               />
-              <span className="font-sans font-black text-[15px] uppercase tracking-[3px] text-[#ffffff]">
+              <span className="font-mandatory font-normal text-[15px] uppercase tracking-[2px] text-[#ffffff]">
                 ENDEAVOUR
               </span>
             </div>
@@ -250,17 +250,18 @@ export function Footer() {
 
           {/* 2. Description Paragraph */}
           <p className="font-sans text-[#ffffff]/70 text-[11px] leading-[1.5] mb-4">
-            The official robotics club of Sant Longowal Institute of Engineering and Technology. Building the future, one robot at a time.
+            The official robotics club of Sant Longowal Institute of Engineering and Technology. Building the future.
           </p>
           
 
 
           {/* 3. Contact Cards (Location, Email, Phone contacts) - Moved Up! */}
-          <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col gap-1.5 relative overflow-visible">
+            
             {/* Location */}
             <div 
               onClick={() => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contactInfo.address)}`, '_blank')}
-              className="p-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.08)] flex items-start gap-2.5 cursor-pointer hover:bg-white/15 hover:border-white/40 transition-all duration-300"
+              className="p-2 rounded-xl bg-white/[0.07] backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.2)] flex items-start gap-2.5 cursor-pointer hover:bg-white/[0.12] hover:border-white/40 transition-all duration-300 relative z-10"
             >
               <div className="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
                 <MapPin className="w-3 h-3 text-[#ffffff]" />
@@ -276,7 +277,7 @@ export function Footer() {
             {/* Email */}
             <div 
               onClick={() => window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${contactInfo.email}`, '_blank')}
-              className="p-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.08)] flex items-center gap-2.5 cursor-pointer hover:bg-white/15 hover:border-white/40 transition-all duration-300"
+              className="p-2 rounded-xl bg-white/[0.07] backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.2)] flex items-center gap-2.5 cursor-pointer hover:bg-white/[0.12] hover:border-white/40 transition-all duration-300 relative z-10"
             >
               <div className="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
                 <Mail className="w-3 h-3 text-[#ffffff]" />
@@ -296,15 +297,15 @@ export function Footer() {
             </div>
 
             {/* Phone Contacts Grid */}
-            <div className="grid grid-cols-2 gap-1.5">
+            <div className="grid grid-cols-2 gap-1.5 relative z-10">
               {contactInfo.phone && (
-                <div className="p-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.08)] flex items-center gap-2">
+                <div className="p-2 rounded-xl bg-white/[0.07] backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.2)] flex items-center gap-2 relative z-10">
                   <div className="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
                     <Phone className="w-3 h-3 text-[#ffffff]" />
                   </div>
                   <div className="min-w-0">
                     <div className="text-[8.5px] font-extrabold uppercase tracking-widest text-[#ffffff]/70 truncate">Phone</div>
-                    <a href={`tel:${contactInfo.phone}`} className="font-sans text-[10px] font-semibold text-[#ffffff] hover:underline block truncate">
+                    <a href={`tel:${contactInfo.phone.replace(/\s+/g, '')}`} className="font-sans text-[10px] font-semibold text-[#ffffff] hover:underline block truncate">
                       {contactInfo.phone}
                     </a>
                   </div>
@@ -313,7 +314,7 @@ export function Footer() {
 
               {contactInfo.contacts?.map((contact, idx) => (
                 contact.name && contact.phone ? (
-                  <div key={idx} className="p-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.08)] flex items-center gap-2">
+                  <div key={idx} className="p-2 rounded-xl bg-white/[0.07] backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.2)] flex items-center gap-2 relative z-10">
                     <div className="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
                       <Phone className="w-3 h-3 text-[#ffffff]" />
                     </div>
@@ -321,7 +322,7 @@ export function Footer() {
                       <div className="text-[8.5px] font-extrabold uppercase tracking-widest text-[#ffffff]/70 truncate">
                         {contact.name}
                       </div>
-                      <a href={`tel:${contact.phone}`} className="font-sans text-[10px] font-semibold text-[#ffffff] hover:underline block truncate">
+                      <a href={`tel:${contact.phone.replace(/\s+/g, '')}`} className="font-sans text-[10px] font-semibold text-[#ffffff] hover:underline block truncate">
                         {contact.phone}
                       </a>
                     </div>
