@@ -134,6 +134,16 @@ export function CustomCursor() {
         [data-cursor-system="true"], [data-cursor-system="true"] * {
           cursor: auto !important;
         }
+        [data-cursor-system="true"] a,
+        [data-cursor-system="true"] button,
+        [data-cursor-system="true"] [role="button"],
+        [data-cursor-system="true"] select,
+        [data-cursor-system="true"] input[type="submit"],
+        [data-cursor-system="true"] input[type="button"],
+        [data-cursor-system="true"] .cursor-pointer,
+        [data-cursor-system="true"] .cursor-pointer * {
+          cursor: pointer !important;
+        }
         body.global-cursor-hidden,
         body.global-cursor-hidden *,
         body.global-cursor-hidden [data-cursor-system="true"],
