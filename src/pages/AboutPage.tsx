@@ -134,9 +134,13 @@ export function AboutPage() {
                 <GradientWaveText
                   inView={true}
                   once={false}
-                  className="text-[16px] md:text-[18px] text-brand-muted leading-[1.8] font-sans text-center mx-auto max-w-4xl"
+                  className="text-[14px] sm:text-[16px] md:text-[18px] text-brand-muted leading-[1.8] font-sans text-justify mx-auto max-w-4xl"
                 >
-                  Endeavour is a robotics team based in SLIET, Punjab. It has had its presence in the national robotics scene for the past half a decade, over years the team has worked on projects such as E-yantra (Bombay), TEQIP (GOI &amp; World bank), SAE Aero Design Challenge, and other projects for social welfare. The team has also participated in several prestigious events held at premier institutions in our country, including Techfest (IIT Bombay), ABU ROBOCON, Indian drone racing league (IIT Delhi &amp; VIT Vellore), APOGEE (BITS Pilani), Technex (IIT BHU), Techkriti (IIT Kanpur) and Advitya (IIT Ropar) to name a few. The team has brought many laurels to the college proving its excellence. We provide a platform where one can bridge the gap between theoretical and practical knowledge. When the world stalled, we were still able to make progress with our continued efforts and hard work.
+                  {`Endeavour is a robotics team based at Sant Longowal Institute of Engineering and Technology (SLIET), Punjab, with a legacy spanning more than a decade in robotics, innovation, and technological development. Over the years, the team has undertaken several projects and initiatives, including e-Yantra (IIT Bombay), TEQIP (Government of India & World Bank), SAE Aero Design Challenge, and projects focused on social welfare.
+
+The team has represented SLIET at several prestigious national-level events hosted by premier institutions, including Techfest (IIT Bombay), ABU ROBOCON, Indian Drone Racing League (IIT Delhi & VIT Vellore), APOGEE (BITS Pilani), Technex (IIT BHU), Techkriti (IIT Kanpur), Advitya (IIT Ropar) and ISRO Robotics Competition, among others. Through its consistent efforts, Endeavour has earned numerous accolades and brought recognition to the institute.
+
+Beyond competitions, Endeavour provides students with a platform to bridge the gap between theoretical knowledge and practical application, encouraging hands-on learning, innovation, teamwork, and problem-solving. Despite challenging times, the team has remained committed to continuous learning and development, upholding its legacy of excellence through dedication and perseverance.`}
                 </GradientWaveText>
               </motion.div>
             </div>
@@ -163,7 +167,7 @@ export function AboutPage() {
                 <GradientWaveText
                   inView={true}
                   once={false}
-                  className="text-[16px] md:text-[18px] text-brand-muted leading-[1.8] font-sans text-center mx-auto max-w-4xl"
+                  className="text-[16px] md:text-[18px] text-brand-muted leading-[1.8] font-sans text-justify mx-auto max-w-4xl"
                 >
                   The team was initially started to reinforce the technical prospect of students, enabling them to become refined concocts having knowledge of diverse fields. Following the current trends, everyone is in hunt to become that polymath, who is capable of handling any work assigned. So for this, what will be better than working in the field of robotics. A field that needs no introduction where people from varied backgrounds come and work in harmony, contribute their part and learn in reciprocation. Robotics is the collective implementation of latest technologies &amp; using it for our ease that certainly requires profound technical expertise.
                 </GradientWaveText>
@@ -171,18 +175,64 @@ export function AboutPage() {
             </div>
           </div>
 
-          {/* Full-Width High-Impact Bebas Neue Statement */}
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.3 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            className="bg-brand-accent text-center my-20 py-10 px-4 md:py-14 md:px-8 relative overflow-hidden max-w-[1024px] mx-auto border border-white/10 shadow-2xl rounded-lg"
-          >
-            <h2 className="font-bebas text-[42px] sm:text-[72px] md:text-[105px] leading-[0.85] text-[#ffffff] tracking-[-0.01em] uppercase select-none font-bold">
-              BEST TEAMWORK CAN ACHIEVE ANYTHING
-            </h2>
-          </motion.div>
+          {/* Full-Width Staggered Typography Slogan - Redesigned */}
+          <div className="relative py-10 md:py-16 my-10 overflow-hidden max-w-[1024px] mx-auto select-none">
+            {/* Large background watermark text */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0">
+              <span 
+                className="font-syncopate text-[9vw] sm:text-[70px] md:text-[100px] lg:text-[120px] font-black uppercase tracking-widest text-transparent leading-none"
+                style={{ WebkitTextStroke: isLight ? '1px rgba(0, 0, 0, 0.04)' : '1px rgba(255, 255, 255, 0.035)' }}
+              >
+                TEAMWORK
+              </span>
+            </div>
+
+            {/* Slogan Content Container */}
+            <div className="relative z-10 flex flex-col items-center justify-center space-y-4 px-4">
+              {/* Small indicator */}
+              <div className="flex items-center gap-3 mb-2">
+                <span className="h-[1px] w-8 bg-brand-accent/50" />
+                <span className="font-mono text-[9px] uppercase tracking-[3px] text-brand-accent font-bold">
+                  Core Belief
+                </span>
+                <span className="h-[1px] w-8 bg-brand-accent/50" />
+              </div>
+
+              {/* Staggered Editorial Typography */}
+              <div className="font-syncopate font-black uppercase leading-[1.2] text-center w-full max-w-4xl">
+                {/* Line 1 */}
+                <motion.div 
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: false, amount: 0.3 }}
+                  transition={{ duration: 0.6 }}
+                  className={`text-[20px] sm:text-[34px] md:text-[44px] tracking-[-1px] sm:tracking-[-2px] ${isLight ? 'text-[#0b0507]' : 'text-white'}`}
+                >
+                  BEST TEAMWORK
+                </motion.div>
+                {/* Line 2 */}
+                <motion.div 
+                  initial={{ opacity: 0, y: 15 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: false, amount: 0.3 }}
+                  transition={{ duration: 0.6, delay: 0.15 }}
+                  className={`text-[12px] sm:text-[20px] md:text-[26px] tracking-[2px] sm:tracking-[4px] my-1 sm:my-2 ${isLight ? 'text-black/50' : 'text-brand-muted/70'}`}
+                >
+                  CAN ACHIEVE
+                </motion.div>
+                {/* Line 3 with Neon Glow */}
+                <motion.div 
+                  initial={{ opacity: 0, x: 30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: false, amount: 0.3 }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
+                  className={`text-[28px] sm:text-[48px] md:text-[64px] text-brand-accent tracking-[-2px] sm:tracking-[-3px] ${isLight ? 'drop-shadow-[0_0_12px_rgba(164,5,5,0.25)]' : 'drop-shadow-[0_0_20px_rgba(164,5,5,0.7)]'}`}
+                >
+                  ANYTHING
+                </motion.div>
+              </div>
+            </div>
+          </div>
           <div>
             <HistoryCircuit />
           </div>

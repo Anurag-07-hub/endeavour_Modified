@@ -27,7 +27,7 @@ function TeamMemberCard({ member, delay }: { member: any; delay: number; key?: s
           alt={member.name}
           loading="lazy"
           onLoad={() => setIsLoaded(true)}
-          className={`absolute inset-0 w-full h-full object-cover object-top transition-all duration-700 ease-out scale-100 group-hover:scale-105 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+          className={`absolute inset-0 w-full h-full object-cover ${member.imagePosition || 'object-top'} transition-all duration-700 ease-out scale-100 group-hover:scale-105 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
           referrerPolicy="no-referrer"
           onError={(e) => {
             (e.target as HTMLImageElement).src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(member.name) + '&background=a40505&color=fff&size=512';

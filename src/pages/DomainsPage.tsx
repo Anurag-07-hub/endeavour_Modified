@@ -222,6 +222,32 @@ const sections: SectionData[] = [
     modelUrl: '/ugv_model.glb',
   },
   {
+    id: 'rocketry',
+    title: 'Rocketry',
+    subTitle: 'Aero-Space & Rocket Propulsion',
+    watermark: 'ENDEAVOUR ROCKETRY',
+    description:
+      'Our Rocketry division focuses on the design, development, flight simulation, and hot-fire testing of model rockets and solid-motor propulsions. We research aerodynamic stability, telemetric data transmission, and recovery payload systems to touch new frontiers.',
+    accent: '#f59e0b',
+    shimmerClass: 'from-[#f59e0b] via-[#fbbf24] to-[#f59e0b]',
+    glowClass: 'shadow-[#f59e0b]/30 border-[#f59e0b]/25',
+    stats: [
+      { value: 'SOLID MOTOR', label: 'Propulsion Systems' },
+      { value: 'APOGEE NAV', label: 'Altimeter Data' },
+      { value: 'PARACHUTE', label: 'Dual-Deployment Recovery' },
+    ],
+    projects: [
+      {
+        title: 'Aero-Space Engineering',
+        subtitle: 'Solid Motor Model Rocketry',
+        description: 'Design and flight simulation of model rockets with advanced multi-stage ejection and recovery payloads.',
+        icon: Compass,
+        techSpecs: ['Aerodynamic Drag Analysis', 'Telemetry Transmitter Link', 'Dual Deployment Recovery'],
+      },
+    ],
+    coverImage: 'https://images.unsplash.com/photo-1541185933-ef5d8ed016c2?q=80&w=1200&auto=format&fit=crop',
+  },
+  {
     id: 'research',
     title: 'Research Projects',
     subTitle: 'Frontier Engineering',
@@ -314,6 +340,7 @@ export function DomainsPage() {
   const sectionRefs = {
     uav: useRef<HTMLDivElement>(null),
     ugv: useRef<HTMLDivElement>(null),
+    rocketry: useRef<HTMLDivElement>(null),
     research: useRef<HTMLDivElement>(null),
   };
 

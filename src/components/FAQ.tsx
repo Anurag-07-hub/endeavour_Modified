@@ -29,7 +29,7 @@ export function FAQ({ theme = 'dark' }: { theme?: 'light' | 'dark' }) {
     {
       id: 1,
       category: 'general',
-      question: 'What is Endeavour?',
+      question: 'What is Team Endeavour?',
       answer: (
         <p className="text-brand-muted leading-relaxed">
           Endeavour is the official robotics club of Sant Longowal Institute of Engineering & Technology (SLIET), Punjab. We are a multidisciplinary team of engineering students dedicated to bridging the gap between theoretical knowledge and practical application through robotics.
@@ -54,7 +54,10 @@ export function FAQ({ theme = 'dark' }: { theme?: 'light' | 'dark' }) {
               <strong className="text-white">UGVs (Unmanned Ground Vehicles):</strong> Autonomous mobile platforms, pick-and-place bots, and rover platforms.
             </li>
             <li>
-              <strong className="text-white">Research & Innovation:</strong> Developing real-world solutions like agricultural drones and specialized harvesters.
+              <strong className="text-white">Rocketry:</strong> Design, development, simulation, and testing of rockets.
+            </li>
+            <li>
+              <strong className="text-white">Research & Innovation:</strong> Developing real-world solutions like agricultural drones and VTOL.
             </li>
           </ul>
         </div>
@@ -167,18 +170,7 @@ export function FAQ({ theme = 'dark' }: { theme?: 'light' | 'dark' }) {
         </p>
       ),
     },
-    {
-      id: 8,
-      category: 'membership',
-      question: 'Is there a membership fee or a monthly subscription?',
-      answer: (
-        <p className="text-brand-muted leading-relaxed">
-          Endeavour is a self-funded technical club. To sustain our high-standard projects and procure specialized hardware, we operate on a{' '}
-          <strong className="text-white font-semibold">contributory model</strong>. Rather than a monthly fee, members contribute between{' '}
-          <strong className="text-brand-accent font-semibold">₹400 and ₹600</strong> only when required—typically during intensive preparation phases for major national competitions (approximately 4–5 times a year).
-        </p>
-      ),
-    },
+
     {
       id: 9,
       category: 'membership',
@@ -200,17 +192,7 @@ export function FAQ({ theme = 'dark' }: { theme?: 'light' | 'dark' }) {
         </p>
       ),
     },
-    {
-      id: 11,
-      category: 'safety',
-      question: 'What are the requirements for outstation competitions (IITs/NITs)?',
-      answer: (
-        <p className="text-brand-muted leading-relaxed">
-          Participating in national-level competitions at institutions like IITs and NITs is a core part of the Endeavour experience. For all such trips,{' '}
-          <strong className="text-white font-semibold">both male and female members are strictly required</strong> to obtain prior formal permission from their parents or guardians. The club ensures that all travel and stay arrangements adhere to safety protocols sanctioned by the institute.
-        </p>
-      ),
-    },
+
   ], []);
 
   const filteredFaqs = useMemo(() => {
@@ -222,16 +204,14 @@ export function FAQ({ theme = 'dark' }: { theme?: 'light' | 'dark' }) {
         const query = searchQuery.toLowerCase();
         const questionMatches = item.question.toLowerCase().includes(query);
         const textContent = item.id === 1 ? 'endeavour official robotics club sliet punjab multidisciplinary' : 
-                            item.id === 2 ? 'uav unmanned aerial vehicle ugv unmanned ground vehicle research innovation' :
+                            item.id === 2 ? 'uav unmanned aerial vehicle ugv unmanned ground vehicle research innovation rocketry' :
                             item.id === 3 ? 'who can join diploma be dual degree engineering branches' :
                             item.id === 4 ? 'how can i join recruitments annual instagram notice boards' :
                             item.id === 5 ? 'prior knowledge cad designing programming electronics training' :
                             item.id === 6 ? 'competitions techfests bombay delhi bhu roorkee e-yantra sae aero techfest' :
                             item.id === 7 ? 'achievements technex cognizance techfest' :
-                            item.id === 8 ? 'membership fee monthly subscription contributory model cost rupee' :
                             item.id === 9 ? 'academic performance priority balance coursework' :
-                            item.id === 10 ? 'other technical clubs permission restrict' :
-                            item.id === 11 ? 'safety outstation parent permission travel stay' : '';
+                            item.id === 10 ? 'other technical clubs permission restrict' : '';
         
         matchesSearch = questionMatches || textContent.toLowerCase().includes(query);
       }

@@ -193,6 +193,7 @@ export const teamMembers = [
         "name": "Ravi Tripathi",
         "position": "Ph.D Scholar IIT Delhi",
         "image": "/images/ravi tripathi.jpg",
+        "imagePosition": "object-center",
         "email": "ravi27tripathi@gmail.com",
         "linkedin": "https://www.linkedin.com/in/ravi-tripathi-95a867106"
       },

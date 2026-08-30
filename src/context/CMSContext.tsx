@@ -12,12 +12,14 @@ export type { Model3DConfig, RecruitmentSettings, HeroLayoutConfig };
 export interface DomainWatermarkConfig {
   uav: { opacity: number; part1X: number; part1Y: number; part2X: number; part2Y: number };
   ugv: { opacity: number; part1X: number; part1Y: number; part2X: number; part2Y: number };
+  rocketry: { opacity: number; part1X: number; part1Y: number; part2X: number; part2Y: number };
   research: { opacity: number; part1X: number; part1Y: number; part2X: number; part2Y: number };
 }
 
 export const defaultDomainsConfig: DomainWatermarkConfig = {
   uav:      { opacity: 0.10, part1X: -288, part1Y: 283,  part2X: 655,  part2Y: -343 },
   ugv:      { opacity: 0.10, part1X: -288, part1Y: 283,  part2X: 655,  part2Y: -343 },
+  rocketry: { opacity: 0.10, part1X: -288, part1Y: 283,  part2X: 655,  part2Y: -343 },
   research: { opacity: 0.10, part1X: -288, part1Y: 283,  part2X: 398,  part2Y: -344 }
 };
 
