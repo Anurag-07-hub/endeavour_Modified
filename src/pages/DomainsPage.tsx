@@ -33,7 +33,7 @@ class ModelErrorBoundary extends React.Component<{ children: React.ReactNode }, 
   render() {
     if (this.state.hasError) {
       return (
-        <div className="w-full h-full bg-white/5 text-red-600 p-4 rounded-3xl flex flex-col items-center justify-center text-center border border-white/10 shadow-sm">
+        <div className="w-full h-full bg-white/[0.07] backdrop-blur-xl text-red-600 p-4 rounded-3xl flex flex-col items-center justify-center text-center border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.2)]">
           <span className="font-righteous text-lg mb-1 tracking-wider">3D ENGINE OFFLINE</span>
           <p className="text-[10px] font-mono opacity-60">{this.state.error?.message || 'Render failure'}</p>
         </div>
@@ -364,7 +364,7 @@ export function DomainsPage() {
             </p>
             <div className="flex flex-wrap gap-3 pt-2">
               {['uav', 'ugv', 'research'].map((d) => (
-                <div key={d} className="flex items-center gap-2 bg-white/5 border border-white/10 px-4 py-2.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider text-brand-muted">
+                <div key={d} className="flex items-center gap-2 bg-white/[0.07] backdrop-blur-xl border border-white/20 px-4 py-2.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider text-brand-muted shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
                   <span className="w-2 h-2 rounded-full bg-[#c41515]" />
                   {d} division
                 </div>
@@ -375,7 +375,7 @@ export function DomainsPage() {
           {/* Right Column: Dynamic Diagnostic Box */}
           <motion.div 
             style={{ y: isMobile ? 0 : parallaxY.statementBox }}
-            className="lg:col-span-5 bg-black border border-white/10 p-8 sm:p-10 rounded-3xl shadow-xl relative overflow-hidden text-left"
+            className="lg:col-span-5 bg-white/[0.07] backdrop-blur-xl border border-white/20 p-8 sm:p-10 rounded-3xl shadow-[0_8px_32px_0_rgba(0,0,0,0.2)] relative overflow-hidden text-left z-10"
           >
             <div className="absolute top-0 right-0 w-32 h-32 rounded-full bg-[#c41515]/5 blur-[60px]" />
             <div className="flex items-center justify-between pb-6 border-b border-white/5">
@@ -418,94 +418,7 @@ export function DomainsPage() {
       </section>
 
       {/* 2. Explore Section */}
-      <section
-        id="explore-section"
-        ref={exploreRef}
-        data-cursor-system="true"
-        className="relative h-[160vh] w-full bg-brand-bg z-10 border-b border-white/5 flex flex-col justify-start"
-      >
-        <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-center overflow-hidden px-6">
-          {/* Subtle Vector Background Grid */}
-          <div className="absolute inset-0 z-0 bg-[radial-gradient(var(--color-grid-lines)_1.2px,transparent_1.2px)] [background-size:24px_24px] opacity-60" />
-          
-          {/* Diagnostic Stats Header */}
-          <div className="relative z-10 text-center max-w-2xl mb-8 sm:mb-12 pointer-events-none">
-            <span className="font-mono text-xs uppercase tracking-[0.3em] text-[#c41515] font-bold">LIDAR ENVIRONMENT SCANNER</span>
-            <h2 className="font-righteous text-2xl sm:text-4xl text-white tracking-tight mt-2 uppercase">
-              BLUEPRINT DISCOVERY PHASE
-            </h2>
-            <p className="text-brand-muted text-xs sm:text-sm mt-2 font-medium">
-              Real-time vector structural scans of our technical architecture payload modules.
-            </p>
-          </div>
-
-          {/* Scanner Blueprint Board */}
-          <motion.div 
-            style={{ scale: blueprintScale, opacity: blueprintOpacity }}
-            className="relative z-10 w-full max-w-4xl h-[360px] sm:h-[480px] bg-black border border-white/10 rounded-[2.5rem] shadow-2xl p-5 sm:p-10 flex flex-col justify-between overflow-hidden"
-          >
-            {/* Blueprint Grid Lines */}
-            <div className="absolute inset-0 border border-dashed border-[#c41515]/10 m-4 rounded-[2rem] pointer-events-none" />
-            <div className="absolute left-1/2 top-0 bottom-0 w-[1px] border-l border-dashed border-white/5 pointer-events-none" />
-            <div className="absolute top-1/2 left-0 right-0 h-[1px] border-t border-dashed border-white/5 pointer-events-none" />
-
-            {/* Sweep Laser Scanner Line */}
-            <motion.div 
-              style={{ y: scannerY }}
-              className="absolute left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#c41515] to-transparent shadow-[0_0_15px_rgba(196,21,21,0.8)] z-20 pointer-events-none"
-            />
-
-            {/* Top Diagnostic Labels */}
-            <div className="relative z-10 flex justify-between items-center font-mono text-[8px] sm:text-[10px] text-gray-400 font-bold uppercase tracking-wider">
-              <div className="flex items-center gap-1.5 sm:gap-2">
-                <Activity className="w-3.5 h-3.5 text-[#c41515]" />
-                <span>CHASSIS_SCAN: INITIALIZED</span>
-              </div>
-              <div>COORD: 30.21N // 75.70E</div>
-            </div>
-
-            {/* Central Schematic Vector Graphics */}
-            <div className="flex-1 flex items-center justify-center relative my-6">
-              {/* Spinning Vector Circle */}
-              <motion.div 
-                animate={{ rotate: 360 }}
-                transition={{ repeat: Infinity, duration: 18, ease: "linear" }}
-                className="w-40 h-40 sm:w-60 sm:h-60 rounded-full border border-dashed border-[#c41515]/25 flex items-center justify-center"
-              >
-                <div className="w-28 h-28 sm:w-44 sm:h-44 rounded-full border border-white/5 flex items-center justify-center">
-                  <div className="w-16 h-16 sm:w-28 sm:h-28 rounded-full border border-dashed border-white/10 flex items-center justify-center">
-                    <span className="w-3 h-3 rounded-full bg-[#c41515] shadow-lg shadow-[#c41515]/40" />
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* Floating Blueprint Markers */}
-              <div className="absolute top-2 left-2 sm:top-12 sm:left-28 font-mono text-[8px] sm:text-[10px] text-left text-brand-muted bg-brand-bg border border-white/10 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg shadow-sm max-w-[150px] sm:max-w-none">
-                <p className="font-bold text-[#c41515]">// UAV_MOD_v10</p>
-                <p className="hidden sm:block">PROPELLER COMPLIANCE: 98.4%</p>
-              </div>
-
-              <div className="absolute bottom-2 right-2 sm:bottom-8 sm:right-28 font-mono text-[8px] sm:text-[10px] text-left text-brand-muted bg-brand-bg border border-white/10 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg shadow-sm max-w-[150px] sm:max-w-none">
-                <p className="font-bold text-[#00cc66]">// UGV_DRIVE_SYSTEM</p>
-                <p className="hidden sm:block">HUB MOTOR CONTROLLERS: ACTIVE</p>
-              </div>
-            </div>
-
-            {/* Bottom Diagnostic Labels */}
-            <div className="relative z-10 flex justify-between items-end font-mono text-[8px] sm:text-[10px] text-gray-400 font-bold uppercase tracking-wider">
-              <div className="space-y-0.5 sm:space-y-1 text-left">
-                <p>TELEM_LINK: STABLE [92.1 kB/s]</p>
-                <p className="text-gray-300">RSSI_DBM: -45 DB</p>
-              </div>
-              <div className="flex gap-4">
-                <span className="text-[#c41515]">SCROLL TO EXPLORE</span>
-              </div>
-            </div>
-
-          </motion.div>
-        </div>
-      </section>
-
+      
       {/* 3. Stacking Sections */}
       <div 
         data-cursor-hidden="false" 
@@ -559,7 +472,7 @@ export function DomainsPage() {
 
                   <div className="flex flex-wrap gap-3 sm:gap-4 pt-2 sm:pt-4">
                     {domain.stats.map((stat, sIdx) => (
-                      <div key={sIdx} className="bg-white/5 border border-white/10 px-4 py-3 rounded-2xl flex flex-col justify-center min-w-[125px] sm:min-w-[140px]">
+                      <div key={sIdx} className="bg-white/[0.07] backdrop-blur-xl border border-white/20 px-4 py-3 rounded-2xl flex flex-col justify-center min-w-[125px] sm:min-w-[140px] shadow-[0_8px_32px_0_rgba(0,0,0,0.2)]">
                         <span className="font-righteous text-sm sm:text-lg tracking-wider" style={{ color: domain.accent }}>{stat.value}</span>
                         <span className="text-[8px] sm:text-[9px] tracking-wide uppercase font-bold text-brand-muted">{stat.label}</span>
                       </div>
@@ -575,7 +488,7 @@ export function DomainsPage() {
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-                    className="relative w-full h-[280px] sm:h-[400px] bg-black border border-white/15 rounded-[2.5rem] p-4 flex flex-col overflow-hidden shadow-2xl hover:border-white/20 transition-colors duration-500"
+                    className="relative w-full h-[280px] sm:h-[400px] bg-white/[0.07] backdrop-blur-xl border border-white/20 rounded-[2.5rem] p-4 flex flex-col overflow-hidden shadow-[0_8px_32px_0_rgba(0,0,0,0.2)] hover:border-white/40 transition-colors duration-500"
                   >
                     <div className="absolute top-0 right-0 w-48 h-48 rounded-full blur-[80px] opacity-5" style={{ backgroundColor: domain.accent }} />
                     <div className="relative z-10 flex justify-between items-center p-3 border-b border-white/5">
@@ -587,7 +500,7 @@ export function DomainsPage() {
                         <div className="w-full h-full relative z-20">
                           <ModelErrorBoundary>
                             <Suspense fallback={
-                              <div className="w-full h-full flex items-center justify-center text-brand-muted font-mono text-xs bg-white/5 rounded-2xl border border-white/10">
+                              <div className="w-full h-full flex items-center justify-center text-brand-muted font-mono text-xs bg-white/[0.07] backdrop-blur-xl rounded-2xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.2)]">
                                 Launching Interactive WebGL...
                               </div>
                             }>
@@ -596,7 +509,7 @@ export function DomainsPage() {
                           </ModelErrorBoundary>
                         </div>
                       ) : (
-                        <div className="w-full h-full overflow-hidden rounded-2xl border border-white/10 relative z-20 group">
+                        <div className="w-full h-full overflow-hidden rounded-2xl border border-white/20 relative z-20 group shadow-[0_8px_32px_0_rgba(0,0,0,0.2)]">
                           <img src={domain.coverImage} alt={domain.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                         </div>
                       )}

@@ -57,7 +57,7 @@ export function PhaseGenesis() {
             initial={{ opacity: 0, x: -50 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
             transition={{ duration: 0.8 }}
-            className="relative h-[400px] md:h-[600px] w-full border border-white/10 p-2 bg-black/40 backdrop-blur-sm group"
+            className="relative h-[400px] md:h-[600px] w-full border border-white/20 p-2 bg-white/[0.07] backdrop-blur-xl group shadow-[0_8px_32px_rgba(0,0,0,0.2)]"
           >
             {/* Grid overlay */}
             <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none opacity-20"></div>
@@ -69,7 +69,7 @@ export function PhaseGenesis() {
             />
             
             {/* Neon Data Overlays */}
-            <div className="absolute bottom-6 left-6 right-6 p-6 bg-black/60 backdrop-blur-md border border-brand-accent/30 shadow-[0_0_15px_rgba(164,5,5,0.3)]">
+            <div className="absolute bottom-6 left-6 right-6 p-6 bg-white/[0.07] backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.2)]">
               <h3 className="font-syncopate text-xl md:text-2xl text-white font-bold leading-relaxed">2014: FOUNDED <br/><span className="text-brand-accent">ENDEAVOUR</span></h3>
               <p className="font-roboto text-brand-muted mt-2 text-xs md:text-sm">INITIALIZING CORE DIRECTIVE...</p>
             </div>
@@ -105,7 +105,7 @@ export function PhaseGenesis() {
               <motion.div 
                 key={idx}
                 variants={itemVariants}
-                className="bg-black/40 backdrop-blur-md border border-white/10 p-6 rounded-md hover:border-brand-accent transition-colors relative overflow-hidden group shadow-lg"
+                className="bg-white/[0.07] backdrop-blur-xl border border-white/20 p-6 rounded-md hover:border-brand-accent transition-colors relative overflow-hidden group shadow-[0_8px_32px_rgba(0,0,0,0.2)]"
               >
                 {/* Circuit accent line */}
                 <div className="absolute left-0 top-0 bottom-0 w-1 bg-brand-accent/20 group-hover:bg-brand-accent transition-colors"></div>

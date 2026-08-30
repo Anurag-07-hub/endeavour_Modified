@@ -96,7 +96,7 @@ export function PhasePandemic() {
             transition={{ duration: 0.8 }}
             className="flex-1 w-full relative"
           >
-            <div className="relative rounded-2xl overflow-hidden border border-[#ffffff]/10 shadow-[0_0_50px_rgba(0,255,102,0.1)]">
+            <div className="relative rounded-2xl overflow-hidden border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.2)] bg-white/[0.07] backdrop-blur-xl">
                {/* Scanline overlay for that techy monitor feel */}
                <div className="absolute inset-0 bg-[linear-gradient(transparent_50%,rgba(0,0,0,0.25)_50%)] bg-[size:100%_4px] pointer-events-none z-10"></div>
                

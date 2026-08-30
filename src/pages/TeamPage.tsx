@@ -12,7 +12,7 @@ function TeamMemberCard({ member, delay }: { member: any; delay: number; key?: s
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ delay, type: "spring", stiffness: 50 }}
-      className="group bg-black/30 border border-white/10 overflow-hidden flex flex-col items-center transition-all duration-500 backdrop-blur-sm relative rounded-2xl cursor-pointer select-none hover:border-brand-accent hover:shadow-[0_0_25px_rgba(164,5,5,0.4)] hover:-translate-y-1 h-full w-full"
+      className="group bg-white/[0.07] backdrop-blur-xl border border-white/20 overflow-hidden flex flex-col items-center transition-all duration-500 relative rounded-2xl cursor-pointer select-none hover:border-brand-accent hover:shadow-[0_8px_32px_rgba(164,5,5,0.4)] hover:-translate-y-1 h-full w-full shadow-[0_8px_32px_rgba(0,0,0,0.2)]"
     >
       <div className="w-full relative pt-[80%] overflow-hidden bg-white/5 shrink-0">
         {/* Skeleton Loader */}

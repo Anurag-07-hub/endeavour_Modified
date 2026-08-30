@@ -113,7 +113,7 @@ export function About() {
         
         {/* Tomorrow Title - Centered at the top split into 3 lines */}
         <h2 
-          className="font-boska uppercase tracking-[1px] md:tracking-[2px] mb-12 md:mb-16 leading-[1.1] text-white flex flex-col items-center select-none text-center"
+          className="font-sans uppercase tracking-[1px] md:tracking-[2px] mb-12 md:mb-16 leading-[1.9] text-white flex flex-col items-center select-none text-center"
           style={{ fontSize: 'clamp(32px, 4.5vw, 48px)' }}
         >
           <span>Empowering the innovators</span>
@@ -162,7 +162,7 @@ export function About() {
             <FadeIn 
               direction="up" 
               delay={0.3} 
-              className="w-full grid grid-cols-2 gap-4 sm:gap-6 border border-white/10 bg-white/[0.02] backdrop-blur-md p-5 sm:p-6 rounded-2xl hover:border-brand-accent/30 hover:bg-white/[0.04] transition-all duration-500"
+              className="w-full grid grid-cols-2 gap-4 sm:gap-6 border border-white/20 bg-white/[0.07] backdrop-blur-xl p-5 sm:p-6 rounded-2xl hover:border-brand-accent/30 hover:bg-white/[0.12] shadow-[0_8px_32px_0_rgba(0,0,0,0.2)] transition-all duration-500"
             >
               <div className="flex flex-col gap-0.5 sm:gap-1.5 text-left">
                 <h3 className="font-mono text-[22px] sm:text-[28px] font-bold text-brand-accent">10+</h3>

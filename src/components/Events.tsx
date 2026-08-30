@@ -14,8 +14,8 @@ function EventCard({ event }: { event: any; key?: React.Key }): any {
         onMouseLeave={() => setIsActive(false)}
         onTouchStart={() => setIsActive(true)}
         onTouchEnd={() => setIsActive(false)}
-        className={`relative p-3 sm:p-6 md:p-[40px] bg-brand-accent/20 backdrop-blur-md border transition-all duration-500 overflow-hidden h-full cursor-pointer select-none
-          ${isActive ? 'border-brand-accent' : 'border-white/10'}`}
+        className={`relative p-3 sm:p-6 md:p-[40px] bg-white/[0.07] backdrop-blur-xl border transition-all duration-500 overflow-hidden h-full cursor-pointer select-none shadow-[0_8px_32px_0_rgba(0,0,0,0.2)] hover:bg-white/[0.12]
+          ${isActive ? 'border-brand-accent' : 'border-white/20'}`}
       >
         <div className="relative z-10 flex flex-col gap-2.5 sm:gap-4 md:gap-[20px]">
           <div className="inline-flex border border-white/10 border-l-brand-accent border-l-2 bg-black/30 p-[8px] sm:p-[12px] md:p-[15px] self-start">

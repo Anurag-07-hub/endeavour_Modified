@@ -131,20 +131,7 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Middle Column: Vertical links column with legal links directly below - Spans 3 columns */}
-          <div className="md:col-span-3 flex flex-col justify-between py-2 border-l border-white/15 pl-6 md:pl-8">
-            <div className="space-y-6 md:space-y-8">
-              <div>
-                <h4 className="font-mono text-[12px] md:text-[13px] text-[#ffffff]/60 tracking-widest uppercase mb-3 md:mb-4 font-extrabold">EXPLORE</h4>
-                <ul className="space-y-3 md:space-y-4 font-sans font-bold text-[15px] md:text-[16px] text-[#ffffff] uppercase tracking-wider">
-                  <li><Link to="/about" className="hover:text-[#ffffff]/80 transition-colors">About Us</Link></li>
-                  <li><a href="#events" className="hover:text-[#ffffff]/80 transition-colors">Techfest</a></li>
-                  <li><a href="#events" className="hover:text-[#ffffff]/80 transition-colors">Competitions</a></li>
-                  <li><Link to="/gallery" className="hover:text-[#ffffff]/80 transition-colors">Our Gallery</Link></li>
-                </ul>
-              </div>
-            </div>
-          </div>
+        
 
           {/* Right Column: Clean glassmorphic contact list with 3D TiltCard and white glare/blur shadow - Spans 4 columns */}
           <div className="md:col-span-4 flex flex-col gap-1.5 md:gap-4 relative overflow-visible">

@@ -60,7 +60,7 @@ export function PhaseScaling() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.6 }}
-            className="lg:col-span-8 relative h-[300px] md:h-[500px] border border-white/10 p-2 bg-black/40 backdrop-blur-sm group overflow-hidden rounded-lg"
+            className="lg:col-span-8 relative h-[300px] md:h-[500px] border border-white/20 p-2 bg-white/[0.07] backdrop-blur-xl group overflow-hidden rounded-lg shadow-[0_8px_32px_rgba(0,0,0,0.2)]"
           >
             <img 
               src="/images/achievements/phase2_scaling.jpg" 
@@ -83,21 +83,21 @@ export function PhaseScaling() {
             className="lg:col-span-4 flex flex-col gap-4"
           >
             {/* Stat Box 1 */}
-            <motion.div variants={itemVariants} className="bg-black/60 border border-white/10 p-6 flex flex-col justify-center hover:border-[#00a2ff]/50 transition-colors rounded-lg group">
+            <motion.div variants={itemVariants} className="bg-white/[0.07] backdrop-blur-xl border border-white/20 p-6 flex flex-col justify-center hover:border-[#00a2ff]/50 transition-colors rounded-lg group shadow-[0_8px_32px_rgba(0,0,0,0.2)]">
               <h3 className="font-syncopate text-5xl md:text-6xl text-[#00a2ff] font-bold group-hover:scale-110 origin-left transition-transform duration-300">11+</h3>
               <h4 className="font-space text-white text-xl font-bold mt-2 uppercase">Positions at Kweizar'18</h4>
               <p className="font-roboto text-brand-muted text-xs mt-2">Dominated the entire fest across multiple competitions.</p>
             </motion.div>
 
             {/* Stat Box 2 */}
-            <motion.div variants={itemVariants} className="bg-black/60 border border-white/10 p-6 flex flex-col justify-center hover:border-brand-accent/50 transition-colors rounded-lg group">
+            <motion.div variants={itemVariants} className="bg-white/[0.07] backdrop-blur-xl border border-white/20 p-6 flex flex-col justify-center hover:border-brand-accent/50 transition-colors rounded-lg group shadow-[0_8px_32px_rgba(0,0,0,0.2)]">
               <h3 className="font-syncopate text-5xl md:text-6xl text-brand-accent font-bold group-hover:scale-110 origin-left transition-transform duration-300">1st</h3>
               <h4 className="font-space text-white text-xl font-bold mt-2 uppercase">Hydraload (Techfest'19)</h4>
               <p className="font-roboto text-brand-muted text-xs mt-2">Pick & Place Bot champion at Techfest SLIET.</p>
             </motion.div>
 
             {/* Stat Box 3 */}
-            <motion.div variants={itemVariants} className="bg-black/60 border border-white/10 p-6 flex flex-col justify-center hover:border-white/50 transition-colors rounded-lg group">
+            <motion.div variants={itemVariants} className="bg-white/[0.07] backdrop-blur-xl border border-white/20 p-6 flex flex-col justify-center hover:border-white/50 transition-colors rounded-lg group shadow-[0_8px_32px_rgba(0,0,0,0.2)]">
               <h3 className="font-syncopate text-5xl md:text-6xl text-white font-bold group-hover:scale-110 origin-left transition-transform duration-300">10+</h3>
               <h4 className="font-space text-white text-xl font-bold mt-2 uppercase">Techfest SLIET Podiums</h4>
               <p className="font-roboto text-brand-muted text-xs mt-2">Trussload, Reconissance, Drone+, Final Redemption.</p>

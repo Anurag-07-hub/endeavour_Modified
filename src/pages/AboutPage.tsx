@@ -64,7 +64,7 @@ export function AboutPage() {
             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
             className="mb-8"
           >
-            <span className="font-mono text-brand-accent uppercase tracking-[4px] text-[14px] md:text-[16px]">Who We Are</span>
+            <span className="font-mono text-brand-accent uppercase tracking-[4px] text-[14px] md:text-[16px] pl-4 sm:pl-12">Who We Are</span>
           </motion.div>
           
           <h1 className="font-sans text-[60px] md:text-[120px] lg:text-[180px] font-black uppercase tracking-[-3px] md:tracking-[-8px] leading-[0.85] text-white">

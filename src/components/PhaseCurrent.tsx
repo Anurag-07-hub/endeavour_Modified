@@ -69,7 +69,7 @@ export function PhaseCurrent() {
             transition={{ duration: 0.8 }}
             className="w-full lg:w-1/2"
           >
-            <div className="bg-white/5 border border-white/10 p-4 rounded-2xl shadow-2xl relative group">
+            <div className="bg-white/[0.07] backdrop-blur-xl border border-white/20 p-4 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.2)] relative group">
               <CornerBrackets />
               <div className="relative rounded-xl overflow-hidden h-[400px] md:h-[550px]">
                 <img 
@@ -97,7 +97,7 @@ export function PhaseCurrent() {
             {/* Technex'24 Card */}
             <motion.div 
               variants={itemVariants}
-              className="bg-black/55 backdrop-blur-md border border-white/10 p-8 rounded-xl transition-all duration-300 group relative overflow-hidden hover:border-brand-accent/60 hover:shadow-[0_0_20px_rgba(164,5,5,0.25)] flex flex-col justify-between"
+              className="bg-white/[0.07] backdrop-blur-xl border border-white/20 p-8 rounded-xl transition-all duration-300 group relative overflow-hidden hover:border-brand-accent/60 hover:shadow-[0_8px_32px_rgba(164,5,5,0.4)] flex flex-col justify-between shadow-[0_8px_32px_rgba(0,0,0,0.2)]"
             >
               <CornerBrackets />
               <div>
@@ -126,7 +126,7 @@ export function PhaseCurrent() {
             {/* Cognizance & techFEST Card */}
             <motion.div 
               variants={itemVariants}
-              className="bg-black/55 backdrop-blur-md border border-white/10 p-8 rounded-xl transition-all duration-300 group relative overflow-hidden hover:border-[#00a2ff]/60 hover:shadow-[0_0_20px_rgba(0,162,255,0.25)] flex flex-col justify-between"
+              className="bg-white/[0.07] backdrop-blur-xl border border-white/20 p-8 rounded-xl transition-all duration-300 group relative overflow-hidden hover:border-[#00a2ff]/60 hover:shadow-[0_8px_32px_rgba(0,162,255,0.4)] flex flex-col justify-between shadow-[0_8px_32px_rgba(0,0,0,0.2)]"
             >
               <CornerBrackets />
               <div>
