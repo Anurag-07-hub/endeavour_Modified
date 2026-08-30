@@ -6,7 +6,7 @@ const accordionItems = [
   {
     id: 1,
     title: 'Robotics & Mechanics',
-    imageUrl: '/images/combat_robot.png',
+    imageUrl: '/images/warbot.jpeg',
   },
   {
     id: 2,
@@ -21,7 +21,7 @@ const accordionItems = [
   {
     id: 4,
     title: 'Embedded Firmware',
-    imageUrl: '/phase4_workshop.png',
+    imageUrl: '/images/embbed.jpeg',
   },
   {
     id: 5,
@@ -75,12 +75,12 @@ function AccordionItem({ item, isActive, onMouseEnter }: AccordionItemProps) {
       {/* Caption Text - Style forced to white to prevent theme overrides */}
       <span
         className={`
-          absolute font-sans font-black uppercase tracking-[1px] sm:tracking-[2px] whitespace-nowrap
+          absolute font-sans font-black uppercase tracking-[0.5px] sm:tracking-[2px] whitespace-nowrap
           transition-all duration-300 ease-in-out select-none pointer-events-none
           ${
             isActive
-              ? 'text-[10px] min-[400px]:text-[11px] sm:text-sm bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 rotate-0 opacity-100'
-              : 'text-[9px] sm:text-xs bottom-12 sm:bottom-24 left-1/2 -translate-x-1/2 rotate-90 opacity-75'
+              ? 'text-[7.5px] min-[360px]:text-[8.5px] min-[400px]:text-[10px] sm:text-sm bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 translate-y-0 rotate-0 opacity-100'
+              : 'text-[9px] sm:text-xs top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rotate-90 opacity-75'
           }
         `}
         style={{ color: '#ffffff' }}

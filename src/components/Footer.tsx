@@ -72,8 +72,8 @@ export function Footer() {
         {/* Main Grid split - Desktop only */}
         <div className="hidden md:grid md:grid-cols-12 gap-8 md:gap-12 mb-10 md:mb-12">
 
-          {/* Left Column: Massive Fontfabric Specimen Header - Spans 5 columns */}
-          <div className="md:col-span-5 flex flex-col justify-between space-y-6 md:space-y-8">
+          {/* Left Column: Massive Fontfabric Specimen Header - Spans 6 columns */}
+          <div className="md:col-span-6 flex flex-col justify-between space-y-6 md:space-y-8">
             <div>
               {/* Brand label - Further enlarged logo and text */}
               <div className="flex items-center gap-[18px] mb-4 md:mb-6">
@@ -97,7 +97,7 @@ export function Footer() {
 
             <div>
               <p className="font-sans text-[#ffffff]/70 text-[13px] md:text-[14px] leading-[1.6] max-w-[360px] mb-6 md:mb-8">
-                The official robotics club of Sant Longowal Institute of Engineering and Technology. Building the future.
+                The official robotics society of Sant Longowal Institute of Engineering and Technology. Building the future.
               </p>
               
 
@@ -107,7 +107,7 @@ export function Footer() {
                   href="https://www.instagram.com/endeavoursliet/" 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="w-10 h-10 rounded-full bg-[#E1306C] border border-[#E1306C] text-[#ffffff] shadow-[0_0_15px_rgba(225,48,108,0.3)] hover:bg-[#ffffff] hover:border-[#ffffff] hover:text-[#a40505] hover:shadow-[0_0_20px_rgba(255,255,255,0.6)] active:bg-[#ffffff]/85 active:scale-95 transition-all duration-300 flex items-center justify-center hover:scale-105 shrink-0"
+                  className="w-10 h-10 rounded-full bg-white/[0.07] backdrop-blur-xl border border-white/20 text-[#ffffff] shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:bg-[#E1306C]/20 hover:border-[#E1306C] hover:shadow-[0_0_15px_rgba(225,48,108,0.5)] active:scale-95 transition-all duration-300 flex items-center justify-center hover:scale-105 shrink-0"
                 >
                   <Instagram className="w-4 h-4" />
                 </a>
@@ -115,7 +115,7 @@ export function Footer() {
                   href="https://www.facebook.com/endeavoursliet" 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="w-10 h-10 rounded-full bg-[#1877F2] border border-[#1877F2] text-[#ffffff] shadow-[0_0_15px_rgba(24,119,242,0.3)] hover:bg-[#ffffff] hover:border-[#ffffff] hover:text-[#a40505] hover:shadow-[0_0_20px_rgba(255,255,255,0.6)] active:bg-[#ffffff]/85 active:scale-95 transition-all duration-300 flex items-center justify-center hover:scale-105 shrink-0"
+                  className="w-10 h-10 rounded-full bg-white/[0.07] backdrop-blur-xl border border-white/20 text-[#ffffff] shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:bg-[#1877F2]/20 hover:border-[#1877F2] hover:shadow-[0_0_15px_rgba(24,119,242,0.5)] active:scale-95 transition-all duration-300 flex items-center justify-center hover:scale-105 shrink-0"
                 >
                   <Facebook className="w-4 h-4" />
                 </a>
@@ -123,7 +123,7 @@ export function Footer() {
                   href="https://www.linkedin.com/company/endeavoursliet/" 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="w-10 h-10 rounded-full bg-[#0077B5] border border-[#0077B5] text-[#ffffff] shadow-[0_0_15px_rgba(0,119,181,0.3)] hover:bg-[#ffffff] hover:border-[#ffffff] hover:text-[#a40505] hover:shadow-[0_0_20px_rgba(255,255,255,0.6)] active:bg-[#ffffff]/85 active:scale-95 transition-all duration-300 flex items-center justify-center hover:scale-105 shrink-0"
+                  className="w-10 h-10 rounded-full bg-white/[0.07] backdrop-blur-xl border border-white/20 text-[#ffffff] shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:bg-[#0077B5]/20 hover:border-[#0077B5] hover:shadow-[0_0_15px_rgba(0,119,181,0.5)] active:scale-95 transition-all duration-300 flex items-center justify-center hover:scale-105 shrink-0"
                 >
                   <Linkedin className="w-4 h-4" />
                 </a>
@@ -133,8 +133,8 @@ export function Footer() {
 
         
 
-          {/* Right Column: Clean glassmorphic contact list with 3D TiltCard and white glare/blur shadow - Spans 4 columns */}
-          <div className="md:col-span-4 flex flex-col gap-1.5 md:gap-4 relative overflow-visible">
+          {/* Right Column: Clean glassmorphic contact list with 3D TiltCard and white glare/blur shadow - Spans 6 columns */}
+          <div className="md:col-span-6 flex flex-col gap-1.5 md:gap-4 relative overflow-visible">
             
             {/* Address */}
             <TiltCard 
@@ -174,8 +174,8 @@ export function Footer() {
               </div>
             </TiltCard>
 
-            {/* Phone & Secondary Contacts - Side-by-side grid on mobile to save 50% vertical height */}
-            <div className="grid grid-cols-2 gap-1.5 md:flex md:flex-col md:gap-3 relative z-10">
+            {/* Phone & Secondary Contacts - Stacked list */}
+            <div className="flex flex-col gap-1.5 md:gap-3 relative z-10">
               {contactInfo.phone && (
                 <TiltCard className="p-2 sm:p-5 rounded-xl bg-white/[0.07] backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.2)] hover:bg-white/[0.12] hover:border-white/40 hover:shadow-[0_12px_40px_0_rgba(0,0,0,0.3)] transition-all duration-300 flex items-center gap-2 sm:gap-4 cursor-pointer relative z-10">
                   <div className="w-6 h-6 sm:w-9 sm:h-9 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
@@ -284,7 +284,7 @@ export function Footer() {
             </div>
 
             {/* Phone Contacts Grid */}
-            <div className="grid grid-cols-2 gap-1.5 relative z-10">
+            <div className="flex flex-col gap-1.5 relative z-10">
               {contactInfo.phone && (
                 <div className="p-2 rounded-xl bg-white/[0.07] backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.2)] flex items-center gap-2 relative z-10">
                   <div className="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
@@ -338,7 +338,7 @@ export function Footer() {
               href="https://www.instagram.com/endeavoursliet/" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="w-8 h-8 rounded-full bg-[#E1306C] border border-[#E1306C] text-[#ffffff] shadow-[0_0_10px_rgba(225,48,108,0.2)] hover:bg-[#ffffff] hover:border-[#ffffff] hover:text-[#a40505] transition-all duration-300 flex items-center justify-center shrink-0"
+              className="w-8 h-8 rounded-full bg-white/[0.07] backdrop-blur-xl border border-white/20 text-[#ffffff] shadow-[0_4px_10px_rgba(0,0,0,0.15)] hover:bg-[#E1306C]/20 hover:border-[#E1306C] hover:shadow-[0_0_12px_rgba(225,48,108,0.4)] active:scale-95 transition-all duration-300 flex items-center justify-center shrink-0"
             >
               <Instagram className="w-3.5 h-3.5" />
             </a>
@@ -346,7 +346,7 @@ export function Footer() {
               href="https://www.facebook.com/endeavoursliet" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="w-8 h-8 rounded-full bg-[#1877F2] border border-[#1877F2] text-[#ffffff] shadow-[0_0_10px_rgba(24,119,242,0.2)] hover:bg-[#ffffff] hover:border-[#ffffff] hover:text-[#a40505] transition-all duration-300 flex items-center justify-center shrink-0"
+              className="w-8 h-8 rounded-full bg-white/[0.07] backdrop-blur-xl border border-white/20 text-[#ffffff] shadow-[0_4px_10px_rgba(0,0,0,0.15)] hover:bg-[#1877F2]/20 hover:border-[#1877F2] hover:shadow-[0_0_12px_rgba(24,119,242,0.4)] active:scale-95 transition-all duration-300 flex items-center justify-center shrink-0"
             >
               <Facebook className="w-3.5 h-3.5" />
             </a>
@@ -354,7 +354,7 @@ export function Footer() {
               href="https://www.linkedin.com/company/endeavoursliet/" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="w-8 h-8 rounded-full bg-[#0077B5] border border-[#0077B5] text-[#ffffff] shadow-[0_0_10px_rgba(0,119,181,0.2)] hover:bg-[#ffffff] hover:border-[#ffffff] hover:text-[#a40505] transition-all duration-300 flex items-center justify-center shrink-0"
+              className="w-8 h-8 rounded-full bg-white/[0.07] backdrop-blur-xl border border-white/20 text-[#ffffff] shadow-[0_4px_10px_rgba(0,0,0,0.15)] hover:bg-[#0077B5]/20 hover:border-[#0077B5] hover:shadow-[0_0_12px_rgba(0,119,181,0.4)] active:scale-95 transition-all duration-300 flex items-center justify-center shrink-0"
             >
               <Linkedin className="w-3.5 h-3.5" />
             </a>
@@ -362,7 +362,7 @@ export function Footer() {
               href="https://dribbble.com/" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="w-8 h-8 rounded-full bg-[#EA4C89] border border-[#EA4C89] text-[#ffffff] shadow-[0_0_10px_rgba(234,76,137,0.2)] hover:bg-[#ffffff] hover:border-[#ffffff] hover:text-[#a40505] transition-all duration-300 flex items-center justify-center shrink-0"
+              className="w-8 h-8 rounded-full bg-white/[0.07] backdrop-blur-xl border border-white/20 text-[#ffffff] shadow-[0_4px_10px_rgba(0,0,0,0.15)] hover:bg-[#EA4C89]/20 hover:border-[#EA4C89] hover:shadow-[0_0_12px_rgba(234,76,137,0.4)] active:scale-95 transition-all duration-300 flex items-center justify-center shrink-0"
             >
               <Dribbble className="w-3.5 h-3.5" />
             </a>
