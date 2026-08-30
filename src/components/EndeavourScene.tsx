@@ -14,7 +14,7 @@ function MovingLetter({ letter, scrollYProgress, staggerOffset }: MovingLetterPr
   return (
     <motion.span
       style={{ opacity: individualOpacity, y: individualY }}
-      className="bg-letters text-[12vw] sm:text-[14vw] font-sans font-medium tracking-[-0.03em] leading-[0.8] select-none"
+      className="bg-letters text-[12vw] sm:text-[14vw] font-sans font-medium tracking-[-0.03em] leading-none select-none"
     >
       {letter}
     </motion.span>
@@ -29,7 +29,7 @@ interface MovingRowProps {
 }
 
 function MovingRow({ row, rowIndex, scrollYProgress, letters }: MovingRowProps) {
-  const dynamicX = useTransform(scrollYProgress, [0, 1], [0, row.moveX]);
+  const dynamicX = useTransform(scrollYProgress, [0, 0.35], [0, row.moveX], { clamp: true });
 
   return (
     <motion.div
@@ -115,7 +115,7 @@ export function EndeavourScene() {
         {/* Background Moving Rows */}
         <motion.div
           style={{ scale: groupScale }}
-          className="flex flex-col items-center justify-center space-y-[-1vw] absolute inset-0"
+          className="flex flex-col items-center justify-center space-y-[8vw] sm:space-y-[4vw] absolute inset-0"
         >
           {rows.map((row, rowIndex) => (
             <MovingRow

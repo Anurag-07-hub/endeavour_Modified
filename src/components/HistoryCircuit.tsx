@@ -37,10 +37,10 @@ export function HistoryCircuit() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="font-syncopate text-[40px] md:text-[60px] font-black uppercase tracking-[-2px] text-[#ffffff] leading-[1]"
+            className="font-syncopate text-[28px] sm:text-[40px] md:text-[60px] font-black uppercase tracking-[-1px] sm:tracking-[-2px] text-white leading-[1.1]"
             style={{ color: '#ffffff' }}
           >
-            OUR <span className="text-brand-accent">ACHIEVEMENTS !</span>
+            OUR <span className="text-brand-accent">ACHIEVEMENTS</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0 }}

@@ -355,7 +355,7 @@ export function DomainsPage() {
             </span>
             <h1 className="font-righteous text-[42px] sm:text-[72px] lg:text-[88px] font-black uppercase tracking-[-2px] sm:tracking-[-3px] leading-[0.85] text-white">
               OUR <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#c41515] via-[#ef4444] to-[#f97316]">
+              <span className="text-[#c41515]">
                 DOMAINS
               </span>
             </h1>
@@ -463,7 +463,7 @@ export function DomainsPage() {
                   </h3>
 
                   <div className="h-6 sm:h-10">
-                    <TypewriterHeading text={domain.subTitle} className="text-brand-muted font-playfair font-bold text-base sm:text-xl" />
+                    <TypewriterHeading text={domain.subTitle} className="text-brand-muted font-sans font-bold text-base sm:text-xl" />
                   </div>
 
                   <SlideInText>

@@ -319,19 +319,6 @@ export function Footer() {
             </div>
           </div>
 
-          {/* 4. Explore Details section */}
-          <div className="flex justify-center py-2 border-t border-b border-white/10 my-1 px-1">
-            <div className="text-center">
-              <h4 className="font-mono text-[9px] text-[#ffffff]/50 tracking-widest uppercase mb-1.5 font-extrabold">EXPLORE</h4>
-              <ul className="space-y-1.5 font-sans font-bold text-[11px] text-[#ffffff] uppercase tracking-wider">
-                <li><Link to="/about" className="hover:text-[#ffffff]/80 transition-colors">About Us</Link></li>
-                <li><a href="#events" className="hover:text-[#ffffff]/80 transition-colors">Techfest</a></li>
-                <li><a href="#events" className="hover:text-[#ffffff]/80 transition-colors">Competitions</a></li>
-                <li><Link to="/gallery" className="hover:text-[#ffffff]/80 transition-colors">Our Gallery</Link></li>
-              </ul>
-            </div>
-          </div>
-
           {/* 5. Social Account Logos */}
           <div className="flex justify-center gap-[12px] pt-1">
             <a 
@@ -357,14 +344,6 @@ export function Footer() {
               className="w-8 h-8 rounded-full bg-white/[0.07] backdrop-blur-xl border border-white/20 text-[#ffffff] shadow-[0_4px_10px_rgba(0,0,0,0.15)] hover:bg-[#0077B5]/20 hover:border-[#0077B5] hover:shadow-[0_0_12px_rgba(0,119,181,0.4)] active:scale-95 transition-all duration-300 flex items-center justify-center shrink-0"
             >
               <Linkedin className="w-3.5 h-3.5" />
-            </a>
-            <a 
-              href="https://dribbble.com/" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="w-8 h-8 rounded-full bg-white/[0.07] backdrop-blur-xl border border-white/20 text-[#ffffff] shadow-[0_4px_10px_rgba(0,0,0,0.15)] hover:bg-[#EA4C89]/20 hover:border-[#EA4C89] hover:shadow-[0_0_12px_rgba(234,76,137,0.4)] active:scale-95 transition-all duration-300 flex items-center justify-center shrink-0"
-            >
-              <Dribbble className="w-3.5 h-3.5" />
             </a>
           </div>
 

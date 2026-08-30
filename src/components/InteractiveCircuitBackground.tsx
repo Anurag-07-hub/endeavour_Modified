@@ -31,6 +31,18 @@ interface NetworkPulse {
 }
 
 export function InteractiveCircuitBackground() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   
   // Track interactive states in refs for smooth animation loops
@@ -192,8 +204,10 @@ export function InteractiveCircuitBackground() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Listen for Mouse Movement
+  // Listen for Mouse/Touch Movement
   useEffect(() => {
+    if (isMobile) return;
+
     const handleMouseMove = (e: MouseEvent) => {
       const canvas = canvasRef.current;
       if (!canvas) return;
@@ -264,7 +278,7 @@ export function InteractiveCircuitBackground() {
       window.removeEventListener('touchcancel', handleTouchEnd);
       observer.disconnect();
     };
-  }, []);
+  }, [isMobile]);
 
   // Spawn dynamic data pulses along connection lines
   const spawnPulse = (connections: NetworkConnection[]) => {
@@ -368,16 +382,16 @@ export function InteractiveCircuitBackground() {
         spawnPulse(connections);
       }
 
-      // 3. DRAW CONNECTIONS (With Spotlight Glow)
+      // 3. DRAW CONNECTIONS (Optimized: Batched Ambient Draw Path!)
+      const ambientConns: NetworkConnection[] = [];
+      const glowingConns: { conn: NetworkConnection; intensity: number; alpha: number }[] = [];
+
       connections.forEach(conn => {
         const { nodeA, nodeB, distance } = conn;
-
-        // Calculate opacity based on distance (boosted for clear visibility)
         const baseAlpha = (1 - distance / connectionDist) * (theme.isDark ? 0.18 : 0.14);
         let spotlightIntensity = 0;
 
         if (mouse.active) {
-          // Find closest point on segment to mouse, or just measure distances to nodes
           const distToA = Math.hypot(mouse.x - nodeA.x, mouse.y - nodeA.y);
           const distToB = Math.hypot(mouse.x - nodeB.x, mouse.y - nodeB.y);
           const minMouseDist = Math.min(distToA, distToB);
@@ -387,26 +401,40 @@ export function InteractiveCircuitBackground() {
           }
         }
 
+        if (spotlightIntensity > 0) {
+          glowingConns.push({ conn, intensity: spotlightIntensity, alpha: baseAlpha });
+        } else {
+          ambientConns.push(conn);
+        }
+      });
+
+      // Batch draw all standard/ambient connections in a single path (Huge optimization!)
+      if (ambientConns.length > 0) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.strokeStyle = theme.circuitStroke;
+        ctx.globalAlpha = theme.isDark ? 0.12 : 0.08;
+        ctx.lineWidth = 0.8;
+        ambientConns.forEach(conn => {
+          ctx.moveTo(conn.nodeA.x, conn.nodeA.y);
+          ctx.lineTo(conn.nodeB.x, conn.nodeB.y);
+        });
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      // Draw only the interactive glowing connections individually
+      glowingConns.forEach(({ conn, intensity, alpha }) => {
+        const { nodeA, nodeB } = conn;
         ctx.save();
         ctx.beginPath();
         ctx.moveTo(nodeA.x, nodeA.y);
         ctx.lineTo(nodeB.x, nodeB.y);
-
-        if (spotlightIntensity > 0) {
-          // Draw spotlight boosted connection
-          ctx.strokeStyle = theme.brandAccent;
-          ctx.globalAlpha = baseAlpha + spotlightIntensity * (theme.isDark ? 0.7 : 0.5);
-          ctx.lineWidth = 1.0 + spotlightIntensity * 1.0;
-          ctx.shadowBlur = spotlightIntensity * 15;
-          ctx.shadowColor = theme.brandAccent;
-        } else {
-          // Draw ambient connection
-          ctx.strokeStyle = theme.circuitStroke;
-          ctx.globalAlpha = baseAlpha;
-          ctx.lineWidth = 0.9; // Slightly thicker
-          ctx.shadowBlur = 0;
-        }
-
+        ctx.strokeStyle = theme.brandAccent;
+        ctx.globalAlpha = alpha + intensity * (theme.isDark ? 0.7 : 0.5);
+        ctx.lineWidth = 1.0 + intensity * 1.0;
+        ctx.shadowBlur = intensity * 10; // Slightly reduced max blur to prevent CPU lag
+        ctx.shadowColor = theme.brandAccent;
         ctx.stroke();
         ctx.restore();
       });
@@ -512,7 +540,11 @@ export function InteractiveCircuitBackground() {
 
     animationId = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(animationId);
-  }, []);
+  }, [isMobile]);
+
+  if (isMobile) {
+    return null;
+  }
 
   return (
     <canvas
