@@ -35,9 +35,9 @@ const phases = [
     id: 3,
     tag: "PHASE 3 // 2019",
     title: "Conquering",
-    photo: "/images/achievements/phase2_scaling.jpg",
+    photo: "/images/IIT_Gandhinagar.webp",
     photoLabel: "2019: UNPRECEDENTED PEAKS",
-    description: "Endeavour dominated SLIET's techFEST and various national fests, qualifying for final rounds in major industry competitions like Smart India Hackathon and Enginx.",
+    description: "IIT Gandhinagar 2023 Finalist Qualifying for Warbot",
     achievements: [
       { event: "techFEST'19 (SLIET)", position: "10+ Positions", desc: "Dominated with 1st in Hydraload, Trussload, and Reconnaissance; 2nd in Drone+; 3rd in Final Redemption.", metric: "CLEAN SWEEP" },
       { event: "Techinvent'19", position: "1st, 2nd & 3rd", desc: "First position in Drone for Defense, 2nd in Quadcopter race, 3rd in Acrobatic flyer.", metric: "AEROMODELLING" },
@@ -49,9 +49,9 @@ const phases = [
     id: 4,
     tag: "PHASE 4 // 2020-2021",
     title: "Pandemic Victory",
-    photo: "/images/IIT_Gandhinagar.webp",
+    photo: "/images/achievements/phase3_pandemic.webp",
     photoLabel: "2020-21: RESILIENT DOMINANCE",
-    description: "IIT Gandhinagar 2023 Finalist Qualifying for final rounds",
+    description: "During the pandemic, the team shifted from physical mechanical fabrication to heavy software simulations, ROS modeling, and virtual fests, achieving records in SLIET and IIT BHU.",
     achievements: [
       { event: "E-yantra 2020 (IIT Bombay)", position: "5th Rank", desc: "Secured 5th rank in the national final round of EYRC conducted by IIT Bombay with MHRD.", metric: "EYRC FINALS" },
       { event: "techFEST'21 (SLIET)", position: "21 Positions", desc: "Set a record by winning 21 podium finishes in virtual technical competitions.", metric: "RECORD WINS" },
