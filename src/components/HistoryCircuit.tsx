@@ -63,7 +63,7 @@ const phases = [
     photo: "/images/achievements/phase4_legacy.webp",
     photoLabel: "2021-23: INSTITUTIONAL PERFORMANCE",
     achievements: [
-      { event: "IIT Delhi'23", position: "Finalist", desc: "Finalist in ", metric: "IIT Gandhinagar Hustler" },
+      { event: "IIT Delhi'23", position: "Finalist", desc: "Finalist in ", metric: "IIT Gandhinagar Hustler",photo:"images/iitdelhi.webp" },
       { event: "IIT Gandhinagar'23", position: "Finalist", desc: "Finalist in Robowar (15kg).", metric: "IIT Gandhinagar Hustler",photo:"images/IIT_Gandhinagar.webp" },
       { event: "Technex'23 (IIT BHU)", position: "1st Place (x3)", desc: "1st in Build It, Momentum, and Bridge the Gap; 2nd in Maze X; 3rd in Robowar (15kg).", metric: "IIT BHU CHAMP", photo: "/website_gallery/Technex_23/IMG-20230510-WA0010.jpg" },
       { event: "techFEST SLIET", position: "34 Positions", desc: "Secured 21 positions in techFEST'22 and 13 positions in techFEST'23.", metric: "SLIET DOMINANCE" },
@@ -78,7 +78,7 @@ const phases = [
     photo: "/images/achievements/phase5_current.webp",
     photoLabel: "2024-25: FUTURE STACK",
     achievements: [
-       { event: "PecFest '25", position: "1st Place & 2nd Place", desc: "First Prize in Hovermanin & Second prize in LFR in Techfest 25' (CU)", metric: "Hoveria", photo: "/website_gallery/PEC_25/IMG_20251124_123600509_HDR_AE.jpg" },
+       { event: "PecFest '25", position: "1st Place & 2nd Place", desc: "First Prize in Hovermanin & Second prize in LFR in Techfest 25' (CU)", metric: "Hoveria", photo: "images/pecfest.jpg" },
       { event: "Cognizance '25", position: "1st Place", desc: "First Prize in Plasma Pull in Techfest 25' (IIT Roorkee)", metric: "TECH MASTER", photo: "/images/achievements/phase5_current.webp" },
        { event: "Cognizance'24", position: "2nd Place", desc: "Second Prize in RC Nitro Car in Techfest 24' (IIT Roorke)", metric: "NITRO", photo: "/website_gallery/Cognizance_24/IMG-20260306-WA0041.jpg" },
       { event: "Technex'24 (IIT BHU)", position: "2nd & 3rd Place", desc: "2nd in Maze X & Reconnaissance, 3rd in Momentum.", metric: "TECH MASTER" }
@@ -91,7 +91,7 @@ const phases = [
     photo: "/website_gallery/Technex_26/IMG_20260315_113338796_HDR (1).jpg",
     photoLabel: "2025-26: CHAMPIONS AGAIN",
     achievements: [
-      { event: "Cognizance'26 (IIT Roorkee)", position: "1st Place", desc: "First Prize in Plasma Pull.", metric: "TUG OF WAR CHAMP", photo: "/images/achievements/phase5_current.webp" },
+      { event: "Cognizance'26 (IIT Roorkee)", position: "1st Place", desc: "First Prize in Plasma Pull.", metric: "TUG OF WAR CHAMP", photo: "/images/cognizance26.jpg" },
       { event: "Technex'26 (IIT BHU)", position: "1st Place (x2)", desc: "Secured 2nd place in Rocketry and 3rd place in Maze X.", metric: "DOUBLE PODIUM" ,photo:"/website_gallery/Technex_26/IMG_20260315_113338796_HDR (1).jpg" },
       { event: "NIT Jalandar' 25", position: "1st & 2nd Place", desc: "1st in Quadcopter Race, 1st in Drag Race & 2nd in LFR.", metric: "NITJ DOMINANCE", photo: "/website_gallery/NIT Jalandhar/IMG-20260331-WA0009.jpg" }
     ]
