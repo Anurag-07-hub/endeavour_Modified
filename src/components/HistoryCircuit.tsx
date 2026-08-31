@@ -47,9 +47,9 @@ const phases = [
   },
   {
     id: 4,
-    tag: "PHASE 4 // 2022-2023",
-    title: "Victory",
-    photo: "/images/achievements/phase3_pandemic.webp",
+    tag: "PHASE 4 // 2020-2021",
+    title: "Pandemic Victory",
+    photo: "/images/IIT_Gandhinagar.webp",
     photoLabel: "2020-21: RESILIENT DOMINANCE",
     description: "During the pandemic, the team shifted from physical mechanical fabrication to heavy software simulations, ROS modeling, and virtual fests, achieving records in SLIET and IIT BHU.",
     achievements: [
@@ -61,7 +61,7 @@ const phases = [
   },
   {
     id: 5,
-    tag: "PHASE 5 // 2024-2025",
+    tag: "PHASE 5 // 2022-2023",
     title: "Performance",
     photo: "/images/achievements/phase4_legacy.webp",
     photoLabel: "2021-23: INSTITUTIONAL PERFORMANCE",
@@ -82,8 +82,20 @@ const phases = [
     description: "Today, Endeavour continues to pioneer in robotics education, research publications, and advanced hardware prototyping, setting new benchmarks in drone racing, UGV deployment, and AI-driven control systems.",
     achievements: [
       { event: "Cognizance 25'", position: "1st Place", desc: "First Prize in Plasma Pull in Techfest 25' (IIT Roorkee)", metric: "TECH MASTER" },
-      { event: "Technex'24 (IIT BHU)", position: "2nd & 3rd Place", desc: "1st in Momentum & Axelarate,3rd in Momentum.", metric: "TECH MASTER" },
-
+      { event: "Technex'24 (IIT BHU)", position: "2nd & 3rd Place", desc: "2nd in Maze X & Reconnaissance, 3rd in Momentum.", metric: "TECH MASTER" },
+    ]
+  },
+  {
+    id: 7,
+    tag: "PHASE 7 // 2025-2026",
+    title: "CHAMPIONS AGAIN",
+    photo: "/website_gallery/Technex_26/IMG_20260315_113338796_HDR (1).jpg",
+    photoLabel: "2025-26: CHAMPIONS AGAIN",
+    description: "Today, Endeavour dominates national-level tech fests, integrating full ROS autonomy and deep learning frameworks into our UAV and UGV fleets, scaling new heights in design and control systems.",
+    achievements: [
+      { event: "Cognizance 26' (IIT Roorkee)", position: "1st Place", desc: "First Prize in Plasma Pull.", metric: "TUG OF WAR CHAMP" },
+      { event: "Technex'26 (IIT BHU)", position: "1st Place (x2)", desc: "Secured 2nd place in Rocketry and 3rd place in Maze X.", metric: "DOUBLE PODIUM" },
+      { event: "PEC-FEST' 25", position: "1st & 2nd Place", desc: "1st in Hovermania & 2nd in LFR.", metric: "HOVERMANIA&LFR CHAMPS" }
     ]
   }
 ];
@@ -132,10 +144,6 @@ const PhaseSection = ({ phase, isEven }: { phase: typeof phases[0]; isEven: bool
                 className="w-full h-full object-cover opacity-90 group-hover:scale-103 transition-transform duration-700"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"></div>
-              <div className="absolute bottom-4 left-4 right-4">
-                <span className="font-mono text-[9px] text-brand-accent tracking-widest uppercase font-bold">{phase.photoLabel}</span>
-                <h4 className="font-sans font-bold text-white text-sm sm:text-base mt-0.5">{phase.title} Overview</h4>
-              </div>
             </div>
             <p className="font-sans text-brand-muted text-xs sm:text-sm leading-relaxed mt-4">
               {phase.description}

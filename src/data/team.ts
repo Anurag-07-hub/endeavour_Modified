@@ -42,7 +42,7 @@ export const teamMembers = [
         "position": "Co-Coordinator & Social Media Head",
         "image": "/images/profilesBatch2023/Pragya.jpg",
         "email": "2140147@gmail.com",
-        "linkedin": "http://www.linkedin.com/in/pragya-sinha-37a350245"
+        "linkedin": "https://www.linkedin.com/in/pragya-sinha-239236233/"
       },
       {
         "name": "RAJ SINGH",
