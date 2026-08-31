@@ -113,8 +113,8 @@ export function About() {
         
         {/* Tomorrow Title - Centered at the top split into 3 lines */}
         <h2 
-          className="font-sans uppercase tracking-[1px] md:tracking-[2px] mb-12 md:mb-16 leading-[1.9] text-white flex flex-col items-center select-none text-center"
-          style={{ fontSize: 'clamp(32px, 4.5vw, 48px)' }}
+          className="font-sans font-extrabold text-brand-accent uppercase tracking-[1px] md:tracking-[2px] mb-12 md:mb-16 leading-[0.9] text-white flex flex-col items-center select-none text-center"
+          style={{ fontSize: 'clamp(40px, 4.5vw, 48px)' }}
         >
           <span>Empowering the innovators</span>
           <span className="mt-1">of tomorrow in</span>
@@ -123,7 +123,7 @@ export function About() {
             {titles.map((title, index) => (
               <motion.span
                 key={index}
-                className="absolute inset-0 flex items-center justify-center font-black tracking-[1px] uppercase whitespace-nowrap"
+                className="absolute inset-0 flex items-center justify-center font-black font-extrabold tracking-[1px] uppercase whitespace-nowrap"
                 initial={{ opacity: 0, y: '100%' }}
                 transition={{ type: "spring", stiffness: 50, damping: 10 }}
                 animate={

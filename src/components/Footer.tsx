@@ -1,7 +1,7 @@
 import { Mail, MapPin, Phone, Linkedin, Instagram, Facebook, Dribbble } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useCMS } from '../context/CMSContext';
-import { TiltCard } from './TiltCard';
+
 
 export function Footer() {
   const { contactInfo } = useCMS();
@@ -135,11 +135,11 @@ export function Footer() {
 
           {/* Right Column: Clean glassmorphic contact list with 3D TiltCard and white glare/blur shadow - Spans 6 columns */}
           <div className="md:col-span-6 flex flex-col gap-1.5 md:gap-4 relative overflow-visible">
-            
+
             {/* Address */}
-            <TiltCard 
+            <div 
               onClick={() => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contactInfo.address)}`, '_blank')}
-              className="p-2 sm:p-5 rounded-xl bg-white/[0.07] backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.2)] hover:bg-white/[0.12] hover:border-white/40 hover:shadow-[0_12px_40px_0_rgba(0,0,0,0.3)] transition-all duration-300 flex items-start gap-2.5 sm:gap-4 cursor-pointer relative z-10"
+              className="p-2 sm:p-5 rounded-xl bg-white/[0.07] backdrop-blur-sm border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.2)] hover:bg-white/[0.12] hover:border-white/40 hover:shadow-[0_12px_40px_0_rgba(0,0,0,0.3)] transition-all duration-300 flex items-start gap-2.5 sm:gap-4 relative z-10 cursor-pointer"
             >
               <div className="w-6 h-6 sm:w-9 sm:h-9 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
                 <MapPin className="w-3 h-3 sm:w-5 sm:h-5 text-[#ffffff]" />
@@ -150,12 +150,12 @@ export function Footer() {
                   {contactInfo.address}
                 </p>
               </div>
-            </TiltCard>
+            </div>
 
             {/* Email */}
-            <TiltCard 
+            <div 
               onClick={() => window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${contactInfo.email}`, '_blank')}
-              className="p-2 sm:p-5 rounded-xl bg-white/[0.07] backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.2)] hover:bg-white/[0.12] hover:border-white/40 hover:shadow-[0_12px_40px_0_rgba(0,0,0,0.3)] transition-all duration-300 flex items-center gap-2.5 sm:gap-4 cursor-pointer relative z-10"
+              className="p-2 sm:p-5 rounded-xl bg-white/[0.07] backdrop-blur-sm border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.2)] hover:bg-white/[0.12] hover:border-white/40 hover:shadow-[0_12px_40px_0_rgba(0,0,0,0.3)] transition-all duration-300 flex items-center gap-2.5 sm:gap-4 cursor-pointer relative z-10"
             >
               <div className="w-6 h-6 sm:w-9 sm:h-9 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
                 <Mail className="w-3 h-3 sm:w-5 sm:h-5 text-[#ffffff]" />
@@ -172,12 +172,12 @@ export function Footer() {
                   {contactInfo.email}
                 </a>
               </div>
-            </TiltCard>
+            </div>
 
             {/* Phone & Secondary Contacts - Stacked list */}
             <div className="flex flex-col gap-1.5 md:gap-3 relative z-10">
               {contactInfo.phone && (
-                <TiltCard className="p-2 sm:p-5 rounded-xl bg-white/[0.07] backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.2)] hover:bg-white/[0.12] hover:border-white/40 hover:shadow-[0_12px_40px_0_rgba(0,0,0,0.3)] transition-all duration-300 flex items-center gap-2 sm:gap-4 cursor-pointer relative z-10">
+                <div className="p-2 sm:p-5 rounded-xl bg-white/[0.07] backdrop-blur-sm border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.2)] hover:bg-white/[0.12] hover:border-white/40 hover:shadow-[0_12px_40px_0_rgba(0,0,0,0.3)] transition-all duration-300 flex items-center gap-2 sm:gap-4 cursor-pointer relative z-10">
                   <div className="w-6 h-6 sm:w-9 sm:h-9 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
                     <Phone className="w-3 h-3 sm:w-5 sm:h-5 text-[#ffffff]" />
                   </div>
@@ -187,12 +187,12 @@ export function Footer() {
                       {contactInfo.phone}
                     </a>
                   </div>
-                </TiltCard>
+                </div>
               )}
 
               {contactInfo.contacts?.map((contact, idx) => (
                 contact.name && contact.phone ? (
-                  <TiltCard key={idx} className="p-2 sm:p-5 rounded-xl bg-white/[0.07] backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.2)] hover:bg-white/[0.12] hover:border-white/40 hover:shadow-[0_12px_40px_0_rgba(0,0,0,0.3)] transition-all duration-300 flex items-center gap-2.5 sm:gap-4 cursor-pointer relative z-10">
+                  <div key={idx} className="p-2 sm:p-5 rounded-xl bg-white/[0.07] backdrop-blur-sm border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.2)] hover:bg-white/[0.12] hover:border-white/40 hover:shadow-[0_12px_40px_0_rgba(0,0,0,0.3)] transition-all duration-300 flex items-center gap-2.5 sm:gap-4 cursor-pointer relative z-10">
                     <div className="w-6 h-6 sm:w-9 sm:h-9 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
                       <Phone className="w-3 h-3 sm:w-5 sm:h-5 text-[#ffffff]" />
                     </div>
@@ -204,7 +204,7 @@ export function Footer() {
                         {contact.phone}
                       </a>
                     </div>
-                  </TiltCard>
+                  </div>
                 ) : null
               ))}
             </div>
@@ -245,6 +245,12 @@ export function Footer() {
           {/* 3. Contact Cards (Location, Email, Phone contacts) - Moved Up! */}
           <div className="flex flex-col gap-1.5 relative overflow-visible">
             
+            {/* Decorative background glows to flourish glassmorphism */}
+            <div className="absolute inset-0 -z-10 pointer-events-none overflow-hidden select-none">
+              <div className="absolute top-[10%] left-[10%] w-[110px] h-[110px] rounded-full bg-[#ffffcdd2] blur-[60px]" />
+              <div className="absolute bottom-[20%] right-[15%] w-[130px] h-[130px] rounded-full bg-[#ffffcdd2] blur-[70px]" />
+            </div>
+
             {/* Location */}
             <div 
               onClick={() => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contactInfo.address)}`, '_blank')}
