@@ -117,7 +117,7 @@ export const teamMembers = [
       {
         "name": "Aditya Kumar",
         "position": "Executive Member",
-        "image": "/images/profilesBatch2023/AdityaKumar3.jpg",
+        "image": "/images/profilesBatch2023/AdityaKumar3.png",
         "email": "ak6414119@gmail.com",
         "linkedin": "https://www.linkedin.com/in/aditya-kumar-536019289/"
       }
