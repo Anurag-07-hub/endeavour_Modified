@@ -39,7 +39,7 @@ export function FAQ({ theme = 'dark' }: { theme?: 'light' | 'dark' }) {
     {
       id: 2,
       category: 'general',
-      question: 'What domains does the club work in?',
+      question: 'What domains does Team Endeavour work in?',
       answer: (
         <div className="space-y-4 text-brand-muted">
           <p>We focus on several core technical areas, including:</p>
@@ -66,7 +66,7 @@ export function FAQ({ theme = 'dark' }: { theme?: 'light' | 'dark' }) {
     {
       id: 3,
       category: 'joining',
-      question: 'Who can join Endeavour?',
+      question: 'Who can join Team Endeavour?',
       answer: (
         <div className="space-y-4 text-brand-muted">
           <p>
@@ -102,7 +102,7 @@ export function FAQ({ theme = 'dark' }: { theme?: 'light' | 'dark' }) {
     {
       id: 4,
       category: 'joining',
-      question: 'How can I join the club?',
+      question: 'How can I join Team Endeavour?',
       answer: (
         <p className="text-brand-muted leading-relaxed">
           Recruitments usually happen annually. We look for students who are passionate about learning and have a positive attitude. Keep an eye on our{' '}
@@ -131,7 +131,7 @@ export function FAQ({ theme = 'dark' }: { theme?: 'light' | 'dark' }) {
     {
       id: 6,
       category: 'competitions',
-      question: 'Which competitions does Endeavour participate in?',
+      question: 'Which competitions does Team Endeavour participate in?',
       answer: (
         <div className="space-y-3 text-brand-muted">
           <p>The team regularly competes at national-level events, including:</p>
@@ -159,7 +159,7 @@ export function FAQ({ theme = 'dark' }: { theme?: 'light' | 'dark' }) {
     {
       id: 7,
       category: 'competitions',
-      question: "What are some of Endeavour's major achievements?",
+      question: "What are some of Team Endeavour's major achievements?",
       answer: (
         <p className="text-brand-muted leading-relaxed">
           We have a history of excellence, including winning multiple podium positions at{' '}
@@ -184,7 +184,7 @@ export function FAQ({ theme = 'dark' }: { theme?: 'light' | 'dark' }) {
     {
       id: 10,
       category: 'membership',
-      question: 'Can I join other technical clubs alongside Endeavour?',
+      question: 'Can I join other technical clubs alongside Team Endeavour?',
       answer: (
         <p className="text-brand-muted leading-relaxed">
           To ensure total dedication to our mission and technical standards and avoid conflict of interest, members of Endeavour are{' '}
