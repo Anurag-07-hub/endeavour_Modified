@@ -51,7 +51,7 @@ const phases = [
     title: "Pandemic Victory",
     photo: "/images/IIT_Gandhinagar.webp",
     photoLabel: "2020-21: RESILIENT DOMINANCE",
-    description: "During the pandemic, the team shifted from physical mechanical fabrication to heavy software simulations, ROS modeling, and virtual fests, achieving records in SLIET and IIT BHU.",
+    description: "IIT Gandhinagar 2023 Finalist Qualifying for final rounds",
     achievements: [
       { event: "E-yantra 2020 (IIT Bombay)", position: "5th Rank", desc: "Secured 5th rank in the national final round of EYRC conducted by IIT Bombay with MHRD.", metric: "EYRC FINALS" },
       { event: "techFEST'21 (SLIET)", position: "21 Positions", desc: "Set a record by winning 21 podium finishes in virtual technical competitions.", metric: "RECORD WINS" },
