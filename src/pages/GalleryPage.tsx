@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { X, Maximize2, Compass, Layers, Radio, Camera } from 'lucide-react';
+import { X, Maximize2, Compass, Layers, Radio, Camera, Trophy, Users, MapPin } from 'lucide-react';
 import { useParticlesBackground } from '../hooks/useParticlesBackground';
 import { useCMS } from '../context/CMSContext';
 import ScrollExpandMedia from '../components/ui/scroll-expansion-hero';
 
-export type GalleryCategory = 'all' | 'uav' | 'ugv' | 'events' | 'team';
+export type GalleryCategory = 'all' | 'photoshoot' | 'cognizance' | 'iiit-una' | 'nit-jalandhar' | 'pec' | 'techfest-sliet' | 'technex';
 
 interface BentoItem {
   id: string;
@@ -34,10 +34,13 @@ const bentoLayouts = [
 
 const categoryLabels: { value: GalleryCategory; label: string; icon: React.ComponentType<any> }[] = [
   { value: 'all', label: 'All Memories', icon: Camera },
-  { value: 'uav', label: 'UAV Division', icon: Radio },
-  { value: 'ugv', label: 'UGV Division', icon: Layers },
-  { value: 'events', label: 'Events & Wins', icon: Compass },
-  { value: 'team', label: 'Team Moments', icon: Camera },
+  { value: 'photoshoot', label: 'Annual Photoshoot', icon: Users },
+  { value: 'cognizance', label: 'Cognizance', icon: Trophy },
+  { value: 'iiit-una', label: 'IIIT Una', icon: MapPin },
+  { value: 'nit-jalandhar', label: 'NIT Jalandhar', icon: MapPin },
+  { value: 'pec', label: 'PEC', icon: Compass },
+  { value: 'techfest-sliet', label: 'Techfest SLIET', icon: Layers },
+  { value: 'technex', label: 'Technex', icon: Trophy },
 ];
 
 export function GalleryPage() {
@@ -82,23 +85,110 @@ export function GalleryPage() {
     return gallery
       .filter((item) => item.type !== 'empty' && item.url)
       .map((item, index) => {
-        let category: GalleryCategory = 'team';
-        let title = 'Lab Brainstorm Session';
-        let description = 'Collaborative discussions refining mechanics and circuits.';
+        let category: GalleryCategory = 'photoshoot';
+        let title = 'Team Photoshoot';
+        let description = 'Team Endeavour official club photoshoot and group memories.';
 
         const lowerUrl = item.url.toLowerCase();
-        if (lowerUrl.includes('ugv') || lowerUrl.includes('rover') || index % 4 === 1) {
-          category = 'ugv';
-          title = 'UGV Field Run';
-          description = 'Testing autonomous SLAM mapping routes and chassis endurance.';
-        } else if (lowerUrl.includes('uav') || lowerUrl.includes('drone') || index % 4 === 2) {
-          category = 'uav';
-          title = 'UAV Autonomous Flight';
-          description = 'Validating flight control loops and obstacle compliance algorithms.';
-        } else if (lowerUrl.includes('technex') || lowerUrl.includes('win') || index % 4 === 3) {
-          category = 'events';
-          title = 'Technex IIT BHU Win';
-          description = 'Celebrating national achievements and podium wins.';
+        if (lowerUrl.includes('annual photoshoot') || lowerUrl.includes('annual_photoshoot')) {
+          category = 'photoshoot';
+          title = `Annual Photoshoot #${index + 1}`;
+          description = 'Official group portrait and member photoshoots of Team Endeavour.';
+        } else if (lowerUrl.includes('cognizance_24')) {
+          category = 'cognizance';
+          title = `Cognizance 24 #${index + 1}`;
+          description = 'Robotics competition and achievements at Cognizance, IIT Roorkee 2024.';
+        } else if (lowerUrl.includes('cognizance_25')) {
+          category = 'cognizance';
+          title = `Cognizance 25 #${index + 1}`;
+          description = 'Exhibition runs, all-terrain rovers, and team presentations at Cognizance, IIT Roorkee 2025.';
+        } else if (lowerUrl.includes('cognizance_26')) {
+          category = 'cognizance';
+          title = `Cognizance 26 #${index + 1}`;
+          description = 'Advanced aerial drone challenges and robotics engineering showcase at Cognizance, IIT Roorkee 2026.';
+        } else if (lowerUrl.includes('iiit una') || lowerUrl.includes('iiit_una')) {
+          category = 'iiit-una';
+          title = `IIIT Una Exhibition #${index + 1}`;
+          description = 'Robotics project display, autonomous models, and guest interactions at IIIT Una tech fest.';
+        } else if (lowerUrl.includes('nit jalandhar') || lowerUrl.includes('nit_jalandhar')) {
+          category = 'nit-jalandhar';
+          title = `NIT Jalandhar Challenge #${index + 1}`;
+          description = 'Testing robots and competing in national challenges at NIT Jalandhar.';
+        } else if (lowerUrl.includes('pec_25')) {
+          category = 'pec';
+          title = `PEC 2025 #${index + 1}`;
+          description = 'All-terrain suspension runs and autonomous mapping demonstrations at PecFest, PEC Chandigarh 2025.';
+        } else if (lowerUrl.includes('techfest sliet') || lowerUrl.includes('techfest_sliet')) {
+          category = 'techfest-sliet';
+          title = `Techfest SLIET #${index + 1}`;
+          description = 'Drone flight loops and quadcopter obstacle course compliance at Techfest SLIET.';
+        } else if (lowerUrl.includes('technex_23')) {
+          category = 'technex';
+          title = `Technex 2023 #${index + 1}`;
+          description = 'Podium wins, trophy presentation, and national level robotics triumph at Technex, IIT BHU 2023.';
+        } else if (lowerUrl.includes('technex_26')) {
+          category = 'technex';
+          title = `Technex 2026 #${index + 1}`;
+          description = 'Advanced robotics showcase and team participation at Technex, IIT BHU 2026.';
+        } else {
+          // Fallback for custom user inputs based on general matches or modulo index
+          if (lowerUrl.includes('technex') || lowerUrl.includes('win')) {
+            category = 'technex';
+            title = 'Technex Competition';
+            description = 'National robotics competition runs and podium achievements at IIT BHU.';
+          } else if (lowerUrl.includes('cognizance')) {
+            category = 'cognizance';
+            title = 'Cognizance Competition';
+            description = 'Advanced robotics challenge participation at IIT Roorkee.';
+          } else if (lowerUrl.includes('iiit')) {
+            category = 'iiit-una';
+            title = 'IIIT Exhibition';
+            description = 'Robotics project showcases at IIIT.';
+          } else if (lowerUrl.includes('nit')) {
+            category = 'nit-jalandhar';
+            title = 'NIT Exhibition';
+            description = 'Robotics project showcases at NIT.';
+          } else if (lowerUrl.includes('pec')) {
+            category = 'pec';
+            title = 'PEC Competition';
+            description = 'Competitions and robotic runs at PEC.';
+          } else if (lowerUrl.includes('techfest')) {
+            category = 'techfest-sliet';
+            title = 'Techfest Showcase';
+            description = 'Institutional tech fest exhibition and project displays.';
+          } else {
+            // General index fallback
+            const rem = index % 7;
+            if (rem === 1) {
+              category = 'cognizance';
+              title = 'Cognizance Event';
+              description = 'Competing and showcasing custom robotics at Cognizance.';
+            } else if (rem === 2) {
+              category = 'iiit-una';
+              title = 'IIIT Una Showcase';
+              description = 'Demonstrating custom automated platforms at IIIT Una.';
+            } else if (rem === 3) {
+              category = 'nit-jalandhar';
+              title = 'NIT Jalandhar Showcase';
+              description = 'Representing Endeavour club in robotics event at NIT Jalandhar.';
+            } else if (rem === 4) {
+              category = 'pec';
+              title = 'PEC Showcase';
+              description = 'Presenting engineering projects and challenges at PEC.';
+            } else if (rem === 5) {
+              category = 'techfest-sliet';
+              title = 'Techfest Showcase';
+              description = 'Exhibiting flight controllers and chassis mechanics at Techfest SLIET.';
+            } else if (rem === 6) {
+              category = 'technex';
+              title = 'Technex Competition';
+              description = 'National level robotics design validation at Technex IIT BHU.';
+            } else {
+              category = 'photoshoot';
+              title = 'Club Photo session';
+              description = 'Capturing team portrait and engineering sessions.';
+            }
+          }
         }
 
         return {

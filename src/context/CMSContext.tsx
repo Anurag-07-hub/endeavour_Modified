@@ -162,7 +162,21 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const storedGallery = localStorage.getItem('endeavour_gallery');
     if (storedGallery) {
       try {
-        setGalleryState(JSON.parse(storedGallery));
+        const parsed = JSON.parse(storedGallery);
+        const isMockGallery = Array.isArray(parsed) && (
+          parsed.length === 0 || 
+          parsed.every((item: any) => item.url && item.url.includes('unsplash.com'))
+        );
+        const hasHeif = Array.isArray(parsed) && parsed.some((item: any) => item.url && item.url.includes('heif'));
+        const hasOldOrder = Array.isArray(parsed) && parsed.some((item: any) => 
+          item.id === 'web-gal-19' && item.url && item.url.includes('IMG_20251123_171603578_HDR_AE.jpg')
+        );
+        if (isMockGallery || hasHeif || hasOldOrder) {
+          setGalleryState(defaultGallery);
+          localStorage.setItem('endeavour_gallery', JSON.stringify(defaultGallery));
+        } else {
+          setGalleryState(parsed);
+        }
       } catch (e) {
         setGalleryState(defaultGallery);
       }

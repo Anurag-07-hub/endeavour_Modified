@@ -1101,9 +1101,9 @@ export const AdminDashboard = () => {
                   </div>
                 </div>
 
-                {/* 20 Box Grid */}
+                {/* Dynamic Gallery Box Grid */}
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                  {Array.from({ length: 20 }).map((_, index) => {
+                  {Array.from({ length: Math.max(gallery.length, 20) }).map((_, index) => {
                     const item = gallery[index] || { id: `empty-${index}`, type: 'empty', url: '' };
                     return (
                       <div key={index} className="relative group bg-[#050505] rounded-lg overflow-hidden border border-brand-accent/20 aspect-[3/4] flex flex-col items-center justify-center">
